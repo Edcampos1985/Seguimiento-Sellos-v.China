@@ -1,0 +1,166 @@
+{
+  "version": "4.5",
+  "aplicacion": "Control de Avance de Obra - Corte y Sello de Juntas",
+  "fechaGuardado": "2026-11-17T14:00:02.558Z",
+  "obra": {
+    "nombre": "Oruro-Challapata",
+    "progIniGlobal": "235+266",
+    "progFinGlobal": "256+612",
+    "profundidadMm": "5",
+    "anchoCorteMm": "6",
+    "precioUnit": "22.89",
+    "volTotalItem": "262908",
+    "anchoMaxEscala": "10",
+    "fechaInicioObra": "2024-01-01",
+    "fechaFinObra": "2028-01-01"
+  },
+  "selladores": [
+    {
+      "nombre": "SikaFlex CR125",
+      "tipo": "Poliuretano",
+      "color": "#00bd5b",
+      "gravedad": 1.3
+    },
+    {
+      "nombre": "SikaFlex 401",
+      "tipo": "Poliuretano",
+      "color": "#ebb800",
+      "gravedad": 1.31
+    },
+    {
+      "nombre": "SudaFlex",
+      "tipo": "Silicona",
+      "color": "#ff0000",
+      "gravedad": 2.1
+    },
+    {
+      "nombre": "Vulkem 45SSL",
+      "tipo": "Poliuretano",
+      "color": "#004b87",
+      "gravedad": null
+    }
+  ],
+  "tiposLosa": [
+    {
+      "id": 1794923727990,
+      "codigo": "Losa tipo B [8.5 metros]",
+      "ancho": 8.5,
+      "largoRef": 9,
+      "distanciasLong": [
+        2.5,
+        2,
+        2,
+        2
+      ],
+      "distanciasTransv": [
+        3,
+        3,
+        3
+      ],
+      "lineasTransv": [
+        true,
+        true,
+        true,
+        false
+      ],
+      "lineasLong": [
+        false,
+        true,
+        true,
+        true,
+        false
+      ],
+      "color": "#1e7a4a"
+    }
+  ],
+  "tramos": [
+    {
+      "num": 1,
+      "progIni": 250551,
+      "progFin": 250557,
+      "dist": 6,
+      "sellador": "SikaFlex CR125",
+      "losaTipo": "Losa tipo B [8.5 metros]",
+      "ancho": 8.5,
+      "via": "DERECHA",
+      "obs": "PC",
+      "fecha": "2026-05-08",
+      "longTransv": 25.5,
+      "longLong": 18,
+      "longTotal": 43.5,
+      "nTransv": 3,
+      "nLong": 3,
+      "monto": 995.715,
+      "m3": 0.0013050000000000002,
+      "litros": 1.6965000000000003,
+      "longAcum": 43.5,
+      "montoAcum": 995.715
+    },
+    {
+      "num": 2,
+      "progIni": 250563,
+      "progFin": 250569,
+      "dist": 6,
+      "sellador": "SudaFlex",
+      "losaTipo": "Losa tipo B [8.5 metros]",
+      "ancho": 8.5,
+      "via": "DERECHA",
+      "obs": "PC",
+      "fecha": "2026-05-08",
+      "longTransv": 25.5,
+      "longLong": 18,
+      "longTotal": 43.5,
+      "nTransv": 3,
+      "nLong": 3,
+      "monto": 995.715,
+      "m3": 0.0013050000000000002,
+      "litros": 2.7405000000000004,
+      "longAcum": 87,
+      "montoAcum": 1991.43
+    },
+    {
+      "num": 3,
+      "progIni": 250569,
+      "progFin": 250584,
+      "dist": 15,
+      "sellador": "Vulkem 45SSL",
+      "losaTipo": "Losa tipo B [8.5 metros]",
+      "ancho": 8.5,
+      "via": "DERECHA",
+      "obs": "PC",
+      "fecha": "2026-11-16",
+      "longTransv": 51,
+      "longLong": 45,
+      "longTotal": 96,
+      "nTransv": 3,
+      "nLong": 3,
+      "monto": 2197.44,
+      "m3": 0.00288,
+      "litros": 2.8800000000000003,
+      "longAcum": 183,
+      "montoAcum": 4188.87
+    },
+    {
+      "num": 4,
+      "progIni": 250557,
+      "progFin": 250563,
+      "dist": 6,
+      "sellador": "SikaFlex 401",
+      "losaTipo": "Losa tipo B [8.5 metros]",
+      "ancho": 8.5,
+      "via": "DERECHA",
+      "obs": "PC",
+      "fecha": "2027-05-08",
+      "longTransv": 25.5,
+      "longLong": 18,
+      "longTotal": 43.5,
+      "nTransv": 3,
+      "nLong": 3,
+      "monto": 995.715,
+      "m3": 0.0013050000000000002,
+      "litros": 1.7095500000000001,
+      "longAcum": 226.5,
+      "montoAcum": 5184.585
+    }
+  ]
+}
