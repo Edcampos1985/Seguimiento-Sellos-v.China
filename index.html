@@ -569,8 +569,8 @@ const URL_DATOS_GITHUB = 'data/proyecto.json';
    UTILIDADES
    ========================================================= */
 function $(id){ return document.getElementById(id); }
-function fmt(v,d){ if(d===undefined)d=2; return Number(v).toLocaleString('zh-CN',{minimumFractionDigits:d,maximumFractionDigits:d}); }
-function fmt0(v){ return Number(v).toLocaleString('zh-CN',{maximumFractionDigits:0}); }
+function fmt(v,d){ if(d===undefined)d=2; return Number(v).toLocaleString('es-BO',{minimumFractionDigits:d,maximumFractionDigits:d}); }
+function fmt0(v){ return Number(v).toLocaleString('es-BO',{maximumFractionDigits:0}); }
 function num(id){ var v=parseFloat($(id).value); return Number.isFinite(v)?v:NaN; }
 function txt(id){ var el=$(id); return el?el.value:""; }
 function fechaISOaLocal(iso){ if(!iso)return ""; var p=iso.split("T")[0].split("-"); return p[2]+"/"+p[1]+"/"+p[0]; }
@@ -622,7 +622,7 @@ async function actualizarDesdeServidor(silencioso){
   try {
     if(!silencioso) {
       var btn = document.querySelector('.btn-arch.actualizar');
-      btn.innerHTML = '⏳ 正在加载...';
+      btn.innerHTML = '⏳ Cargando...';
       btn.disabled = true;
     }
     
@@ -636,22 +636,22 @@ async function actualizarDesdeServidor(silencioso){
     cargarEstado(data, true); 
     
     if(!silencioso) {
-      var ind=$("indicador已保存");
-      $("texto已保存").textContent="已从 GitHub 更新：" + new Date().toLocaleTimeString();
+      var ind=$("indicadorGuardado");
+      $("textoGuardado").textContent="Actualizado desde GitHub: " + new Date().toLocaleTimeString();
       ind.classList.add("visible");
       setTimeout(function(){ind.classList.remove("visible");},4000);
     }
     
   } catch (error) {
     if(!silencioso) {
-      mostrarError("自动加载数据失败。请确认已上传 'data/proyecto.json' 至 GitHub 仓库。详情：" + error.message);
+      mostrarError("Error al cargar los datos automáticos. Asegúrate de haber subido 'data/proyecto.json' a tu repositorio de GitHub. Detalle: " + error.message);
     } else {
-      console.log("无法自动加载数据（静默模式）。");
+      console.log("No se pudieron cargar los datos automáticos (modo silencioso).");
     }
   } finally {
     if(!silencioso) {
       var btn = document.querySelector('.btn-arch.actualizar');
-      btn.innerHTML = '🔄 更新数据';
+      btn.innerHTML = '🔄 Actualizar Datos';
       btn.disabled = false;
     }
   }
@@ -713,9 +713,9 @@ function leerEstado(){
 
   var ayuda=$("ayudaVolTotal");
   if(geometria.volTotal>0){
-    ayuda.textContent="已设定："+fmt(geometria.volTotal,2)+" ml";
+    ayuda.textContent="Definido: "+fmt(geometria.volTotal,2)+" ml";
   }else{
-    ayuda.textContent="为空 → 将根据全线范围计算";
+    ayuda.textContent="Vacío → se calculará del rango global";
   }
   return geometria;
 }
@@ -729,9 +729,9 @@ function agregarSellador(){
   var tipo=txt("sTipo") || "Otro";
   var color=txt("sColor");
   var grav = num("sGravedad");
-  if(!nombre){mostrarError("请输入密封胶名称。");return;}
+  if(!nombre){mostrarError("Ingresa el nombre del sellador.");return;}
   if(selladores.some(function(s){return s.nombre.toLowerCase()===nombre.toLowerCase();})){
-    mostrarError("该密封胶名称已存在。");return;
+    mostrarError("Ya existe un sellador con ese nombre.");return;
   }
   selladores.push({
     nombre: nombre,
@@ -739,14 +739,14 @@ function agregarSellador(){
     color: color,
     gravedad: Number.isFinite(grav) && grav > 0 ? grav : null
   });
-  $("sNombre").value=""; $("sTipo").value="聚氨酯"; $("sColor").value="#004B87"; $("sGravedad").value="";
+  $("sNombre").value=""; $("sTipo").value="Poliuretano"; $("sColor").value="#004B87"; $("sGravedad").value="";
   renderSelladores();
   renderFormSelects();
   renderTabla();
 }
 
 function eliminarSellador(idx){
-  if(!confirm("确定删除密封胶 "+selladores[idx].nombre+"?"))return;
+  if(!confirm("¿Eliminar el sellador "+selladores[idx].nombre+"?"))return;
   selladores.splice(idx,1);
   renderSelladores();
   renderFormSelects();
@@ -756,8 +756,8 @@ function eliminarSellador(idx){
 function renderSelladores(){
   var cont=$("listaSelladores");
   if(selladores.length===0){
-    cont.innerHTML='<div class="aviso info" style="width:100%;margin:0">尚未登记密封胶。</div>';
-    $("badgeSelladores").textContent="0 种密封胶";return;
+    cont.innerHTML='<div class="aviso info" style="width:100%;margin:0">Aún no hay selladores registrados.</div>';
+    $("badgeSelladores").textContent="0 selladores";return;
   }
   var html="";
   selladores.forEach(function(s,i){
@@ -771,7 +771,7 @@ function renderSelladores(){
     '</div>';
   });
   cont.innerHTML=html;
-  $("badgeSelladores").textContent=selladores.length+(selladores.length===1?" 种密封胶":" 种密封胶es");
+  $("badgeSelladores").textContent=selladores.length+(selladores.length===1?" sellador":" selladores");
 }
 
 /* =========================================================
@@ -787,7 +787,7 @@ function actualizarPreviewLosa(){
   previewState.ancho = a;
   previewState.largo = l;
   
-  var inputsDiv = $("inputs距离s");
+  var inputsDiv = $("inputsDistancias");
   if(inputsDiv.children.length === 0){
     previewState.distanciasLong = [2, 2, 2, 2];
     previewState.distanciasTransv = [3, 3, 3];
@@ -800,15 +800,15 @@ function actualizarPreviewLosa(){
 }
 
 function generarInputsDistancias(){
-  var div = $("inputs距离s");
+  var div = $("inputsDistancias");
   var html = '';
   
   html += '<div style="width:100%;margin-bottom:8px">'+
-            '<b>纵向切缝 <span style="font-weight:normal;color:var(--muted)">(总和 = 板块宽度 = '+fmt(previewState.ancho,2)+'m):</span> <span id="txtSumaLong" style="color:var(--azul);font-weight:bold">当前合计：0.00m</span></b>'+
+            '<b>Longitudinales <span style="font-weight:normal;color:var(--muted)">(suma = ancho de losa = '+fmt(previewState.ancho,2)+'m):</span> <span id="txtSumaLong" style="color:var(--azul);font-weight:bold">Suma actual: 0.00m</span></b>'+
             '<div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:4px" id="inputsLong"></div>'+
           '</div>';
   html += '<div style="width:100%">'+
-            '<b>横向切缝 <span style="font-weight:normal;color:var(--muted)">(总和 = 板块长度 = '+fmt(previewState.largo,2)+'m):</span> <span id="txtSumaTransv" style="color:var(--azul);font-weight:bold">当前合计：0.00m</span></b>'+
+            '<b>Transversales <span style="font-weight:normal;color:var(--muted)">(suma = largo de losa = '+fmt(previewState.largo,2)+'m):</span> <span id="txtSumaTransv" style="color:var(--azul);font-weight:bold">Suma actual: 0.00m</span></b>'+
             '<div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:4px" id="inputsTransv"></div>'+
           '</div>';
   
@@ -823,10 +823,10 @@ function renderInputsLong(){
   if(!cont) return;
   var html = '';
   previewState.distanciasLong.forEach(function(d, i){
-    html += '<div style="display:flex;flex-direction:column;gap:2px"><label style="font-size:9px">间距 '+(i+1)+'</label><input type="number" step="0.01" value="'+d+'" style="width:60px;font-size:11px;text-align:center;padding:4px;border:1px solid #cfd8dc;border-radius:4px" oninput="cambiarDistLong('+i+',this.value)"></div>';
+    html += '<div style="display:flex;flex-direction:column;gap:2px"><label style="font-size:9px">Dist '+(i+1)+'</label><input type="number" step="0.01" value="'+d+'" style="width:60px;font-size:11px;text-align:center;padding:4px;border:1px solid #cfd8dc;border-radius:4px" oninput="cambiarDistLong('+i+',this.value)"></div>';
   });
-  html += '<button class="btn-outline" style="padding:4px 8px;font-size:11px;align-self:flex-end;margin-bottom:2px" onclick="addCorteLong()">+ 添加切缝</button>';
-  html += '<button class="btn-peligro" style="padding:4px 8px;font-size:11px;align-self:flex-end;margin-bottom:2px" onclick="removeCorteLong()">- 删除切缝</button>';
+  html += '<button class="btn-outline" style="padding:4px 8px;font-size:11px;align-self:flex-end;margin-bottom:2px" onclick="addCorteLong()">+ Corte</button>';
+  html += '<button class="btn-peligro" style="padding:4px 8px;font-size:11px;align-self:flex-end;margin-bottom:2px" onclick="removeCorteLong()">- Corte</button>';
   cont.innerHTML = html;
   actualizarSumaDist();
 }
@@ -836,10 +836,10 @@ function renderInputsTransv(){
   if(!cont) return;
   var html = '';
   previewState.distanciasTransv.forEach(function(d, i){
-    html += '<div style="display:flex;flex-direction:column;gap:2px"><label style="font-size:9px">间距 '+(i+1)+'</label><input type="number" step="0.01" value="'+d+'" style="width:60px;font-size:11px;text-align:center;padding:4px;border:1px solid #cfd8dc;border-radius:4px" oninput="cambiarDistTransv('+i+',this.value)"></div>';
+    html += '<div style="display:flex;flex-direction:column;gap:2px"><label style="font-size:9px">Dist '+(i+1)+'</label><input type="number" step="0.01" value="'+d+'" style="width:60px;font-size:11px;text-align:center;padding:4px;border:1px solid #cfd8dc;border-radius:4px" oninput="cambiarDistTransv('+i+',this.value)"></div>';
   });
-  html += '<button class="btn-outline" style="padding:4px 8px;font-size:11px;align-self:flex-end;margin-bottom:2px" onclick="addCorteTransv()">+ 添加切缝</button>';
-  html += '<button class="btn-peligro" style="padding:4px 8px;font-size:11px;align-self:flex-end;margin-bottom:2px" onclick="removeCorteTransv()">- 删除切缝</button>';
+  html += '<button class="btn-outline" style="padding:4px 8px;font-size:11px;align-self:flex-end;margin-bottom:2px" onclick="addCorteTransv()">+ Corte</button>';
+  html += '<button class="btn-peligro" style="padding:4px 8px;font-size:11px;align-self:flex-end;margin-bottom:2px" onclick="removeCorteTransv()">- Corte</button>';
   cont.innerHTML = html;
   actualizarSumaDist();
 }
@@ -906,11 +906,11 @@ function actualizarSumaDist(){
   var elT = $("txtSumaTransv");
   
   if(elL) {
-    elL.textContent = '当前合计：' + fmt(sumaL,2) + 'm';
+    elL.textContent = 'Suma actual: ' + fmt(sumaL,2) + 'm';
     elL.style.color = (Math.abs(sumaL - previewState.ancho) < 0.01) ? 'var(--verde)' : 'var(--rojo)';
   }
   if(elT) {
-    elT.textContent = '当前合计：' + fmt(sumaT,2) + 'm';
+    elT.textContent = 'Suma actual: ' + fmt(sumaT,2) + 'm';
     elT.style.color = (Math.abs(sumaT - previewState.largo) < 0.01) ? 'var(--verde)' : 'var(--rojo)';
   }
 }
@@ -1022,9 +1022,9 @@ function actualizarInfoLosa(){
   var mlTransv = nTransvAct * a;
   var mlTotal = mlLong + mlTransv;
   
-  el.innerHTML = '📊 <b>Metrado del 种类型 de losa (con estas líneas activas):</b><br>'+
-    '• 纵向切缝 activas: <b>'+nLongAct+'</b> × '+fmt(l,2)+' m = <b>'+fmt(mlLong,2)+' ml</b><br>'+
-    '• 横向切缝 activas: <b>'+nTransvAct+'</b> × '+fmt(a,2)+' m = <b>'+fmt(mlTransv,2)+' ml</b><br>'+
+  el.innerHTML = '📊 <b>Metrado del tipo de losa (con estas líneas activas):</b><br>'+
+    '• Longitudinales activas: <b>'+nLongAct+'</b> × '+fmt(l,2)+' m = <b>'+fmt(mlLong,2)+' ml</b><br>'+
+    '• Transversales activas: <b>'+nTransvAct+'</b> × '+fmt(a,2)+' m = <b>'+fmt(mlTransv,2)+' ml</b><br>'+
     '• <b>Total por losa: '+fmt(mlTotal,2)+' ml</b>';
 }
 
@@ -1049,11 +1049,11 @@ function agregarLosaTipo(){
   var sumaL = previewState.distanciasLong.reduce(function(a,b){return a+b;},0);
   var sumaT = previewState.distanciasTransv.reduce(function(a,b){return a+b;},0);
   
-  if(!cod){ mostrarError("请输入板块类型名称。"); return; }
-  if(Math.abs(sumaL-ancho) > 0.05){ mostrarError("纵向切缝总和（"+fmt(sumaL,2)+"米）必须与板块宽度（"+fmt(ancho,2)+"米）一致。"); return; }
-  if(Math.abs(sumaT-largo) > 0.05){ mostrarError("横向切缝总和（"+fmt(sumaT,2)+"m) debe coincidir con el largo de la losa ("+fmt(largo,2)+"米）一致。"); return; }
+  if(!cod){ mostrarError("Ingresa el nombre del tipo de losa."); return; }
+  if(Math.abs(sumaL-ancho) > 0.05){ mostrarError("La suma de los cortes longitudinales ("+fmt(sumaL,2)+"m) debe coincidir con el ancho de la losa ("+fmt(ancho,2)+"m)."); return; }
+  if(Math.abs(sumaT-largo) > 0.05){ mostrarError("La suma de los cortes transversales ("+fmt(sumaT,2)+"m) debe coincidir con el largo de la losa ("+fmt(largo,2)+"m)."); return; }
   if(tiposLosa.some(function(t){return t.codigo.toLowerCase()===cod.toLowerCase();})){
-    mostrarError("该板块类型名称已存在。"); return;
+    mostrarError("Ya existe un tipo de losa con ese nombre."); return;
   }
   
   tiposLosa.push({
@@ -1079,11 +1079,11 @@ function agregarLosaTipo(){
 function eliminarLosaTipo(id){
   var idx = tiposLosa.findIndex(function(t){return t.id === id;});
   if(idx < 0) return;
-  if(!confirm("确定删除板块类型 '"+tiposLosa[idx].codigo+"'?")) return;
+  if(!confirm("¿Eliminar el tipo de losa '"+tiposLosa[idx].codigo+"'?")) return;
   
   var usados = tramos.filter(function(t){return t.losaTipo === tiposLosa[idx].codigo;}).length;
   if(usados > 0){
-    if(!confirm("⚠️ Este 种类型 de losa está siendo usado en "+usados+" 个区段.\n\n删除后，区段记录仍会保留，但将失去该类型的关联。\n\n仍要继续吗？")) return;
+    if(!confirm("⚠️ Este tipo de losa está siendo usado en "+usados+" tramo(s).\n\nSi lo eliminas, los tramos seguirán existiendo pero perderán la referencia.\n\n¿Continuar igual?")) return;
   }
   
   tiposLosa.splice(idx, 1);
@@ -1095,8 +1095,8 @@ function eliminarLosaTipo(id){
 function renderTiposLosa(){
   var cont = $("listaLosas");
   if(tiposLosa.length === 0){
-    cont.innerHTML = '<div class="aviso info" style="margin:0">尚未登记板块类型。</div>';
-    $("badgeLosas").textContent = "0 种类型";
+    cont.innerHTML = '<div class="aviso info" style="margin:0">Aún no hay tipos de losa registrados.</div>';
+    $("badgeLosas").textContent = "0 tipos";
     return;
   }
   
@@ -1118,13 +1118,13 @@ function renderTiposLosa(){
         'Metrado por losa (ref): <b>'+fmt(mlLosa,2)+' ml</b>'+
       '</div>'+
       '<div class="acciones">'+
-        '<button class="btn-outline" onclick="cargarEnConstructor('+m.id+')" title="Cargar para editar">✏️ 编辑</button>'+
+        '<button class="btn-outline" onclick="cargarEnConstructor('+m.id+')" title="Cargar para editar">✏️ Editar</button>'+
         '<button class="btn-peligro" onclick="eliminarLosaTipo('+m.id+')" title="Eliminar">🗑 Eliminar</button>'+
       '</div>'+
     '</div>';
   });
   cont.innerHTML = html;
-  $("badgeLosas").textContent = tiposLosa.length + (tiposLosa.length===1?" 种类型":" 种类型s");
+  $("badgeLosas").textContent = tiposLosa.length + (tiposLosa.length===1?" tipo":" tipos");
 }
 
 function generarMiniSvgLosa(m){
@@ -1192,7 +1192,7 @@ function cargarEnConstructor(id){
 function renderFormSelects(){
   var selS = $("fSellador");
   var selFiltroS = $("filtroSellador");
-  var htmlS = '<option value="">— 请选择 —</option>';
+  var htmlS = '<option value="">— Elegir —</option>';
   selladores.forEach(function(s){ 
     htmlS += '<option value="'+s.nombre+'">'+s.nombre+' ('+s.tipo+')</option>'; 
   });
@@ -1203,7 +1203,7 @@ function renderFormSelects(){
   if(selFiltroS) selFiltroS.innerHTML = htmlFS;
   
   var selL = $("fLosaTipo");
-  var htmlL = '<option value="">— 请选择 —</option>';
+  var htmlL = '<option value="">— Elegir —</option>';
   tiposLosa.forEach(function(t){ htmlL += '<option value="'+t.codigo+'">'+t.codigo+'</option>'; });
   if(selL) selL.innerHTML = htmlL;
 }
@@ -1298,13 +1298,13 @@ function agregarTramo(){
   var losaTipo = txt("fLosaTipo");
   var via = txt("fVia"), obs = txt("fObs"), fecha = txt("fFecha");
   
-  if(!Number.isFinite(pIni)){ mostrarError("请输入起始桩号。"); return; }
-  if(!Number.isFinite(pFin)){ mostrarError("请输入终止桩号。"); return; }
-  if(pFin <= pIni){ mostrarError("终止桩号必须大于起始桩号。"); return; }
+  if(!Number.isFinite(pIni)){ mostrarError("Ingresa la progresiva inicial."); return; }
+  if(!Number.isFinite(pFin)){ mostrarError("Ingresa la progresiva final."); return; }
+  if(pFin <= pIni){ mostrarError("La progresiva final debe ser mayor que la inicial."); return; }
   if(!Number.isFinite(ancho) || ancho<=0){ mostrarError("El ancho debe ser mayor a cero."); return; }
-  if(!sellador){ mostrarError("Selecciona el 种密封胶."); return; }
-  if(!losaTipo){ mostrarError("Selecciona el 种类型 de losa."); return; }
-  if(!fecha){ mostrarError("请输入区段日期。"); return; }
+  if(!sellador){ mostrarError("Selecciona el sellador."); return; }
+  if(!losaTipo){ mostrarError("Selecciona el tipo de losa."); return; }
+  if(!fecha){ mostrarError("Ingresa la fecha del tramo."); return; }
   
   var dist = pFin - pIni;
   var tramo = {
@@ -1343,7 +1343,7 @@ function limpiarFormTramo(){
 }
 
 function duplicarUltimo(){
-  if(tramos.length === 0){ mostrarError("暂无可复制的区段。"); return; }
+  if(tramos.length === 0){ mostrarError("Aún no hay tramos para duplicar."); return; }
   var u = tramos[tramos.length-1];
   $("fIni").value = fmtProg(u.progFin);
   $("fFin").value = fmtProg(u.progFin + u.dist);
@@ -1369,7 +1369,7 @@ function editarCampo(idx, campo, valor, input){
     t[campo] = n;
     if(t.progFin <= t.progIni){
       restaurar(input, ant);
-      mostrarError("终止桩号必须大于起始桩号。");
+      mostrarError("La progresiva final debe ser mayor que la inicial.");
       return;
     }
     t.dist = t.progFin - t.progIni;
@@ -1413,7 +1413,7 @@ function restaurar(input, valor){
 }
 
 function eliminarTramo(idx){
-  if(!confirm("确定删除第 "+(idx+1)+" ("+fmtProg(tramos[idx].progIni)+" → "+fmtProg(tramos[idx].progFin)+")?")) return;
+  if(!confirm("¿Eliminar el tramo N° "+(idx+1)+" ("+fmtProg(tramos[idx].progIni)+" → "+fmtProg(tramos[idx].progFin)+")?")) return;
   tramos.splice(idx, 1);
   ordenarTramos();
   actualizarTodo();
@@ -1494,15 +1494,15 @@ function renderTabla(){
     html += '<td class="celda-editable"><input class="celda-edit" type="number" step="0.01" data-idx="'+idx+'" data-campo="ancho" value="'+t.ancho+'" onchange="editarCampo('+idx+',\'ancho\',this.value,this)"></td>';
     
     var selectVia = '<select class="celda-edit" data-idx="'+idx+'" data-campo="via" onchange="editarCampo('+idx+',\'via\',this.value,this)">'+
-      '<option value="左幅" '+(t.via==="左幅"?'selected':'')+'>左幅</option>'+
-      '<option value="右幅" '+(t.via==="右幅"?'selected':'')+'>右幅</option>'+
-      '<option value="全幅" '+(t.via==="全幅"?'selected':'')+'>全幅</option>'+
+      '<option value="IZQUIERDA" '+(t.via==="IZQUIERDA"?'selected':'')+'>IZQ</option>'+
+      '<option value="DERECHA" '+(t.via==="DERECHA"?'selected':'')+'>DER</option>'+
+      '<option value="COMPLETA" '+(t.via==="COMPLETA"?'selected':'')+'>COMP</option>'+
     '</select>';
     html += '<td class="celda-editable">'+selectVia+'</td>';
     
     var selectObs = '<select class="celda-edit" data-idx="'+idx+'" data-campo="obs" onchange="editarCampo('+idx+',\'obs\',this.value,this)">'+
-      '<option value="INTERNA" '+(t.obs==="INTERNA"?'selected':'')+'>内部</option>'+
-      '<option value="EXTERNA" '+(t.obs==="EXTERNA"?'selected':'')+'>外部</option>'+
+      '<option value="INTERNA" '+(t.obs==="INTERNA"?'selected':'')+'>INT</option>'+
+      '<option value="EXTERNA" '+(t.obs==="EXTERNA"?'selected':'')+'>EXT</option>'+
       '<option value="PC" '+(t.obs==="PC"?'selected':'')+'>PC</option>'+
     '</select>';
     html += '<td class="celda-editable">'+selectObs+'</td>';
@@ -1520,12 +1520,12 @@ function renderTabla(){
   });
   
   if(tramos.length === 0){
-    html = '<tr><td colspan="17" style="text-align:center;padding:20px;color:#607d8b;font-style:italic;">Aún no hay 个已登记区段. Usa el formulario superior para agregar el primero.</td></tr>';
+    html = '<tr><td colspan="17" style="text-align:center;padding:20px;color:#607d8b;font-style:italic;">Aún no hay tramos registrados. Usa el formulario superior para agregar el primero.</td></tr>';
   } else if(lista.length === 0){
-    html = '<tr><td colspan="17" style="text-align:center;padding:20px;color:#607d8b;font-style:italic;">没有符合当前筛选条件的区段。</td></tr>';
+    html = '<tr><td colspan="17" style="text-align:center;padding:20px;color:#607d8b;font-style:italic;">Ningún tramo coincide con el filtro aplicado.</td></tr>';
   }
   $("cuerpoTramos").innerHTML = html;
-  $("badgeTramos").textContent = tramos.length + (tramos.length===1?" tramo registrado":" 个已登记区段");
+  $("badgeTramos").textContent = tramos.length + (tramos.length===1?" tramo registrado":" tramos registrados");
 }
 
 /* =========================================================
@@ -1613,19 +1613,19 @@ function calcular(){
 function renderResumen(){
   var c = calcular();
   var html = "";
-  html += '<div class="tarjeta-res viajes"><div class="titulo">已登记区段数</div><div class="valor">'+c.totalTramos+'</div></div>';
-  html += '<div class="tarjeta-res acum"><div class="titulo">已完成长度</div><div class="valor">'+fmt(c.totalLong,2)+'<span class="unidad">ml</span></div></div>';
-  html += '<div class="tarjeta-res obra"><div class="titulo">项目总长度</div><div class="valor">'+fmt(c.volTotal,2)+'<span class="unidad">ml</span></div></div>';
+  html += '<div class="tarjeta-res viajes"><div class="titulo">Tramos registrados</div><div class="valor">'+c.totalTramos+'</div></div>';
+  html += '<div class="tarjeta-res acum"><div class="titulo">ML ejecutados</div><div class="valor">'+fmt(c.totalLong,2)+'<span class="unidad">ml</span></div></div>';
+  html += '<div class="tarjeta-res obra"><div class="titulo">ML total del ítem</div><div class="valor">'+fmt(c.volTotal,2)+'<span class="unidad">ml</span></div></div>';
   var claseRest = c.restante < 0 ? "cierre negativo" : "cierre";
-  html += '<div class="tarjeta-res '+claseRest+'"><div class="titulo">剩余长度</div><div class="valor">'+fmt(c.restante,2)+'<span class="unidad">ml</span></div></div>';
-  html += '<div class="tarjeta-res '+(c.pct>=100?"ok":"acum")+'"><div class="titulo">实体进度</div><div class="valor">'+fmt(c.pct,1)+'<span class="unidad">%</span></div></div>';
-  html += '<div class="tarjeta-res acum"><div class="titulo">金额 ejecutado</div><div class="valor">'+fmt(c.totalMonto,2)+'<span class="unidad">Bs</span></div></div>';
-  html += '<div class="tarjeta-res obra"><div class="titulo">金额 total ítem</div><div class="valor">'+fmt(c.montoTotal,2)+'<span class="unidad">Bs</span></div></div>';
-  html += '<div class="tarjeta-res '+(c.montoRestante<0?"cierre negativo":"cierre")+'"><div class="titulo">金额 restante</div><div class="valor">'+fmt(c.montoRestante,2)+'<span class="unidad">Bs</span></div></div>';
+  html += '<div class="tarjeta-res '+claseRest+'"><div class="titulo">ML restantes</div><div class="valor">'+fmt(c.restante,2)+'<span class="unidad">ml</span></div></div>';
+  html += '<div class="tarjeta-res '+(c.pct>=100?"ok":"acum")+'"><div class="titulo">Avance físico</div><div class="valor">'+fmt(c.pct,1)+'<span class="unidad">%</span></div></div>';
+  html += '<div class="tarjeta-res acum"><div class="titulo">Monto ejecutado</div><div class="valor">'+fmt(c.totalMonto,2)+'<span class="unidad">Bs</span></div></div>';
+  html += '<div class="tarjeta-res obra"><div class="titulo">Monto total ítem</div><div class="valor">'+fmt(c.montoTotal,2)+'<span class="unidad">Bs</span></div></div>';
+  html += '<div class="tarjeta-res '+(c.montoRestante<0?"cierre negativo":"cierre")+'"><div class="titulo">Monto restante</div><div class="valor">'+fmt(c.montoRestante,2)+'<span class="unidad">Bs</span></div></div>';
   
-  html += '<div class="tarjeta-res viajes"><div class="titulo">横向切缝长度</div><div class="valor">'+fmt(c.totalTransv,2)+'<span class="unidad">ml</span></div><div class="sub">'+c.totalTransvN+' 已施工接缝数</div></div>';
-  html += '<div class="tarjeta-res viajes"><div class="titulo">纵向切缝长度</div><div class="valor">'+fmt(c.totalLong_,2)+'<span class="unidad">ml</span></div></div>';
-  html += '<div class="tarjeta-res material"><div class="titulo">密封胶体积</div><div class="valor">'+fmt(c.totalLitros,2)+'<span class="unidad">L</span></div><div class="sub">'+fmt(c.totalM3,4)+' m³</div></div>';
+  html += '<div class="tarjeta-res viajes"><div class="titulo">ML transversales</div><div class="valor">'+fmt(c.totalTransv,2)+'<span class="unidad">ml</span></div><div class="sub">'+c.totalTransvN+' juntas ejecutadas</div></div>';
+  html += '<div class="tarjeta-res viajes"><div class="titulo">ML longitudinales</div><div class="valor">'+fmt(c.totalLong_,2)+'<span class="unidad">ml</span></div></div>';
+  html += '<div class="tarjeta-res material"><div class="titulo">Volumen de sello</div><div class="valor">'+fmt(c.totalLitros,2)+'<span class="unidad">L</span></div><div class="sub">'+fmt(c.totalM3,4)+' m³</div></div>';
   
   $("tarjetasResumen").innerHTML = html;
   
@@ -1633,18 +1633,18 @@ function renderResumen(){
   if(c.totalTramos === 0){
     vh = '<div class="aviso info"><b>ℹ️</b> Aún no se han registrado tramos.</div>';
   } else if(c.restante > 0){
-    vh = '<div class="aviso"><b>🚧 工程进行中：</b> 尚余 <b>'+fmt(c.restante,2)+' ml</b>. 进度： <b>'+fmt(c.pct,1)+'%</b>.</div>';
+    vh = '<div class="aviso"><b>🚧 Obra en curso:</b> Aún faltan <b>'+fmt(c.restante,2)+' ml</b>. Avance: <b>'+fmt(c.pct,1)+'%</b>.</div>';
   } else if(c.restante > -0.5){
-    vh = '<div class="aviso ok"><b>✓ 工程已完成：</b> 已完成长度与项目总长度一致。</div>';
+    vh = '<div class="aviso ok"><b>✓ Obra completa:</b> La longitud ejecutada coincide con el total del ítem.</div>';
   } else {
-    vh = '<div class="aviso error visible"><b>⚠ 超出工程量：</b> 已施工 <b>'+fmt(Math.abs(c.restante),2)+' ml</b>，超过项目总量。</div>';
+    vh = '<div class="aviso error visible"><b>⚠ Exceso de longitud:</b> Se ejecutó <b>'+fmt(Math.abs(c.restante),2)+' ml</b> por encima del ítem.</div>';
   }
   $("zonaVeredicto").innerHTML = vh;
   
   var br = "";
   br += '<div class="bloque-rendimiento">';
-  br += '<h3>🧪 Consumo de material por 种类型 de 种密封胶</h3>';
-  br += '<div style="font-size:11.5px;color:#33691e;margin-bottom:8px">Litros reales = m³ × gravedad específica × 1000. Si el 种密封胶 no define GE, se asume 1.0 (agua).</div>';
+  br += '<h3>🧪 Consumo de material por tipo de sellador</h3>';
+  br += '<div style="font-size:11.5px;color:#33691e;margin-bottom:8px">Litros reales = m³ × gravedad específica × 1000. Si el sellador no define GE, se asume 1.0 (agua).</div>';
   
   var keysS = Object.keys(c.porSellador);
   if(keysS.length > 0){
@@ -1662,7 +1662,7 @@ function renderResumen(){
     br += '</div>';
   }
   
-  br += '<div class="nota">ℹ️ <b>计算公式：</b> m³ = ML × (Ancho_corte_mm/1000) × (Profundidad_mm/1000). Litros = m³ × GE × 1000. El metrado se calcula a partir del 种类型 de losa y las líneas activas seleccionadas, multiplicado por los metros lineales del tramo.</div>';
+  br += '<div class="nota">ℹ️ <b>Cálculo:</b> m³ = ML × (Ancho_corte_mm/1000) × (Profundidad_mm/1000). Litros = m³ × GE × 1000. El metrado se calcula a partir del tipo de losa y las líneas activas seleccionadas, multiplicado por los metros lineales del tramo.</div>';
   br += '</div>';
   $("bloqueRendimiento").innerHTML = br;
 }
@@ -1701,12 +1701,12 @@ function renderPapiro(){
   var offsetEjePx = (offsetEjeMetros / maxAnchoEscala) * alturaMaxVia;
   
   var html = "";
-  html += '<title>工程示意图</title>';
+  html += '<title>Papiro de obra</title>';
   html += '<rect x="'+margen.left+'" y="'+margen.top+'" width="'+pW+'" height="'+pH+'" fill="#fafcfd" stroke="#e0e8f0"/>';
   html += '<rect x="'+margen.left+'" y="'+margen.top+'" width="'+pW+'" height="'+alturaMaxVia+'" fill="#f0f7f2" opacity="0.5"/>';
   html += '<rect x="'+margen.left+'" y="'+yEje+'" width="'+pW+'" height="'+alturaMaxVia+'" fill="#fffbf0" opacity="0.5"/>';
-  html += '<text x="'+(margen.left-8)+'" y="'+(margen.top+alturaMaxVia/2)+'" text-anchor="end" font-size="11" font-weight="bold" fill="#1e7a4a">VÍA 左幅</text>';
-  html += '<text x="'+(margen.left-8)+'" y="'+(yEje+alturaMaxVia/2)+'" text-anchor="end" font-size="11" font-weight="bold" fill="#c05621">VÍA 右幅</text>';
+  html += '<text x="'+(margen.left-8)+'" y="'+(margen.top+alturaMaxVia/2)+'" text-anchor="end" font-size="11" font-weight="bold" fill="#1e7a4a">VÍA IZQUIERDA</text>';
+  html += '<text x="'+(margen.left-8)+'" y="'+(yEje+alturaMaxVia/2)+'" text-anchor="end" font-size="11" font-weight="bold" fill="#c05621">VÍA DERECHA</text>';
   html += '<line x1="'+margen.left+'" y1="'+yEje+'" x2="'+(margen.left+pW)+'" y2="'+yEje+'" stroke="#78909c" stroke-width="2" stroke-dasharray="4 3"/>';
   
   // Etiquetas de INICIO y FIN (extraídas del programa de ejemplo)
@@ -1734,7 +1734,7 @@ function renderPapiro(){
     html += '<text x="'+x+'" y="'+(margen.top+pH+16)+'" text-anchor="middle" font-size="10" fill="#546e7a">'+fmtProg(p)+'</text>';
   }
   
-  html += '<text x="'+(margen.left+pW/2)+'" y="'+(H-6)+'" text-anchor="middle" font-size="11" font-weight="bold" fill="#263238">桩号（米）</text>';
+  html += '<text x="'+(margen.left+pW/2)+'" y="'+(H-6)+'" text-anchor="middle" font-size="11" font-weight="bold" fill="#263238">Progresiva (m)</text>';
   html += '<text x="15" y="'+(margen.top+pH/2)+'" text-anchor="middle" font-size="11" font-weight="bold" fill="#263238" transform="rotate(-90 15 '+(margen.top+pH/2)+')">Vía</text>';
   
   tramos.forEach(function(t){
@@ -1748,7 +1748,7 @@ function renderPapiro(){
     var altoBarra = (t.ancho / maxAnchoEscala) * alturaMaxVia;
     var obs = t.obs === "N/A" ? "PC" : t.obs;
     
-    var esIzq = (t.via === "左幅" || t.via === "全幅");
+    var esIzq = (t.via === "IZQUIERDA" || t.via === "COMPLETA");
     var offsetAnchoMetros = 0;
     
     if(obs === "EXTERNA"){
@@ -1788,7 +1788,7 @@ function renderPapiro(){
   selladores.forEach(function(s){
     leg += '<div class="item"><span class="swatch" style="background:'+s.color+'"></span> '+s.nombre+' ('+s.tipo+')</div>';
   });
-  leg += '<div class="item"><span class="swatch" style="background:#c62828;height:2px"></span> 施工进度前沿</div>';
+  leg += '<div class="item"><span class="swatch" style="background:#c62828;height:2px"></span> Frente de avance</div>';
   $("papiroLeyenda").innerHTML = leg;
 }
 
@@ -1822,7 +1822,7 @@ function exportarPapiroPNG(){
     a.download = "papiro_"+(txt("nombreObra").replace(/[^a-z0-9]/gi,"_")||"obra")+".png";
     document.body.appendChild(a); a.click(); document.body.removeChild(a);
   };
-  img.onerror = function(){ URL.revokeObjectURL(url); alert("导出失败。"); };
+  img.onerror = function(){ URL.revokeObjectURL(url); alert("Error al exportar."); };
   img.src = url;
 }
 
@@ -1847,7 +1847,7 @@ function dibujarCurvaSConIdeal(c){
   
   var fechas = Object.keys(c.porFecha).sort();
   if(fechas.length === 0){
-    svg.innerHTML = '<text x="450" y="150" text-anchor="middle" font-size="13" fill="#90a4ae" font-style="italic">暂无数据</text>';
+    svg.innerHTML = '<text x="450" y="150" text-anchor="middle" font-size="13" fill="#90a4ae" font-style="italic">Sin datos</text>';
     return;
   }
   
@@ -1905,7 +1905,7 @@ function dibujarCurvaSConIdeal(c){
   html += '<line x1="'+(m.left+pW-250)+'" y1="'+(m.top+20)+'" x2="'+(m.left+pW-220)+'" y2="'+(m.top+20)+'" stroke="#087f5b" stroke-width="3"/>';
   html += '<text x="'+(m.left+pW-215)+'" y="'+(m.top+24)+'" font-size="10" fill="#263238">Real</text>';
   html += '<line x1="'+(m.left+pW-250)+'" y1="'+(m.top+38)+'" x2="'+(m.left+pW-220)+'" y2="'+(m.top+38)+'" stroke="#c05621" stroke-width="2" stroke-dasharray="6 4"/>';
-  html += '<text x="'+(m.left+pW-215)+'" y="'+(m.top+42)+'" font-size="10" fill="#263238">理想（按时间）</text>';
+  html += '<text x="'+(m.left+pW-215)+'" y="'+(m.top+42)+'" font-size="10" fill="#263238">Ideal (tiempo)</text>';
   
   svg.innerHTML = html;
 }
@@ -1919,7 +1919,7 @@ function dibujarPorSellador(c){
   
   var claves = Object.keys(c.porSellador).filter(function(k){ return c.porSellador[k].long > 0; });
   if(claves.length === 0){
-    svg.innerHTML = '<text x="450" y="150" text-anchor="middle" font-size="13" fill="#90a4ae" font-style="italic">暂无数据</text>';
+    svg.innerHTML = '<text x="450" y="150" text-anchor="middle" font-size="13" fill="#90a4ae" font-style="italic">Sin datos</text>';
     return;
   }
   
@@ -1961,7 +1961,7 @@ function dibujarMensual(c){
   
   var meses = Object.keys(c.porMes).sort();
   if(meses.length === 0){
-    svg.innerHTML = '<text x="450" y="150" text-anchor="middle" font-size="13" fill="#90a4ae" font-style="italic">暂无数据</text>';
+    svg.innerHTML = '<text x="450" y="150" text-anchor="middle" font-size="13" fill="#90a4ae" font-style="italic">Sin datos</text>';
     return;
   }
   
@@ -1975,7 +1975,7 @@ function dibujarMensual(c){
   }
   
   var anchoB = pW/meses.length;
-  var nombresMes = ["1月","2月","3月","4月","5月","6月","7月","8月","9月","10月","11月","12月"];
+  var nombresMes = ["Ene","Feb","Mar","Abr","May","Jun","Jul","Ago","Sep","Oct","Nov","Dic"];
   meses.forEach(function(k,i){
     var s = c.porMes[k];
     var partes = k.split("-");
@@ -1998,7 +1998,7 @@ function dibujarViaUbicacion(c){
   var m = {top:30, right:30, bottom:60, left:70};
   var pW = W - m.left - m.right, pH = H - m.top - m.bottom;
   
-  var grupos = ["左幅","右幅","全幅"];
+  var grupos = ["IZQUIERDA","DERECHA","COMPLETA"];
   var ubic = ["INTERNA","EXTERNA","PC"];
   
   var matriz = {};
@@ -2015,7 +2015,7 @@ function dibujarViaUbicacion(c){
     if(tot > maxTotal) maxTotal = tot;
   });
   if(maxTotal === 0){
-    svg.innerHTML = '<text x="450" y="150" text-anchor="middle" font-size="13" fill="#90a4ae" font-style="italic">暂无数据</text>';
+    svg.innerHTML = '<text x="450" y="150" text-anchor="middle" font-size="13" fill="#90a4ae" font-style="italic">Sin datos</text>';
     return;
   }
   
@@ -2067,7 +2067,7 @@ function dibujarOrientacion(c){
   var pW = W - m.left - m.right, pH = H - m.top - m.bottom;
   
   if(c.totalTransv === 0 && c.totalLong_ === 0){
-    svg.innerHTML = '<text x="450" y="110" text-anchor="middle" font-size="13" fill="#90a4ae" font-style="italic">暂无数据</text>';
+    svg.innerHTML = '<text x="450" y="110" text-anchor="middle" font-size="13" fill="#90a4ae" font-style="italic">Sin datos</text>';
     return;
   }
   
@@ -2097,7 +2097,7 @@ function dibujarOrientacion(c){
 function recolectarEstado(){
   return {
     version: "4.5",
-    aplicacion: "Control de Avance de Obra - 删除切缝 y Sello de Juntas",
+    aplicacion: "Control de Avance de Obra - Corte y Sello de Juntas",
     fechaGuardado: new Date().toISOString(),
     obra: {
       nombre: txt("nombreObra"),
@@ -2139,7 +2139,7 @@ function recolectarEstado(){
 function guardarProyecto(){
   ocultarError();
   if(tramos.length === 0 && selladores.length === 0 && tiposLosa.length === 0){
-    mostrarError("没有可保存的数据。");
+    mostrarError("No hay datos para guardar.");
     return;
   }
   var estado = recolectarEstado();
@@ -2150,8 +2150,8 @@ function guardarProyecto(){
   a.href = url; a.download = "proyecto.json";
   document.body.appendChild(a); a.click(); document.body.removeChild(a);
   URL.revokeObjectURL(url);
-  var ind = $("indicador已保存");
-  $("texto已保存").textContent = "已保存: proyecto.json";
+  var ind = $("indicadorGuardado");
+  $("textoGuardado").textContent = "Guardado: proyecto.json";
   ind.classList.add("visible");
   setTimeout(function(){ ind.classList.remove("visible"); }, 4000);
 }
@@ -2164,7 +2164,7 @@ function abrirProyecto(){
 
 function cargarEstado(data, silencioso){
   if(!data || typeof data !== "object" || Array.isArray(data)){
-    if(!silencioso) mostrarError("文件不包含有效数据。");
+    if(!silencioso) mostrarError("El archivo no contiene datos válidos.");
     return false;
   }
 
@@ -2241,7 +2241,7 @@ function cargarEstado(data, silencioso){
         sellador: sell,
         losaTipo: t.losaTipo || "",
         ancho: Number.isFinite(Number(t.ancho)) ? Number(t.ancho) : 0,
-        via: t.via || "左幅",
+        via: t.via || "IZQUIERDA",
         obs: t.obs || "INTERNA",
         fecha: t.fecha || "",
         nTransv: 0, longTransv: 0, nLong: 0, longLong: 0,
@@ -2285,25 +2285,25 @@ function cargarEstado(data, silencioso){
 
 function exportarCSV(){
   ocultarError();
-  if(tramos.length === 0){ mostrarError("没有可导出的区段。"); return; }
+  if(tramos.length === 0){ mostrarError("No hay tramos para exportar."); return; }
   var c = calcular();
   var lineas = [];
   lineas.push(["CONTROL DE AVANCE DE OBRA - CORTE Y SELLO DE JUNTAS"]);
   lineas.push([]);
   lineas.push(["Obra", txt("nombreObra")]);
-  lineas.push(["综合单价（Bs/米）", txt("precioUnit")]);
+  lineas.push(["Precio unitario (Bs/ml)", txt("precioUnit")]);
   lineas.push(["Longitud total obra (ml)", fmt(c.volTotal,2)]);
   lineas.push([]);
   lineas.push(["RESUMEN"]);
-  lineas.push(["已登记区段数", c.totalTramos]);
-  lineas.push(["已完成长度", fmt(c.totalLong,2)]);
+  lineas.push(["Tramos registrados", c.totalTramos]);
+  lineas.push(["ML ejecutados", fmt(c.totalLong,2)]);
   lineas.push(["Volumen sello (m³)", fmt(c.totalM3,4)]);
   lineas.push(["Volumen sello (Litros reales)", fmt(c.totalLitros,2)]);
-  lineas.push(["金额 ejecutado", fmt(c.totalMonto,2)]);
-  lineas.push(["实体进度 (%)", fmt(c.pct,2)]);
+  lineas.push(["Monto ejecutado", fmt(c.totalMonto,2)]);
+  lineas.push(["Avance físico (%)", fmt(c.pct,2)]);
   lineas.push([]);
   lineas.push(["DETALLE DE TRAMOS"]);
-  lineas.push(["N°","Prog.Ini","Prog.Fin","Dist","Sellador","板块类型","Ancho","Vía","位置","Fecha","横向米数","纵向米数","总米数","金额","Litros"]);
+  lineas.push(["N°","Prog.Ini","Prog.Fin","Dist","Sellador","Tipo losa","Ancho","Vía","Ubic.","Fecha","ML Transv","ML Long","ML Total","Monto","Litros"]);
   tramos.forEach(function(t){
     lineas.push([
       t.num, fmtProg(t.progIni), fmtProg(t.progFin), fmt(t.dist,2), t.sellador, t.losaTipo,
@@ -2330,14 +2330,14 @@ function exportarCSV(){
 }
 
 function limpiarTodo(){
-  if(!confirm("确定删除所有数据吗？\n\n此操作无法撤销。")) return;
-  tramos = []; 种密封胶es = []; 种类型sLosa = [];
+  if(!confirm("¿Borrar TODOS los datos?\n\nEsta acción no se puede deshacer.")) return;
+  tramos = []; selladores = []; tiposLosa = [];
   ["nombreObra","progIniGlobal","progFinGlobal","fIni","fFin","fAncho","fFecha","mCodigo","sNombre"].forEach(function(id){ if($(id)) $(id).value = ""; });
   $("fSellador").innerHTML = "";
   $("fLosaTipo").innerHTML = "";
   $("sGravedad").value = "";
   $("sColor").value = "#004B87";
-  $("sTipo").value = "聚氨酯";
+  $("sTipo").value = "Poliuretano";
   inicializarPreviewState();
   renderSelladores();
   renderTiposLosa();
@@ -2349,7 +2349,7 @@ function limpiarTodo(){
    NUEVO PROYECTO / IMPRIMIR
    ========================================================= */
 function nuevoProyecto(){
-  if(!confirm("确定新建项目吗？如果尚未保存，当前数据将丢失。")) return;
+  if(!confirm("¿Crear un nuevo proyecto? Se perderán los datos actuales si no has guardado.")) return;
   limpiarTodo();
   $("nombreObra").value = "Oruro-Challapata";
   $("progIniGlobal").value = "235+266";
@@ -2369,21 +2369,21 @@ function imprimirResumen(){
   var c = calcular();
   var html = '<html><head><meta charset="UTF-8"><title>Resumen</title><style>body{font-family:Arial;padding:20px;font-size:12px}h1{color:#004B87;font-size:18px}h2{color:#004B87;font-size:14px;margin-top:20px;border-bottom:1px solid #ccc}table{width:100%;border-collapse:collapse;margin-top:8px}td,th{border:1px solid #ccc;padding:4px 6px;font-size:11px}th{background:#eef2f7}.k{font-weight:bold;color:#37474f}.v{color:#004B87;font-weight:bold}</style></head><body>';
   html += '<h1>Resumen de avance — '+txt("nombreObra")+'</h1>';
-  html += '<p>Fecha de emisión: '+new Date().toLocaleString('zh-CN')+'</p>';
+  html += '<p>Fecha de emisión: '+new Date().toLocaleString('es-BO')+'</p>';
   html += '<h2>Indicadores</h2><table>';
   html += '<tr><td class="k">Tramos registrados</td><td class="v">'+c.totalTramos+'</td></tr>';
   html += '<tr><td class="k">ML ejecutados</td><td class="v">'+fmt(c.totalLong,2)+' ml</td></tr>';
   html += '<tr><td class="k">ML total del ítem</td><td class="v">'+fmt(c.volTotal,2)+' ml</td></tr>';
   html += '<tr><td class="k">ML restantes</td><td class="v">'+fmt(c.restante,2)+' ml</td></tr>';
   html += '<tr><td class="k">Avance físico</td><td class="v">'+fmt(c.pct,2)+' %</td></tr>';
-  html += '<tr><td class="k">Monto ejecutado</td><td class="v">Bs '+fmt(c.total金额,2)+'</td></tr>';
+  html += '<tr><td class="k">Monto ejecutado</td><td class="v">Bs '+fmt(c.totalMonto,2)+'</td></tr>';
   html += '<tr><td class="k">Monto total ítem</td><td class="v">Bs '+fmt(c.montoTotal,2)+'</td></tr>';
   html += '<tr><td class="k">Volumen de sello</td><td class="v">'+fmt(c.totalLitros,2)+' L ('+fmt(c.totalM3,4)+' m³)</td></tr>';
   html += '</table>';
   html += '<h2>Consumo por sellador</h2><table><tr><th>Sellador</th><th>Tipo</th><th>ML</th><th>Litros</th><th>m³</th><th>Monto Bs</th></tr>';
   Object.keys(c.porSellador).forEach(function(k){
     var s = c.porSellador[k];
-    var info = 种密封胶es.find(function(x){ return x.nombre === k; });
+    var info = selladores.find(function(x){ return x.nombre === k; });
     html += '<tr><td>'+k+'</td><td>'+(info?info.tipo:'-')+'</td><td>'+fmt(s.long,2)+'</td><td>'+fmt(s.litros,2)+'</td><td>'+fmt(s.m3,4)+'</td><td>'+fmt(s.monto,2)+'</td></tr>';
   });
   html += '</table>';
@@ -2410,13 +2410,13 @@ document.addEventListener("DOMContentLoaded", function(){
         try {
           var data = JSON.parse(e.target.result);
           if(cargarEstado(data, false)){
-            var ind = $("indicador已保存");
-            $("texto已保存").textContent = "已加载：" + f.name;
+            var ind = $("indicadorGuardado");
+            $("textoGuardado").textContent = "Cargado: " + f.name;
             ind.classList.add("visible");
             setTimeout(function(){ ind.classList.remove("visible"); }, 4000);
           }
         } catch(err){
-          mostrarError("JSON 文件无效：" + err.message);
+          mostrarError("Archivo JSON inválido: " + err.message);
         }
       };
       reader.readAsText(f);
