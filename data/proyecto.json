@@ -1,7 +1,7 @@
 {
   "version": "4.5",
   "aplicacion": "Control de Avance de Obra - Corte y Sello de Juntas",
-  "fechaGuardado": "2026-11-17T14:00:02.558Z",
+  "fechaGuardado": "2026-11-17T14:40:56.418Z",
   "obra": {
     "nombre": "Oruro-Challapata",
     "progIniGlobal": "235+266",
@@ -98,6 +98,28 @@
     },
     {
       "num": 2,
+      "progIni": 250557,
+      "progFin": 250563,
+      "dist": 6,
+      "sellador": "SikaFlex 401",
+      "losaTipo": "Losa tipo B [8.5 metros]",
+      "ancho": 8.5,
+      "via": "DERECHA",
+      "obs": "PC",
+      "fecha": "2026-05-08",
+      "longTransv": 25.5,
+      "longLong": 18,
+      "longTotal": 43.5,
+      "nTransv": 3,
+      "nLong": 3,
+      "monto": 995.715,
+      "m3": 0.0013050000000000002,
+      "litros": 1.7095500000000001,
+      "longAcum": 87,
+      "montoAcum": 1991.43
+    },
+    {
+      "num": 3,
       "progIni": 250563,
       "progFin": 250569,
       "dist": 6,
@@ -115,11 +137,11 @@
       "monto": 995.715,
       "m3": 0.0013050000000000002,
       "litros": 2.7405000000000004,
-      "longAcum": 87,
-      "montoAcum": 1991.43
+      "longAcum": 130.5,
+      "montoAcum": 2987.145
     },
     {
-      "num": 3,
+      "num": 4,
       "progIni": 250569,
       "progFin": 250584,
       "dist": 15,
@@ -137,28 +159,6 @@
       "monto": 2197.44,
       "m3": 0.00288,
       "litros": 2.8800000000000003,
-      "longAcum": 183,
-      "montoAcum": 4188.87
-    },
-    {
-      "num": 4,
-      "progIni": 250557,
-      "progFin": 250563,
-      "dist": 6,
-      "sellador": "SikaFlex 401",
-      "losaTipo": "Losa tipo B [8.5 metros]",
-      "ancho": 8.5,
-      "via": "DERECHA",
-      "obs": "PC",
-      "fecha": "2027-05-08",
-      "longTransv": 25.5,
-      "longLong": 18,
-      "longTotal": 43.5,
-      "nTransv": 3,
-      "nLong": 3,
-      "monto": 995.715,
-      "m3": 0.0013050000000000002,
-      "litros": 1.7095500000000001,
       "longAcum": 226.5,
       "montoAcum": 5184.585
     }
