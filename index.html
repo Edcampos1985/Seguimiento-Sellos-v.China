@@ -1,0 +1,2308 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>施工进度控制 — 切缝与密封 v4.5</title>
+<style>
+:root{
+  --azul:#004B87;--azul2:#0068c9;--verde:#087f5b;--verde2:#0ca678;
+  --rojo:#c62828;--naranja:#c05621;--violeta:#6a1b9a;--gris:#546e7a;
+  --texto:#263238;--muted:#607d8b;--borde:#dce4e8;--bg:#eef2f7;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Microsoft YaHei','Segoe UI',Arial,sans-serif;background:linear-gradient(135deg,#eef2f7 0%,#dfe8f0 100%);min-height:100vh;color:var(--texto);padding:20px 12px}
+.contenedor{max-width:1500px;margin:0 auto}
+
+/* 页眉 */
+.cabecera{background:linear-gradient(135deg,#004B87,#0068c9);color:#fff;border-radius:14px;padding:24px;text-align:center;box-shadow:0 8px 22px rgba(0,75,135,.25);margin-bottom:18px}
+.cabecera h1{font-size:22px;margin-bottom:6px}
+.cabecera p{font-size:12.5px;opacity:.9}
+.cabecera .autor{margin-top:10px;font-size:11.5px;font-weight:bold;opacity:.85;line-height:1.6}
+.cabecera .autor span{display:block}
+
+/* 区块 */
+.seccion{background:#fff;border-radius:12px;box-shadow:0 4px 14px rgba(0,0,0,.08);padding:20px;margin-bottom:16px}
+.seccion h2{color:var(--azul);font-size:16px;margin-bottom:16px;padding-bottom:8px;border-bottom:2px solid #e0e8f0;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px}
+.seccion h2 .badge{font-size:11px;font-weight:normal;color:var(--muted);background:#f0f4f8;padding:4px 12px;border-radius:20px}
+
+/* 网格 */
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px}
+.campo label{display:block;font-size:12.5px;font-weight:bold;color:#37474f;margin-bottom:5px}
+.campo input,.campo select,.campo textarea{width:100%;padding:9px 11px;border:1px solid #cfd8dc;border-radius:8px;font-size:13.5px;background:#fafcfc;font-family:inherit}
+.campo textarea{resize:vertical;min-height:60px}
+.campo input:focus,.campo select:focus,.campo textarea:focus{outline:none;border-color:var(--azul);box-shadow:0 0 0 3px rgba(0,75,135,.1);background:#fff}
+.campo input[readonly]{background:#eef2f7;font-weight:bold;color:var(--azul)}
+.campo .ayuda{font-size:10.5px;color:var(--muted);margin-top:3px;font-style:italic}
+
+/* 按钮 */
+.btn-grande{display:block;width:100%;padding:14px;background:linear-gradient(135deg,#004B87,#0068c9);color:#fff;border:none;border-radius:9px;font-size:15px;font-weight:bold;cursor:pointer;transition:.2s;font-family:inherit;letter-spacing:.5px;margin-top:16px}
+.btn-grande:hover{transform:translateY(-2px);box-shadow:0 6px 16px rgba(0,75,135,.3)}
+.btn-mediano{padding:10px 20px;background:var(--verde);color:#fff;border:none;border-radius:8px;font-size:14px;font-weight:bold;cursor:pointer;font-family:inherit;transition:.2s}
+.btn-mediano:hover{background:#05664a}
+.btn-outline{padding:9px 16px;background:#fff;color:var(--azul);border:2px solid var(--azul);border-radius:8px;font-size:13px;font-weight:bold;cursor:pointer;font-family:inherit;transition:.2s}
+.btn-outline:hover{background:var(--azul);color:#fff}
+.btn-peligro{background:#fff;color:var(--rojo);border-color:var(--rojo)}
+.btn-peligro:hover{background:var(--rojo);color:#fff}
+
+/* 文件栏 */
+.barra-archivo{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px;background:#fff;border-radius:12px;padding:14px 18px;box-shadow:0 4px 14px rgba(0,0,0,.08);align-items:center;justify-content:space-between}
+.barra-archivo .grupo-btn{display:flex;gap:8px;flex-wrap:wrap}
+.btn-arch{padding:9px 16px;border-radius:8px;font-size:12.5px;font-weight:bold;cursor:pointer;font-family:inherit;transition:.2s;border:2px solid transparent;display:inline-flex;align-items:center;gap:6px}
+.btn-arch.guardar{background:var(--verde);color:#fff}
+.btn-arch.guardar:hover{background:#05664a;transform:translateY(-1px)}
+.btn-arch.abrir{background:var(--azul);color:#fff}
+.btn-arch.abrir:hover{background:#003a6b;transform:translateY(-1px)}
+.btn-arch.csv{background:var(--naranja);color:#fff}
+.btn-arch.csv:hover{background:#c47f1f;transform:translateY(-1px)}
+.btn-arch.actualizar{background:#8e24aa;color:#fff}
+.btn-arch.actualizar:hover{background:#6a1b9a;transform:translateY(-1px)}
+.btn-arch.limpiar{background:#fff;color:var(--rojo);border-color:var(--rojo)}
+.btn-arch.limpiar:hover{background:var(--rojo);color:#fff}
+
+/* 错误提示 */
+.aviso{background:#fff8e1;border-left:4px solid #e9a23b;padding:11px 14px;border-radius:6px;font-size:12px;color:#76551c;line-height:1.5;margin-bottom:14px}
+.aviso b{color:#c05621}
+.aviso.info{background:#e3f2fd;border-color:#1976d2;color:#0d47a1}
+.aviso.info b{color:#1565c0}
+.aviso.error{background:#ffebee;border-color:var(--rojo);color:#b71c1c;display:none;margin-bottom:14px}
+.aviso.error.visible{display:block}
+.aviso.ok{background:#e8f5e9;border-color:var(--verde);color:#1b5e20}
+
+/* 表格 */
+.tabla-toolbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;flex-wrap:wrap;gap:10px}
+.tabla-toolbar .info-edicion{font-size:11.5px;color:var(--muted);font-style:italic}
+.tabla-toolbar .info-edicion b{color:var(--azul)}
+.tabla-toolbar .filtros{display:flex;gap:8px;align-items:center;flex-wrap:wrap;background:#f5f9fc;padding:6px 12px;border-radius:8px;border:1px solid #d5e0ea}
+.tabla-toolbar .filtros select{padding:6px 10px;border:1px solid #cfd8dc;border-radius:6px;font-size:12px;background:#fff;font-family:inherit}
+.tabla-toolbar .filtros label{font-size:11.5px;font-weight:bold;color:var(--muted)}
+
+.tabla-viajes{width:100%;border-collapse:collapse;background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.06);font-size:12px}
+.tabla-viajes th{background:var(--azul);color:#fff;padding:8px 5px;text-align:center;font-size:10px;font-weight:bold;text-transform:uppercase;letter-spacing:.2px;position:sticky;top:0;z-index:5;cursor:pointer;user-select:none}
+.tabla-viajes th:hover{background:#003a6b}
+.tabla-viajes td{padding:4px 3px;border-bottom:1px solid #e8edf2;text-align:center;font-family:'Courier New',monospace;font-size:11.5px;background:#fff}
+.tabla-viajes tr:last-child td{border-bottom:none}
+.tabla-viajes tr:nth-child(even) td{background:#fafcfd}
+.tabla-viajes tr.alerta td{background:#fff3cd !important;color:#7a5c00}
+.tabla-viajes td.num{color:var(--azul);font-weight:bold}
+.tabla-viajes td input.celda-edit, .tabla-viajes td select.celda-edit{width:100%;padding:6px 4px;border:1px solid transparent;border-radius:5px;font-family:'Courier New',monospace;font-size:11.5px;text-align:center;background:transparent;color:inherit;font-weight:inherit;transition:all .15s}
+.tabla-viajes td select.celda-edit{cursor:pointer}
+.tabla-viajes td input.celda-edit:hover, .tabla-viajes td select.celda-edit:hover{border-color:#b0bec5;background:#fff}
+.tabla-viajes td input.celda-edit:focus, .tabla-viajes td select.celda-edit:focus{outline:none;border-color:var(--azul);background:#fff;box-shadow:0 0 0 2px rgba(0,75,135,.15)}
+.tabla-viajes td input.celda-edit.modificado{background:#fffde7;border-color:var(--naranja)}
+.tabla-viajes td input.celda-edit.invalido{background:#ffebee;border-color:var(--rojo)}
+.tabla-viajes td.celda-editable{position:relative}
+.tabla-viajes .btn-x{background:#ffebee;color:var(--rojo);border:none;border-radius:4px;width:22px;height:22px;cursor:pointer;font-size:12px;font-weight:bold;transition:.15s}
+.tabla-viajes .btn-x:hover{background:#ffcdd2;transform:scale(1.1)}
+.scroll-tabla{max-height:480px;overflow-y:auto;border-radius:10px;border:1px solid #e0e8f0}
+
+/* 行程表单 */
+.form-viaje{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:10px;align-items:end;background:#f5f9fc;border:1px solid #d5e0ea;border-radius:10px;padding:14px;margin-bottom:14px}
+.form-viaje .campo label{font-size:11px}
+.form-viaje .campo input, .form-viaje .campo select{padding:7px 9px;font-size:13px}
+.form-viaje .btn-group{grid-column:span 2;display:flex;gap:6px}
+.form-viaje .btn-group button{flex:1;padding:8px 6px;font-size:12px}
+
+/* 板块构建器 */
+.losa-builder{display:flex;flex-wrap:wrap;gap:16px;align-items:flex-start}
+.losa-form{flex:1;min-width:280px}
+.losa-form .grid{grid-template-columns:1fr 1fr}
+.losa-preview{flex:1;min-width:300px;display:flex;flex-direction:column;align-items:center;gap:10px}
+.losa-svg-container{background:#fafcfd;border:1px solid #d5e0ea;border-radius:10px;padding:10px;width:100%;max-width:500px;display:flex;justify-content:center}
+.losa-svg-container svg{display:block;width:100%;height:auto;max-height:320px}
+.losa-checks{display:grid;grid-template-columns:1fr 1fr;gap:6px;font-size:12px;width:100%;max-width:500px}
+.losa-checks label{display:flex;align-items:center;gap:6px;cursor:pointer;padding:4px 8px;border-radius:6px;background:#f5f9fc;border:1px solid #d5e0ea}
+.losa-checks label:hover{background:#e3f2fd}
+.losa-checks input[type=checkbox]{width:16px;height:16px;cursor:pointer}
+.losa-info{font-size:11.5px;color:var(--muted);text-align:center;line-height:1.5}
+.losa-info b{color:var(--azul)}
+
+/* 板块类型卡片 */
+.lista-losatipos{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px;margin-top:14px}
+.tarjeta-losatipo{background:#fff;border:2px solid #d5e0ea;border-radius:10px;padding:12px;display:flex;flex-direction:column;gap:8px;transition:.2s;position:relative}
+.tarjeta-losatipo:hover{border-color:var(--azul);box-shadow:0 4px 12px rgba(0,75,135,.12)}
+.tarjeta-losatipo .nombre{font-weight:bold;font-size:13.5px;color:var(--azul);display:flex;align-items:center;gap:6px}
+.tarjeta-losatipo .nombre .color-dot{width:14px;height:14px;border-radius:50%;border:1px solid rgba(0,0,0,.15);flex-shrink:0}
+.tarjeta-losatipo .detalles{font-size:11.5px;color:var(--muted);line-height:1.6}
+.tarjeta-losatipo .detalles b{color:#37474f}
+.tarjeta-losatipo .mini-svg{background:#fafcfd;border-radius:6px;padding:4px}
+.tarjeta-losatipo .acciones{display:flex;gap:6px;margin-top:auto}
+.tarjeta-losatipo .acciones button{flex:1;padding:6px;font-size:11px}
+
+/* 汇总卡片 */
+.tarjetas-resumen{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin-bottom:18px}
+.tarjeta-res{background:#fff;border-radius:10px;padding:14px;border-left:5px solid var(--azul);box-shadow:0 3px 10px rgba(0,0,0,.06)}
+.tarjeta-res .titulo{font-size:10.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;font-weight:bold;margin-bottom:6px;line-height:1.3}
+.tarjeta-res .valor{font-size:20px;font-weight:bold;color:var(--azul);line-height:1.1}
+.tarjeta-res .unidad{font-size:11px;color:var(--muted);font-weight:normal;margin-left:3px}
+.tarjeta-res .sub{font-size:10.5px;color:var(--muted);margin-top:4px;font-style:italic}
+.tarjeta-res.viajes{border-left-color:#1976d2;background:linear-gradient(135deg,#e3f2fd,#f5f9fc)}
+.tarjeta-res.viajes .valor{color:#0d47a1}
+.tarjeta-res.acum{border-left-color:var(--verde);background:linear-gradient(135deg,#e8f5e9,#f5faf5)}
+.tarjeta-res.acum .valor{color:var(--verde)}
+.tarjeta-res.cierre{border-left-color:var(--naranja);background:linear-gradient(135deg,#fff8e1,#fdf9f1)}
+.tarjeta-res.cierre .valor{color:#c05621}
+.tarjeta-res.cierre.negativo{border-left-color:var(--rojo);background:linear-gradient(135deg,#ffebee,#fdf2f2)}
+.tarjeta-res.cierre.negativo .valor{color:var(--rojo)}
+.tarjeta-res.obra{border-left-color:var(--violeta);background:linear-gradient(135deg,#f3e5f5,#f9f5fb)}
+.tarjeta-res.obra .valor{color:var(--violeta)}
+.tarjeta-res.ok{border-left-color:var(--verde);background:linear-gradient(135deg,#e8f5e9,#f5faf5)}
+.tarjeta-res.ok .valor{color:var(--verde)}
+.tarjeta-res.material{border-left-color:#00838f;background:linear-gradient(135deg,#e0f7fa,#f1fbfc)}
+.tarjeta-res.material .valor{color:#006064}
+
+/* 性能区块 */
+.bloque-rendimiento{background:linear-gradient(135deg,#f1f8e9,#f9fdf5);border:1px solid #c5e1a5;border-radius:10px;padding:14px;margin-top:14px}
+.bloque-rendimiento h3{color:#33691e;font-size:13.5px;margin-bottom:10px;display:flex;align-items:center;gap:6px}
+.bloque-rendimiento .grid-rend{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.bloque-rendimiento .dato{background:#fff;border-radius:8px;padding:10px;border:1px solid #dcedc8}
+.bloque-rendimiento .dato .lbl{font-size:10px;color:var(--muted);text-transform:uppercase;font-weight:bold;margin-bottom:4px}
+.bloque-rendimiento .dato .val{font-size:16px;font-weight:bold;color:#33691e}
+.bloque-rendimiento .dato .val small{font-size:10px;color:var(--muted);font-weight:normal;margin-left:3px}
+.bloque-rendimiento .nota{font-size:10.5px;color:#558b2f;margin-top:8px;font-style:italic;line-height:1.4}
+
+/* 图纸 SVG */
+.papiro-container{background:#fff;border-radius:12px;padding:16px;border:1px solid var(--borde);margin-bottom:16px;overflow-x:auto}
+.papiro-svg{display:block;min-height:320px}
+.papiro-leyenda{display:flex;flex-wrap:wrap;gap:16px;justify-content:center;margin-top:14px;font-size:11.5px}
+.papiro-leyenda .item{display:flex;align-items:center;gap:6px}
+.papiro-leyenda .swatch{width:22px;height:12px;border-radius:2px;border:1px solid rgba(0,0,0,.15)}
+
+/* 图表 */
+.grafico{background:#fff;border-radius:12px;padding:16px;border:1px solid var(--borde);margin-bottom:16px}
+.grafico h3{color:var(--azul);font-size:14px;margin-bottom:6px;text-align:center}
+.grafico .subtitulo{text-align:center;font-size:11px;color:var(--muted);margin-bottom:10px}
+.grafico svg{display:block;width:100%;height:auto;max-height:340px;margin:0 auto}
+
+/* 底部按钮 */
+.botones-inferiores{display:flex;gap:10px;margin-top:18px;flex-wrap:wrap}
+.botones-inferiores button{flex:1;min-width:140px;padding:12px;border:none;border-radius:8px;font-size:13.5px;font-weight:bold;cursor:pointer;font-family:inherit;transition:.2s}
+.btn-imprimir{background:var(--verde);color:#fff}
+.btn-imprimir:hover{background:#05664a}
+.btn-nuevo{background:#e0e8f0;color:var(--azul)}
+.btn-nuevo:hover{background:#cfd8dc}
+.btn-resumen{background:var(--azul);color:#fff}
+.btn-resumen:hover{background:#003a6b}
+
+/* 打印签名 */
+.firma-impresion{display:none;margin-top:50px;text-align:center;font-size:12px}
+.firma-impresion .linea{width:280px;border-top:1px solid #333;margin:0 auto 6px}
+.firma-impresion .fila{display:flex;justify-content:space-around;gap:40px;flex-wrap:wrap}
+.firma-impresion .bloque{flex:1;min-width:240px}
+
+/* 保存指示器 */
+.indicador-guardado{font-size:11px;color:var(--verde);font-weight:bold;display:none;align-items:center;gap:4px}
+.indicador-guardado.visible{display:inline-flex;animation:fadeIn .3s}
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+
+/* 响应式 */
+@media(max-width:700px){
+  .form-viaje{grid-template-columns:repeat(2,1fr)}
+  .form-viaje .btn-group{grid-column:span 2}
+  .tabla-viajes{font-size:10px}
+  .tabla-viajes th,.tabla-viajes td{padding:4px 2px}
+  .tabla-viajes td input.celda-edit, .tabla-viajes td select.celda-edit{font-size:10px;padding:4px 2px}
+  .barra-archivo{flex-direction:column;align-items:stretch}
+  .barra-archivo .grupo-btn{justify-content:center}
+  .losa-checks{grid-template-columns:1fr}
+}
+@media print{
+  body{background:#fff;padding:0}
+  .btn-grande,.botones-inferiores,.aviso.error,.btn-mediano,.btn-outline,.form-viaje,.no-print,.btn-x,.tabla-toolbar,.barra-archivo{display:none !important}
+  .cabecera{background:#fff !important;color:var(--texto) !important;border:2px solid var(--azul)}
+  .cabecera *{color:var(--texto) !important}
+  .seccion{box-shadow:none;border:1px solid #ccc;page-break-inside:avoid}
+  .grafico{page-break-inside:avoid}
+  .scroll-tabla{max-height:none;overflow:visible}
+  .tabla-viajes td input.celda-edit, .tabla-viajes td select.celda-edit{border:none;background:transparent}
+  .firma-impresion{display:block !important}
+}
+</style>
+</head>
+<body>
+
+<div class="contenedor">
+
+  <!-- 文件栏 -->
+  <div class="barra-archivo no-print">
+    <div class="titulo-archivo" style="font-size:12.5px;color:var(--muted);font-weight:bold;display:flex;align-items:center;gap:6px;flex-wrap:wrap">
+      📁 项目：
+      <span class="indicador-guardado" id="indicadorGuardado">✓ <span id="textoGuardado">已保存</span></span>
+    </div>
+    <div class="grupo-btn">
+      <button class="btn-arch actualizar" onclick="actualizarDesdeServidor()" title="从 GitHub 查找更新">🔄 更新数据</button>
+      <button class="btn-arch guardar" onclick="guardarProyecto()" title="下载 .json 文件">💾 保存</button>
+      <button class="btn-arch abrir" onclick="abrirProyecto()" title="加载本地 .json 文件">📂 打开</button>
+      <button class="btn-arch csv" onclick="exportarCSV()" title="导出为 CSV (Excel)">📊 CSV</button>
+      <button class="btn-arch limpiar" onclick="limpiarTodo()" title="清除所有数据">🗑 清除</button>
+    </div>
+  </div>
+  <input type="file" id="inputArchivo" accept=".json,application/json" style="display:none">
+
+  <!-- 页眉 -->
+  <div class="cabecera">
+    <h1>🏗️ 施工进度控制 — 切缝与密封 v4.5</h1>
+    <p>工程 · 板块类型 · 施工图纸 · 实时进度</p>
+    <div class="autor">
+      <span>工程师 何塞·埃德加·坎波斯·塞斯佩德斯 · RNI: 30-222 · 电话: +591 73433166</span>
+      <span>版本 4.5 - 2026</span>
+    </div>
+  </div>
+
+  <div class="aviso error" id="alertaError">
+    <b>❌ 错误：</b> <span id="textoError"></span>
+  </div>
+
+  <!-- 第1节：工程配置 -->
+  <div class="seccion">
+    <h2>⚙️ 1. 工程配置</h2>
+    <div class="grid">
+      <div class="campo">
+        <label>工程名称</label>
+        <input id="nombreObra" type="text" value="Oruro-Challapata" oninput="sincronizarYRenderizar()">
+      </div>
+      <div class="campo">
+        <label>全局起始桩号</label>
+        <input id="progIniGlobal" type="text" value="235+266" oninput="sincronizarYRenderizar()">
+      </div>
+      <div class="campo">
+        <label>全局终止桩号</label>
+        <input id="progFinGlobal" type="text" value="256+612" oninput="sincronizarYRenderizar()">
+      </div>
+      <div class="campo">
+        <label style="color:var(--azul)">平均密封深度 (mm)</label>
+        <input id="profundidadMm" type="number" step="0.1" value="6" oninput="sincronizarYRenderizar()">
+        <div class="ayuda">Vulkem 45SSL 最小值：6 mm</div>
+      </div>
+      <div class="campo">
+        <label style="color:var(--azul)">扩缝切割宽度 (mm)</label>
+        <input id="anchoCorteMm" type="number" step="0.1" value="6" oninput="sincronizarYRenderizar()">
+        <div class="ayuda">Vulkem 45SSL 最小值：6 mm</div>
+      </div>
+      <div class="campo">
+        <label>单价 (Bs/ml)</label>
+        <input id="precioUnit" type="number" step="0.01" value="22.89" oninput="sincronizarYRenderizar()">
+        <div class="ayuda">扩缝切割与接缝密封</div>
+      </div>
+      <div class="campo">
+        <label>工程总长度 (ml)</label>
+        <input id="volTotalItem" type="number" step="0.01" value="262908" oninput="sincronizarYRenderizar()">
+        <div class="ayuda" id="ayudaVolTotal"></div>
+      </div>
+      <div class="campo">
+        <label style="color:var(--azul)">最大板块宽度 (m)</label>
+        <input id="anchoMaxEscala" type="number" step="0.1" value="10" oninput="sincronizarYRenderizar()" title="定义图纸的垂直比例">
+        <div class="ayuda">图纸视觉比例</div>
+      </div>
+      <div class="campo">
+        <label>工程开工日期</label>
+        <input id="fechaInicioObra" type="date" value="2024-11-16" oninput="sincronizarYRenderizar()">
+      </div>
+      <div class="campo">
+        <label>预计竣工日期</label>
+        <input id="fechaFinObra" type="date" value="2027-01-01" oninput="sincronizarYRenderizar()">
+      </div>
+    </div>
+  </div>
+
+  <!-- 第2节：密封胶类型 -->
+  <div class="seccion">
+    <h2>🧴 2. 密封胶类型 <span class="badge" id="badgeSelladores">0 种密封胶</span></h2>
+    <div class="aviso info">
+      <b>ℹ️ 说明：</b> 工程项目<b>只有一个</b>（扩缝切割与接缝密封）。在此定义所使用的<b>密封胶</b>，包括其类型（聚氨酯、硅酮、沥青等）、图纸颜色及比重（用于精确计算升数）。
+    </div>
+    <div class="form-viaje no-print" style="grid-template-columns:repeat(auto-fit,minmax(140px,1fr))">
+      <div class="campo"><label>密封胶名称</label><input id="sNombre" type="text" placeholder="例如：Vulkem 45SSL"></div>
+      <div class="campo">
+        <label>类型</label>
+        <select id="sTipo">
+          <option value="Poliuretano">聚氨酯</option>
+          <option value="Silicona">硅酮</option>
+          <option value="Asfáltico">沥青</option>
+          <option value="Acrílico">丙烯酸</option>
+          <option value="Epóxico">环氧</option>
+          <option value="Otro">其他</option>
+        </select>
+      </div>
+      <div class="campo"><label>颜色</label><input id="sColor" type="color" value="#004B87" style="height:38px;padding:4px"></div>
+      <div class="campo"><label>比重</label><input id="sGravedad" type="number" step="0.01" placeholder="例如：1.32"></div>
+      <div class="campo" style="grid-column:span 1"><label>&nbsp;</label><button class="btn-mediano" style="width:100%" onclick="agregarSellador()">➕ 添加</button></div>
+    </div>
+    <div id="listaSelladores" style="display:flex;flex-wrap:wrap;gap:8px;margin-top:10px"></div>
+  </div>
+
+  <!-- 第3节：板块类型与切割 -->
+  <div class="seccion">
+    <h2>📐 3. 板块类型与切割 <span class="badge" id="badgeLosas">0 种类型</span></h2>
+    <div class="aviso info">
+      <b>ℹ️ 使用方法：</b> 定义板块模板。设置切割距离，并在网格中标记哪些需要计入。
+    </div>
+    
+    <div class="losa-builder">
+      <div class="losa-form">
+        <div class="grid">
+          <div class="campo">
+            <label>类型名称</label>
+            <input id="mCodigo" type="text" placeholder="例如：标准 8m 板块">
+          </div>
+          <div class="campo">
+            <label>颜色</label>
+            <input id="mColor" type="color" value="#1e7a4a" style="height:38px;padding:4px">
+          </div>
+          <div class="campo">
+            <label>总宽度 (m)</label>
+            <input id="mAncho" type="number" step="0.01" value="8" oninput="actualizarPreviewLosa()">
+          </div>
+          <div class="campo">
+            <label>参考长度 (m)</label>
+            <input id="mLargoRef" type="number" step="0.01" value="9" oninput="actualizarPreviewLosa()">
+          </div>
+          <div class="campo" style="grid-column:1/-1; background:#eef2f7; padding:10px; border-radius:8px">
+            <label style="color:var(--azul)">切割分布（米）</label>
+            <div id="inputsDistancias" style="display:flex;flex-direction:column;gap:8px;margin-top:6px"></div>
+          </div>
+        </div>
+        <div style="margin-top:12px;display:flex;gap:6px">
+          <button class="btn-mediano" style="flex:1" onclick="agregarLosaTipo()">➕ 添加板块类型</button>
+          <button class="btn-outline" style="flex:1" onclick="resetPreviewLosa()">↺ 重置</button>
+        </div>
+      </div>
+      
+      <div class="losa-preview">
+        <div style="font-size:12px;font-weight:bold;color:var(--azul);align-self:flex-start">👁️ 交互式预览：</div>
+        <div class="losa-svg-container">
+          <svg id="losaPreviewSvg" viewBox="0 0 400 300" preserveAspectRatio="xMidYMid meet"></svg>
+        </div>
+        <div class="losa-checks" id="losaChecks"></div>
+        <div class="losa-info" id="losaInfo"></div>
+      </div>
+    </div>
+
+    <div style="margin-top:20px;border-top:2px solid #e0e8f0;padding-top:14px">
+      <div style="font-size:13px;font-weight:bold;color:var(--azul);margin-bottom:10px">📋 已注册的板块类型：</div>
+      <div class="lista-losatipos" id="listaLosas"></div>
+    </div>
+  </div>
+
+  <!-- 第4节：进度记录 -->
+  <div class="seccion">
+    <h2>📋 4. 进度记录 <span class="badge" id="badgeTramos">0 个记录段</span></h2>
+    
+    <div class="form-viaje no-print">
+      <div class="campo">
+        <label>起始桩号</label>
+        <input id="fIni" type="text" placeholder="235+266" oninput="actualizarLongitudViva()">
+      </div>
+      <div class="campo">
+        <label>终止桩号</label>
+        <input id="fFin" type="text" placeholder="235+275" oninput="actualizarLongitudViva()">
+      </div>
+      <div class="campo" style="background:#eef2f7;border-radius:8px;padding:0 8px;">
+        <label style="color:var(--azul)">距离</label>
+        <input id="fDistViva" type="text" readonly value="0.00 m" style="border:none;background:transparent;font-weight:bold;color:var(--azul);padding-left:0">
+      </div>
+      <div class="campo"><label>密封胶</label><select id="fSellador" onchange="autocompletarSellador()"></select></div>
+      <div class="campo"><label>板块类型</label><select id="fLosaTipo" onchange="autocompletarAnchoLosa()"></select></div>
+      <div class="campo"><label>实际宽度 (m)</label><input id="fAncho" type="number" step="0.01" placeholder="8"></div>
+      <div class="campo"><label>车道</label><select id="fVia"><option value="IZQUIERDA">左侧</option><option value="DERECHA">右侧</option><option value="COMPLETA">全幅</option></select></div>
+      <div class="campo">
+        <label>位置</label>
+        <select id="fObs">
+          <option value="INTERNA">内侧</option>
+          <option value="EXTERNA">外侧</option>
+          <option value="PC">全断面</option>
+        </select>
+      </div>
+      <div class="campo"><label>日期</label><input id="fFecha" type="date"></div>
+      <div class="btn-group">
+        <button class="btn-mediano" onclick="agregarTramo()">➕ 添加记录段</button>
+        <button class="btn-outline" onclick="duplicarUltimo()" title="复制上一条">⧉ 复制</button>
+      </div>
+    </div>
+
+    <div class="tabla-toolbar no-print">
+      <div class="info-edicion">ℹ️ <b>提示：</b> 单击单元格即可编辑。回车跳至下一行。合计自动重新计算。</div>
+      <div class="filtros">
+        <label for="filtroSellador">密封胶：</label>
+        <select id="filtroSellador" onchange="renderTabla()"><option value="todas">全部</option></select>
+        
+        <label for="filtroVia">车道：</label>
+        <select id="filtroVia" onchange="renderTabla()"><option value="todas">全部</option><option value="IZQUIERDA">左侧</option><option value="DERECHA">右侧</option><option value="COMPLETA">全幅</option></select>
+        
+        <label for="filtroMes">月份：</label>
+        <select id="filtroMes" onchange="renderTabla()">
+          <option value="todos">全部</option>
+          <option value="01">一月</option><option value="02">二月</option><option value="03">三月</option>
+          <option value="04">四月</option><option value="05">五月</option><option value="06">六月</option>
+          <option value="07">七月</option><option value="08">八月</option><option value="09">九月</option>
+          <option value="10">十月</option><option value="11">十一月</option><option value="12">十二月</option>
+        </select>
+        
+        <label for="filtroAnio">年份：</label>
+        <select id="filtroAnio" onchange="renderTabla()"><option value="todos">全部</option></select>
+      </div>
+    </div>
+
+    <div class="scroll-tabla">
+      <table class="tabla-viajes">
+        <thead>
+          <tr>
+            <th onclick="ordenarPor('num')">编号</th>
+            <th onclick="ordenarPor('progIni')">起始桩号</th>
+            <th onclick="ordenarPor('progFin')">终止桩号</th>
+            <th onclick="ordenarPor('dist')">距离</th>
+            <th onclick="ordenarPor('sellador')">密封胶</th>
+            <th onclick="ordenarPor('losaTipo')">板块类型</th>
+            <th onclick="ordenarPor('ancho')">宽度</th>
+            <th onclick="ordenarPor('via')">车道</th>
+            <th onclick="ordenarPor('obs')">位置</th>
+            <th onclick="ordenarPor('fecha')">日期</th>
+            <th onclick="ordenarPor('longTransv')">横向 ML</th>
+            <th onclick="ordenarPor('longLong')">纵向 ML</th>
+            <th onclick="ordenarPor('longTotal')">总 ML</th>
+            <th onclick="ordenarPor('monto')">金额</th>
+            <th onclick="ordenarPor('litros')">升数</th>
+            <th onclick="ordenarPor('longAcum')">累计 ML</th>
+            <th class="no-print"></th>
+          </tr>
+        </thead>
+        <tbody id="cuerpoTramos"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- 第5节：汇总 -->
+  <div class="seccion">
+    <h2>📊 5. 进度汇总</h2>
+    <div class="tarjetas-resumen" id="tarjetasResumen"></div>
+    <div id="zonaVeredicto"></div>
+    <div id="bloqueRendimiento"></div>
+  </div>
+
+  <!-- 第6节：图纸 -->
+  <div class="seccion">
+    <h2>🗺️ 6. 施工图纸 <span class="badge">切缝与接缝密封</span></h2>
+    <div class="aviso info no-print">
+      <b>ℹ️ 如何阅读：</b> 横轴 = 桩号。纵轴 = 车道。内侧记录段贴近轴线，外侧记录段贴近边缘。粗细反映实际板块宽度（动态比例），颜色对应密封胶。
+    </div>
+    <div class="papiro-container">
+      <svg id="papiroSvg" class="papiro-svg" viewBox="0 0 1200 320" preserveAspectRatio="xMidYMid meet" role="img" aria-label="切缝与接缝密封施工图纸"></svg>
+    </div>
+    <div class="papiro-leyenda" id="papiroLeyenda"></div>
+    <div class="botones-inferiores no-print" style="margin-top:14px">
+      <button class="btn-outline" onclick="exportarPapiroPNG()">📷 导出图纸为 PNG</button>
+      <button class="btn-outline" onclick="ajustarZoomPapiro(0.8)">➖ 缩小</button>
+      <span style="display:flex;align-items:center;font-size:12px;font-weight:bold;color:var(--muted)" id="zoomLabel">100%</span>
+      <button class="btn-outline" onclick="ajustarZoomPapiro(1.25)">➕ 放大</button>
+    </div>
+  </div>
+
+  <!-- 第7节：进度图表 -->
+  <div class="seccion">
+    <h2>📈 7. 进度图表</h2>
+
+    <div class="grafico">
+      <h3>📊 累计进度 vs. 理想时间线</h3>
+      <div class="subtitulo">实际（绿色） vs. 按施工时间比例的理想值（橙色虚线）</div>
+      <svg id="graficoCurvaS" viewBox="0 0 900 300" preserveAspectRatio="xMidYMid meet"></svg>
+    </div>
+
+    <div class="grafico">
+      <h3>🧪 按类型统计的密封胶消耗量</h3>
+      <div class="subtitulo">各密封胶消耗的升数及已完成的 ML</div>
+      <svg id="graficoPorSellador" viewBox="0 0 900 300" preserveAspectRatio="xMidYMid meet"></svg>
+    </div>
+
+    <div class="grafico">
+      <h3>📅 月度进度</h3>
+      <div class="subtitulo">每月完成的 ML（生产率）</div>
+      <svg id="graficoMensual" viewBox="0 0 900 300" preserveAspectRatio="xMidYMid meet"></svg>
+    </div>
+
+    <div class="grafico">
+      <h3>🚧 按车道和位置分布</h3>
+      <div class="subtitulo">按车道（左/右/全幅）和位置（内/外/全断面）统计的已完成 ML</div>
+      <svg id="graficoViaUbic" viewBox="0 0 900 300" preserveAspectRatio="xMidYMid meet"></svg>
+    </div>
+
+    <div class="grafico">
+      <h3>📐 横向 vs. 纵向</h3>
+      <div class="subtitulo">按接缝方向对比工程量</div>
+      <svg id="graficoOrientacion" viewBox="0 0 900 220" preserveAspectRatio="xMidYMid meet"></svg>
+    </div>
+  </div>
+
+  <!-- 底部按钮 -->
+  <div class="botones-inferiores no-print">
+    <button class="btn-imprimir" onclick="window.print()">🖨️ 打印全部</button>
+    <button class="btn-resumen" onclick="imprimirResumen()">📄 仅打印汇总</button>
+    <button class="btn-nuevo" onclick="nuevoProyecto()">➕ 新建项目</button>
+  </div>
+
+  <!-- 打印签名 -->
+  <div class="firma-impresion">
+    <div class="fila">
+      <div class="bloque">
+        <div class="linea"></div>
+        <b>现场负责人</b><br>
+        <span id="firmaResidente"></span>
+      </div>
+      <div class="bloque">
+        <div class="linea"></div>
+        <b>监理工程师</b><br>
+        <span id="firmaFiscal"></span>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+"use strict";
+
+/* =========================================================
+   GitHub 配置
+   ========================================================= */
+const URL_DATOS_GITHUB = 'data/proyecto.json';
+
+/* =========================================================
+   工具函数
+   ========================================================= */
+function $(id){ return document.getElementById(id); }
+function fmt(v,d){ if(d===undefined)d=2; return Number(v).toLocaleString('zh-CN',{minimumFractionDigits:d,maximumFractionDigits:d}); }
+function fmt0(v){ return Number(v).toLocaleString('zh-CN',{maximumFractionDigits:0}); }
+function num(id){ var v=parseFloat($(id).value); return Number.isFinite(v)?v:NaN; }
+function txt(id){ var el=$(id); return el?el.value:""; }
+function fechaISOaLocal(iso){ if(!iso)return ""; var p=iso.split("T")[0].split("-"); return p[0]+"/"+p[1]+"/"+p[2]; }
+
+function parseProg(str){
+  if(!str)return NaN;
+  str=String(str).trim();
+  if(str.indexOf("+")>=0){
+    var p=str.split("+");
+    var km=parseFloat(p[0])||0;
+    var m=parseFloat(p[1])||0;
+    return km*1000+m;
+  }
+  return parseFloat(str);
+}
+
+function formatearInputProg(input){
+  var val=parseProg(input.value);
+  if(Number.isFinite(val)){
+    input.value=fmtProg(val);
+  }
+}
+
+function fmtProg(m){
+  if(!Number.isFinite(m))return "-";
+  var km=Math.floor(m/1000), mm=Math.round(m-km*1000);
+  if(mm>=1000){km++;mm-=1000;}
+  return km+"+"+String(mm).padStart(3,"0");
+}
+
+function mostrarError(msg){
+  $("textoError").textContent=msg;
+  $("alertaError").classList.add("visible");
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+function ocultarError(){ $("alertaError").classList.remove("visible"); }
+
+function debounce(fn,ms){ var t; return function(){ var a=arguments,c=this; clearTimeout(t); t=setTimeout(function(){fn.apply(c,a);},ms); }; }
+
+function sincronizarYRenderizar(){
+  leerEstado();
+  actualizarTodo();
+}
+
+/* =========================================================
+   从 GitHub 自动加载
+   ========================================================= */
+async function actualizarDesdeServidor(silencioso){
+  try {
+    if(!silencioso) {
+      var btn = document.querySelector('.btn-arch.actualizar');
+      btn.innerHTML = '⏳ 加载中...';
+      btn.disabled = true;
+    }
+    
+    var response = await fetch(URL_DATOS_GITHUB + '?t=' + new Date().getTime());
+    
+    if (!response.ok) {
+      throw new Error("服务器上未找到数据文件。");
+    }
+    
+    var data = await response.json();
+    cargarEstado(data, true); 
+    
+    if(!silencioso) {
+      var ind=$("indicadorGuardado");
+      $("textoGuardado").textContent="已从 GitHub 更新：" + new Date().toLocaleTimeString();
+      ind.classList.add("visible");
+      setTimeout(function(){ind.classList.remove("visible");},4000);
+    }
+    
+  } catch (error) {
+    if(!silencioso) {
+      mostrarError("自动加载数据出错。请确保已将 'data/proyecto.json' 上传至 GitHub 仓库。详情：" + error.message);
+    } else {
+      console.log("无法加载自动数据（静默模式）。");
+    }
+  } finally {
+    if(!silencioso) {
+      var btn = document.querySelector('.btn-arch.actualizar');
+      btn.innerHTML = '🔄 更新数据';
+      btn.disabled = false;
+    }
+  }
+}
+
+/* =========================================================
+   全局状态
+   ========================================================= */
+var tramos = [];
+var selladores = [];
+var tiposLosa = [];
+var geometria = { 
+  progIni:0, progFin:0, 
+  profundidadMm:6, anchoCorteMm:6,
+  precio:22.89, volTotal:262908, anchoMax:10
+};
+var ordenActual = { campo:"num", asc:true };
+var zoomPapiro = 1;
+
+var previewState = {
+  ancho: 8,
+  largo: 9,
+  distanciasLong: [2, 2, 2, 2],
+  distanciasTransv: [3, 3, 3],
+  lineasActivas: { transv: [], long: [] }
+};
+
+function inicializarPreviewState(){
+  previewState.ancho = 8;
+  previewState.largo = 9;
+  previewState.distanciasLong = [2, 2, 2, 2]; 
+  previewState.distanciasTransv = [3, 3, 3]; 
+  previewState.lineasActivas.transv = new Array(previewState.distanciasTransv.length+1).fill(true);
+  previewState.lineasActivas.long = new Array(previewState.distanciasLong.length+1).fill(true);
+}
+
+function actualizarLongitudViva(){
+  var pi = parseProg(txt("fIni"));
+  var pf = parseProg(txt("fFin"));
+  if(Number.isFinite(pi) && Number.isFinite(pf) && pf > pi){
+    $("fDistViva").value = fmt(pf - pi, 2) + " m";
+    $("fDistViva").style.color = "var(--verde)";
+  } else {
+    $("fDistViva").value = "0.00 m";
+    $("fDistViva").style.color = "var(--muted)";
+  }
+}
+
+function leerEstado(){
+  geometria.progIni = parseProg(txt("progIniGlobal")) || 0;
+  geometria.progFin = parseProg(txt("progFinGlobal")) || 0;
+  geometria.profundidadMm = Number.isFinite(num("profundidadMm"))?num("profundidadMm"):6;
+  geometria.anchoCorteMm = Number.isFinite(num("anchoCorteMm"))?num("anchoCorteMm"):6;
+  geometria.precio = Number.isFinite(num("precioUnit"))?num("precioUnit"):22.89;
+  geometria.volTotal = Number.isFinite(num("volTotalItem"))?num("volTotalItem"):0;
+  
+  var am = num("anchoMaxEscala");
+  geometria.anchoMax = (Number.isFinite(am) && am > 0) ? am : 10;
+
+  var ayuda=$("ayudaVolTotal");
+  if(geometria.volTotal>0){
+    ayuda.textContent="已定义："+fmt(geometria.volTotal,2)+" ml";
+  }else{
+    ayuda.textContent="空 → 将根据全局范围计算";
+  }
+  return geometria;
+}
+
+/* =========================================================
+   密封胶
+   ========================================================= */
+function agregarSellador(){
+  ocultarError();
+  var nombre=txt("sNombre").trim();
+  var tipo=txt("sTipo") || "Otro";
+  var color=txt("sColor");
+  var grav = num("sGravedad");
+  if(!nombre){mostrarError("请输入密封胶名称。");return;}
+  if(selladores.some(function(s){return s.nombre.toLowerCase()===nombre.toLowerCase();})){
+    mostrarError("已存在同名密封胶。");return;
+  }
+  selladores.push({
+    nombre: nombre,
+    tipo: tipo,
+    color: color,
+    gravedad: Number.isFinite(grav) && grav > 0 ? grav : null
+  });
+  $("sNombre").value=""; $("sTipo").value="Poliuretano"; $("sColor").value="#004B87"; $("sGravedad").value="";
+  renderSelladores();
+  renderFormSelects();
+  renderTabla();
+}
+
+function eliminarSellador(idx){
+  if(!confirm("确定删除密封胶 "+selladores[idx].nombre+"？"))return;
+  selladores.splice(idx,1);
+  renderSelladores();
+  renderFormSelects();
+  renderTabla();
+}
+
+function renderSelladores(){
+  var cont=$("listaSelladores");
+  if(selladores.length===0){
+    cont.innerHTML='<div class="aviso info" style="width:100%;margin:0">尚未注册密封胶。</div>';
+    $("badgeSelladores").textContent="0 种密封胶";return;
+  }
+  var html="";
+  selladores.forEach(function(s,i){
+    var grav = s.gravedad ? ' · 比重 '+fmt(s.gravedad,2) : '';
+    html+='<div style="display:flex;align-items:center;gap:8px;background:#f5f9fc;border:1px solid #d5e0ea;border-radius:8px;padding:6px 12px;font-size:12.5px">'+
+      '<span style="width:14px;height:14px;border-radius:3px;background:'+s.color+';display:inline-block;border:1px solid rgba(0,0,0,.15)"></span>'+
+      '<b>'+s.nombre+'</b>'+
+      '<span style="color:var(--azul);font-size:11px;background:#e3f2fd;padding:2px 8px;border-radius:10px">'+s.tipo+'</span>'+
+      '<span style="color:var(--muted)">'+grav+'</span>'+
+      '<button class="btn-x" style="width:20px;height:20px" onclick="eliminarSellador('+i+')" title="删除">×</button>'+
+    '</div>';
+  });
+  cont.innerHTML=html;
+  $("badgeSelladores").textContent=selladores.length+(selladores.length===1?" 种密封胶":" 种密封胶");
+}
+
+/* =========================================================
+   板块类型
+   ========================================================= */
+function actualizarPreviewLosa(){
+  var a = num("mAncho");
+  var l = num("mLargoRef");
+  
+  if(!Number.isFinite(a) || a<=0) a = 8;
+  if(!Number.isFinite(l) || l<=0) l = 9;
+  
+  previewState.ancho = a;
+  previewState.largo = l;
+  
+  var inputsDiv = $("inputsDistancias");
+  if(inputsDiv.children.length === 0){
+    previewState.distanciasLong = [2, 2, 2, 2];
+    previewState.distanciasTransv = [3, 3, 3];
+    generarInputsDistancias();
+  }
+  
+  dibujarPreviewLosa();
+  dibujarChecksLosa();
+  actualizarInfoLosa();
+}
+
+function generarInputsDistancias(){
+  var div = $("inputsDistancias");
+  var html = '';
+  
+  html += '<div style="width:100%;margin-bottom:8px">'+
+            '<b>纵向 <span style="font-weight:normal;color:var(--muted)">（总和 = 板块宽度 = '+fmt(previewState.ancho,2)+'m）：</span> <span id="txtSumaLong" style="color:var(--azul);font-weight:bold">当前总和：0.00m</span></b>'+
+            '<div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:4px" id="inputsLong"></div>'+
+          '</div>';
+  html += '<div style="width:100%">'+
+            '<b>横向 <span style="font-weight:normal;color:var(--muted)">（总和 = 板块长度 = '+fmt(previewState.largo,2)+'m）：</span> <span id="txtSumaTransv" style="color:var(--azul);font-weight:bold">当前总和：0.00m</span></b>'+
+            '<div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:4px" id="inputsTransv"></div>'+
+          '</div>';
+  
+  div.innerHTML = html;
+  
+  renderInputsLong();
+  renderInputsTransv();
+}
+
+function renderInputsLong(){
+  var cont = $("inputsLong");
+  if(!cont) return;
+  var html = '';
+  previewState.distanciasLong.forEach(function(d, i){
+    html += '<div style="display:flex;flex-direction:column;gap:2px"><label style="font-size:9px">距离 '+(i+1)+'</label><input type="number" step="0.01" value="'+d+'" style="width:60px;font-size:11px;text-align:center;padding:4px;border:1px solid #cfd8dc;border-radius:4px" oninput="cambiarDistLong('+i+',this.value)"></div>';
+  });
+  html += '<button class="btn-outline" style="padding:4px 8px;font-size:11px;align-self:flex-end;margin-bottom:2px" onclick="addCorteLong()">+ 切割</button>';
+  html += '<button class="btn-peligro" style="padding:4px 8px;font-size:11px;align-self:flex-end;margin-bottom:2px" onclick="removeCorteLong()">- 切割</button>';
+  cont.innerHTML = html;
+  actualizarSumaDist();
+}
+
+function renderInputsTransv(){
+  var cont = $("inputsTransv");
+  if(!cont) return;
+  var html = '';
+  previewState.distanciasTransv.forEach(function(d, i){
+    html += '<div style="display:flex;flex-direction:column;gap:2px"><label style="font-size:9px">距离 '+(i+1)+'</label><input type="number" step="0.01" value="'+d+'" style="width:60px;font-size:11px;text-align:center;padding:4px;border:1px solid #cfd8dc;border-radius:4px" oninput="cambiarDistTransv('+i+',this.value)"></div>';
+  });
+  html += '<button class="btn-outline" style="padding:4px 8px;font-size:11px;align-self:flex-end;margin-bottom:2px" onclick="addCorteTransv()">+ 切割</button>';
+  html += '<button class="btn-peligro" style="padding:4px 8px;font-size:11px;align-self:flex-end;margin-bottom:2px" onclick="removeCorteTransv()">- 切割</button>';
+  cont.innerHTML = html;
+  actualizarSumaDist();
+}
+
+function cambiarDistLong(i, val){
+  previewState.distanciasLong[i] = parseFloat(val) || 0;
+  dibujarPreviewLosa();
+  actualizarInfoLosa();
+  actualizarSumaDist();
+}
+
+function cambiarDistTransv(i, val){
+  previewState.distanciasTransv[i] = parseFloat(val) || 0;
+  dibujarPreviewLosa();
+  actualizarInfoLosa();
+  actualizarSumaDist();
+}
+
+function addCorteLong(){
+  previewState.distanciasLong.push(0);
+  previewState.lineasActivas.long = new Array(previewState.distanciasLong.length+1).fill(true);
+  renderInputsLong();
+  dibujarPreviewLosa();
+  dibujarChecksLosa();
+  actualizarInfoLosa();
+}
+
+function removeCorteLong(){
+  if(previewState.distanciasLong.length > 1){
+    previewState.distanciasLong.pop();
+    previewState.lineasActivas.long = new Array(previewState.distanciasLong.length+1).fill(true);
+    renderInputsLong();
+    dibujarPreviewLosa();
+    dibujarChecksLosa();
+    actualizarInfoLosa();
+  }
+}
+
+function addCorteTransv(){
+  previewState.distanciasTransv.push(0);
+  previewState.lineasActivas.transv = new Array(previewState.distanciasTransv.length+1).fill(true);
+  renderInputsTransv();
+  dibujarPreviewLosa();
+  dibujarChecksLosa();
+  actualizarInfoLosa();
+}
+
+function removeCorteTransv(){
+  if(previewState.distanciasTransv.length > 1){
+    previewState.distanciasTransv.pop();
+    previewState.lineasActivas.transv = new Array(previewState.distanciasTransv.length+1).fill(true);
+    renderInputsTransv();
+    dibujarPreviewLosa();
+    dibujarChecksLosa();
+    actualizarInfoLosa();
+  }
+}
+
+function actualizarSumaDist(){
+  var sumaL = previewState.distanciasLong.reduce(function(a,b){return a+b;},0);
+  var sumaT = previewState.distanciasTransv.reduce(function(a,b){return a+b;},0);
+  
+  var elL = $("txtSumaLong");
+  var elT = $("txtSumaTransv");
+  
+  if(elL) {
+    elL.textContent = '当前总和：' + fmt(sumaL,2) + 'm';
+    elL.style.color = (Math.abs(sumaL - previewState.ancho) < 0.01) ? 'var(--verde)' : 'var(--rojo)';
+  }
+  if(elT) {
+    elT.textContent = '当前总和：' + fmt(sumaT,2) + 'm';
+    elT.style.color = (Math.abs(sumaT - previewState.largo) < 0.01) ? 'var(--verde)' : 'var(--rojo)';
+  }
+}
+
+function dibujarPreviewLosa(){
+  var svg = $("losaPreviewSvg");
+  if(!svg) return;
+  
+  var W = 400, H = 300;
+  var margen = {top: 30, right: 30, bottom: 30, left: 30};
+  var pW = W - margen.left - margen.right;
+  var pH = H - margen.top - margen.bottom;
+  
+  var a = previewState.ancho;
+  var l = previewState.largo;
+  
+  var sumaL = previewState.distanciasLong.reduce(function(a,b){return a+b;},0) || 1;
+  var sumaT = previewState.distanciasTransv.reduce(function(a,b){return a+b;},0) || 1;
+  
+  var html = '';
+  
+  html += '<rect x="'+margen.left+'" y="'+margen.top+'" width="'+pW+'" height="'+pH+'" fill="#f0f7f2" stroke="#90a4ae" stroke-width="1.5" rx="3"/>';
+  
+  html += '<text x="'+(margen.left+pW/2)+'" y="'+(margen.top-10)+'" text-anchor="middle" font-size="11" font-weight="bold" fill="#004B87">'+fmt(a,2)+' m</text>';
+  html += '<text x="'+(margen.left-15)+'" y="'+(margen.top+pH/2)+'" text-anchor="middle" font-size="11" font-weight="bold" fill="#004B87" transform="rotate(-90 '+(margen.left-15)+' '+(margen.top+pH/2)+')">'+fmt(l,2)+' m</text>';
+  
+  var yAcum = 0;
+  for(var i=0; i<=previewState.distanciasTransv.length; i++){
+    var y = margen.top + (yAcum/sumaT)*pH;
+    var activa = previewState.lineasActivas.transv[i] !== false;
+    var color = activa ? "#004B87" : "#cfd8dc";
+    var strokeW = activa ? 2.5 : 1.5;
+    var dash = activa ? "" : "4 3";
+    html += '<line x1="'+margen.left+'" y1="'+y+'" x2="'+(margen.left+pW)+'" y2="'+y+'" stroke="'+color+'" stroke-width="'+strokeW+'" '+(dash?'stroke-dasharray="'+dash+'"':'')+' style="cursor:pointer" onclick="toggleLineaTransv('+i+')"><title>单击以'+(activa?'取消':'激活')+'此横向线</title></line>';
+    
+    var etiq = (i===0) ? "边缘" : (i===previewState.distanciasTransv.length) ? "边缘" : "T"+i;
+    html += '<text x="'+(margen.left-5)+'" y="'+(y+4)+'" text-anchor="end" font-size="9" fill="'+color+'" style="pointer-events:none">'+etiq+'</text>';
+    
+    if(i < previewState.distanciasTransv.length) yAcum += previewState.distanciasTransv[i];
+  }
+  
+  var xAcum = 0;
+  for(var j=0; j<=previewState.distanciasLong.length; j++){
+    var x = margen.left + (xAcum/sumaL)*pW;
+    var activa2 = previewState.lineasActivas.long[j] !== false;
+    var color2 = activa2 ? "#087f5b" : "#cfd8dc";
+    var strokeW2 = activa2 ? 2.5 : 1.5;
+    var dash2 = activa2 ? "" : "4 3";
+    html += '<line x1="'+x+'" y1="'+margen.top+'" x2="'+x+'" y2="'+(margen.top+pH)+'" stroke="'+color2+'" stroke-width="'+strokeW2+'" '+(dash2?'stroke-dasharray="'+dash2+'"':'')+' style="cursor:pointer" onclick="toggleLineaLong('+j+')"><title>单击以'+(activa2?'取消':'激活')+'此纵向线</title></line>';
+    
+    var etiq2 = (j===0) ? "边缘" : (j===previewState.distanciasLong.length) ? "边缘" : "L"+j;
+    html += '<text x="'+x+'" y="'+(margen.top+pH+18)+'" text-anchor="middle" font-size="9" fill="'+color2+'" style="pointer-events:none">'+etiq2+'</text>';
+    
+    if(j < previewState.distanciasLong.length) xAcum += previewState.distanciasLong[j];
+  }
+  
+  svg.innerHTML = html;
+}
+
+function toggleLineaTransv(idx){
+  previewState.lineasActivas.transv[idx] = !previewState.lineasActivas.transv[idx];
+  dibujarPreviewLosa();
+  dibujarChecksLosa();
+  actualizarInfoLosa();
+}
+
+function toggleLineaLong(idx){
+  previewState.lineasActivas.long[idx] = !previewState.lineasActivas.long[idx];
+  dibujarPreviewLosa();
+  dibujarChecksLosa();
+  actualizarInfoLosa();
+}
+
+function dibujarChecksLosa(){
+  var cont = $("losaChecks");
+  if(!cont) return;
+  
+  var transv = previewState.lineasActivas.transv;
+  var long_ = previewState.lineasActivas.long;
+  
+  var bIzq = long_[0] !== false;
+  var bDer = long_[long_.length-1] !== false;
+  var bSup = transv[0] !== false;
+  var bInf = transv[transv.length-1] !== false;
+  
+  var html = '';
+  html += '<label><input type="checkbox" '+(bIzq?'checked':'')+' onchange="toggleLineaLong(0)"> 左边缘</label>';
+  html += '<label><input type="checkbox" '+(bDer?'checked':'')+' onchange="toggleLineaLong('+(long_.length-1)+')"> 右边缘</label>';
+  html += '<label><input type="checkbox" '+(bSup?'checked':'')+' onchange="toggleLineaTransv(0)"> 上横向</label>';
+  html += '<label><input type="checkbox" '+(bInf?'checked':'')+' onchange="toggleLineaTransv('+(transv.length-1)+')"> 下横向</label>';
+  
+  cont.innerHTML = html;
+}
+
+function actualizarInfoLosa(){
+  var el = $("losaInfo");
+  if(!el) return;
+  
+  var transv = previewState.lineasActivas.transv;
+  var long_ = previewState.lineasActivas.long;
+  
+  var nLongAct = long_.filter(function(x){return x !== false;}).length;
+  var nTransvAct = transv.filter(function(x){return x !== false;}).length;
+  
+  var a = previewState.ancho;
+  var l = previewState.largo;
+  
+  var mlLong = nLongAct * l;
+  var mlTransv = nTransvAct * a;
+  var mlTotal = mlLong + mlTransv;
+  
+  el.innerHTML = '📊 <b>板块类型工程量（按激活线计算）：</b><br>'+
+    '• 激活纵向线：<b>'+nLongAct+'</b> × '+fmt(l,2)+' m = <b>'+fmt(mlLong,2)+' ml</b><br>'+
+    '• 激活横向线：<b>'+nTransvAct+'</b> × '+fmt(a,2)+' m = <b>'+fmt(mlTransv,2)+' ml</b><br>'+
+    '• <b>每块板合计：'+fmt(mlTotal,2)+' ml</b>';
+}
+
+function resetPreviewLosa(){
+  previewState.distanciasLong = [2, 2, 2, 2];
+  previewState.distanciasTransv = [3, 3, 3];
+  previewState.lineasActivas.transv = new Array(previewState.distanciasTransv.length+1).fill(true);
+  previewState.lineasActivas.long = new Array(previewState.distanciasLong.length+1).fill(true);
+  renderInputsLong();
+  renderInputsTransv();
+  dibujarPreviewLosa();
+  dibujarChecksLosa();
+  actualizarInfoLosa();
+}
+
+function agregarLosaTipo(){
+  ocultarError();
+  var cod = txt("mCodigo").trim();
+  var color = txt("mColor");
+  var ancho = previewState.ancho;
+  var largo = previewState.largo;
+  var sumaL = previewState.distanciasLong.reduce(function(a,b){return a+b;},0);
+  var sumaT = previewState.distanciasTransv.reduce(function(a,b){return a+b;},0);
+  
+  if(!cod){ mostrarError("请输入板块类型名称。"); return; }
+  if(Math.abs(sumaL-ancho) > 0.05){ mostrarError("纵向切割之和（"+fmt(sumaL,2)+"m）必须等于板块宽度（"+fmt(ancho,2)+"m）。"); return; }
+  if(Math.abs(sumaT-largo) > 0.05){ mostrarError("横向切割之和（"+fmt(sumaT,2)+"m）必须等于板块长度（"+fmt(largo,2)+"m）。"); return; }
+  if(tiposLosa.some(function(t){return t.codigo.toLowerCase()===cod.toLowerCase();})){
+    mostrarError("已存在同名板块类型。"); return;
+  }
+  
+  tiposLosa.push({
+    id: Date.now(),
+    codigo: cod,
+    ancho: ancho,
+    largoRef: largo,
+    distanciasLong: previewState.distanciasLong.slice(),
+    distanciasTransv: previewState.distanciasTransv.slice(),
+    lineasTransv: previewState.lineasActivas.transv.slice(),
+    lineasLong: previewState.lineasActivas.long.slice(),
+    color: color
+  });
+  
+  $("mCodigo").value = "";
+  $("mColor").value = "#1e7a4a";
+  resetPreviewLosa();
+  renderTiposLosa();
+  renderFormSelects();
+  renderTabla();
+}
+
+function eliminarLosaTipo(id){
+  var idx = tiposLosa.findIndex(function(t){return t.id === id;});
+  if(idx < 0) return;
+  if(!confirm("确定删除板块类型 '"+tiposLosa[idx].codigo+"'？")) return;
+  
+  var usados = tramos.filter(function(t){return t.losaTipo === tiposLosa[idx].codigo;}).length;
+  if(usados > 0){
+    if(!confirm("⚠️ 此板块类型正在被 "+usados+" 个记录段使用。\n\n若删除，这些记录段将保留但会失去参照。\n\n是否继续？")) return;
+  }
+  
+  tiposLosa.splice(idx, 1);
+  renderTiposLosa();
+  renderFormSelects();
+  renderTabla();
+}
+
+function renderTiposLosa(){
+  var cont = $("listaLosas");
+  if(tiposLosa.length === 0){
+    cont.innerHTML = '<div class="aviso info" style="margin:0">尚未注册板块类型。</div>';
+    $("badgeLosas").textContent = "0 种类型";
+    return;
+  }
+  
+  var html = "";
+  tiposLosa.forEach(function(m){
+    var nLongAct = m.lineasLong.filter(function(x){return x!==false;}).length;
+    var nTransvAct = m.lineasTransv.filter(function(x){return x!==false;}).length;
+    var mlLosa = nLongAct * m.largoRef + nTransvAct * m.ancho;
+    
+    var miniSvg = generarMiniSvgLosa(m);
+    
+    html += '<div class="tarjeta-losatipo">'+
+      '<div class="nombre"><span class="color-dot" style="background:'+m.color+'"></span>'+m.codigo+'</div>'+
+      '<div class="mini-svg">'+miniSvg+'</div>'+
+      '<div class="detalles">'+
+        '宽度：<b>'+fmt(m.ancho,2)+' m</b> · 参考长度：<b>'+fmt(m.largoRef,2)+' m</b><br>'+
+        '纵向切割：<b>'+m.distanciasLong.length+'</b> · 横向切割：<b>'+m.distanciasTransv.length+'</b><br>'+
+        '激活线：<b>'+nLongAct+' 纵</b> + <b>'+nTransvAct+' 横</b><br>'+
+        '每块板工程量（参考）：<b>'+fmt(mlLosa,2)+' ml</b>'+
+      '</div>'+
+      '<div class="acciones">'+
+        '<button class="btn-outline" onclick="cargarEnConstructor('+m.id+')" title="加载编辑">✏️ 编辑</button>'+
+        '<button class="btn-peligro" onclick="eliminarLosaTipo('+m.id+')" title="删除">🗑 删除</button>'+
+      '</div>'+
+    '</div>';
+  });
+  cont.innerHTML = html;
+  $("badgeLosas").textContent = tiposLosa.length + (tiposLosa.length===1?" 种类型":" 种类型");
+}
+
+function generarMiniSvgLosa(m){
+  var W = 260, H = 140;
+  var margen = {top: 10, right: 10, bottom: 10, left: 10};
+  var pW = W - margen.left - margen.right;
+  var pH = H - margen.top - margen.bottom;
+  
+  var sumaL = m.distanciasLong.reduce(function(a,b){return a+b;},0) || 1;
+  var sumaT = m.distanciasTransv.reduce(function(a,b){return a+b;},0) || 1;
+  
+  var html = '<svg viewBox="0 0 '+W+' '+H+'" preserveAspectRatio="xMidYMid meet" style="width:100%;height:auto">';
+  html += '<rect x="'+margen.left+'" y="'+margen.top+'" width="'+pW+'" height="'+pH+'" fill="#f0f7f2" stroke="#90a4ae" stroke-width="1" rx="2"/>';
+  
+  var yAcum = 0;
+  for(var i=0; i<=m.distanciasTransv.length; i++){
+    var y = margen.top + (yAcum/sumaT)*pH;
+    var activa = m.lineasTransv[i] !== false;
+    html += '<line x1="'+margen.left+'" y1="'+y+'" x2="'+(margen.left+pW)+'" y2="'+y+'" stroke="'+(activa?m.color:"#cfd8dc")+'" stroke-width="'+(activa?2:1)+'" '+(activa?'':'stroke-dasharray="3 2"')+'/>';
+    if(i < m.distanciasTransv.length) yAcum += m.distanciasTransv[i];
+  }
+  
+  var xAcum = 0;
+  for(var j=0; j<=m.distanciasLong.length; j++){
+    var x = margen.left + (xAcum/sumaL)*pW;
+    var activa2 = m.lineasLong[j] !== false;
+    html += '<line x1="'+x+'" y1="'+margen.top+'" x2="'+x+'" y2="'+(margen.top+pH)+'" stroke="'+(activa2?'#087f5b':"#cfd8dc")+'" stroke-width="'+(activa2?2:1)+'" '+(activa2?'':'stroke-dasharray="3 2"')+'/>';
+    if(j < m.distanciasLong.length) xAcum += m.distanciasLong[j];
+  }
+  
+  html += '</svg>';
+  return html;
+}
+
+function cargarEnConstructor(id){
+  var m = tiposLosa.find(function(x){return x.id === id;});
+  if(!m) return;
+  
+  $("mCodigo").value = m.codigo + "（副本）";
+  $("mAncho").value = m.ancho;
+  $("mLargoRef").value = m.largoRef;
+  $("mColor").value = m.color;
+  
+  previewState.ancho = m.ancho;
+  previewState.largo = m.largoRef;
+  previewState.distanciasLong = m.distanciasLong.slice();
+  previewState.distanciasTransv = m.distanciasTransv.slice();
+  previewState.lineasActivas.transv = m.lineasTransv.slice();
+  previewState.lineasActivas.long = m.lineasLong.slice();
+  
+  generarInputsDistancias();
+  renderInputsLong();
+  renderInputsTransv();
+  dibujarPreviewLosa();
+  dibujarChecksLosa();
+  actualizarInfoLosa();
+  
+  window.scrollTo({top: $("mCodigo").getBoundingClientRect().top + window.scrollY - 100, behavior: "smooth"});
+  $("mCodigo").focus();
+}
+
+/* =========================================================
+   下拉选择
+   ========================================================= */
+function renderFormSelects(){
+  var selS = $("fSellador");
+  var selFiltroS = $("filtroSellador");
+  var htmlS = '<option value="">— 选择 —</option>';
+  selladores.forEach(function(s){ 
+    htmlS += '<option value="'+s.nombre+'">'+s.nombre+' ('+s.tipo+')</option>'; 
+  });
+  if(selS) selS.innerHTML = htmlS;
+  
+  var htmlFS = '<option value="todas">全部</option>';
+  selladores.forEach(function(s){ htmlFS += '<option value="'+s.nombre+'">'+s.nombre+'</option>'; });
+  if(selFiltroS) selFiltroS.innerHTML = htmlFS;
+  
+  var selL = $("fLosaTipo");
+  var htmlL = '<option value="">— 选择 —</option>';
+  tiposLosa.forEach(function(t){ htmlL += '<option value="'+t.codigo+'">'+t.codigo+'</option>'; });
+  if(selL) selL.innerHTML = htmlL;
+}
+
+function autocompletarSellador(){
+  // 仅提示信息：不自动填充宽度
+}
+
+function autocompletarAnchoLosa(){
+  var cod = txt("fLosaTipo");
+  var t = tiposLosa.find(function(x){return x.codigo === cod;});
+  if(t){ 
+    $("fAncho").value = t.ancho; 
+  }
+}
+
+/* =========================================================
+   单段工程量计算
+   ========================================================= */
+function calcularMetradoTramo(t){
+  var dist = t.dist;
+  var ancho = t.ancho;
+  var losa = tiposLosa.find(function(m){return m.codigo === t.losaTipo;});
+  
+  var nTransvActivas = 0;
+  var nLongActivas = 0;
+  
+  if(losa && Array.isArray(losa.lineasTransv) && Array.isArray(losa.lineasLong)){
+    nTransvActivas = losa.lineasTransv.filter(function(x){return x !== false;}).length;
+    nLongActivas = losa.lineasLong.filter(function(x){return x !== false;}).length;
+  } else {
+    nTransvActivas = 4;
+    nLongActivas = 3;
+  }
+  
+  var largoRef = losa ? (losa.largoRef || 9) : 9;
+  var fraccionesLargo = dist / largoRef;
+  var longTransv = nTransvActivas * ancho * Math.max(1, Math.ceil(fraccionesLargo));
+  
+  var longLong = nLongActivas * dist;
+  
+  var longTotal = longTransv + longLong;
+  
+  return {
+    nTransvActivas: nTransvActivas,
+    nLongActivas: nLongActivas,
+    longTransv: longTransv,
+    longLong: longLong,
+    longTotal: longTotal
+  };
+}
+
+// 密封胶体积 (m3)：ML × (宽度_mm/1000) × (深度_mm/1000)
+function volumenSelloM3(longTotalMl){
+  var anchoM = geometria.anchoCorteMm / 1000;
+  var profM = geometria.profundidadMm / 1000;
+  if(!Number.isFinite(longTotalMl) || longTotalMl<=0) return 0;
+  return (longTotalMl * anchoM * profM);
+}
+
+// 记录段密封胶比重，默认 1.0
+function gravedadDeTramo(t){
+  if(t && t.sellador){
+    var s = selladores.find(function(x){ return x.nombre === t.sellador; });
+    if(s && Number.isFinite(s.gravedad) && s.gravedad > 0) return s.gravedad;
+  }
+  return 1.0;
+}
+
+function recalcularTramo(t){
+  var m = calcularMetradoTramo(t);
+  t.longTransv = m.longTransv;
+  t.longLong = m.longLong;
+  t.longTotal = m.longTotal;
+  t.nTransv = m.nTransvActivas;
+  t.nLong = m.nLongActivas;
+  t.monto = t.longTotal * geometria.precio;
+  t.m3 = volumenSelloM3(t.longTotal);
+  t.litros = t.m3 * gravedadDeTramo(t) * 1000;
+}
+
+/* =========================================================
+   添加 / 编辑 / 删除记录段
+   ========================================================= */
+function agregarTramo(){
+  ocultarError();
+  var pIni = parseProg(txt("fIni"));
+  var pFin = parseProg(txt("fFin"));
+  var ancho = num("fAncho");
+  var sellador = txt("fSellador");
+  var losaTipo = txt("fLosaTipo");
+  var via = txt("fVia"), obs = txt("fObs"), fecha = txt("fFecha");
+  
+  if(!Number.isFinite(pIni)){ mostrarError("请输入起始桩号。"); return; }
+  if(!Number.isFinite(pFin)){ mostrarError("请输入终止桩号。"); return; }
+  if(pFin <= pIni){ mostrarError("终止桩号必须大于起始桩号。"); return; }
+  if(!Number.isFinite(ancho) || ancho<=0){ mostrarError("宽度必须大于零。"); return; }
+  if(!sellador){ mostrarError("请选择密封胶。"); return; }
+  if(!losaTipo){ mostrarError("请选择板块类型。"); return; }
+  if(!fecha){ mostrarError("请输入记录段日期。"); return; }
+  
+  var dist = pFin - pIni;
+  var tramo = {
+    num: 0, progIni: pIni, progFin: pFin, dist: dist,
+    sellador: sellador, losaTipo: losaTipo, ancho: ancho,
+    via: via, obs: obs, fecha: fecha,
+    nTransv: 0, longTransv: 0, nLong: 0, longLong: 0, longTotal: 0,
+    monto: 0, m3: 0, litros: 0, longAcum: 0
+  };
+  
+  recalcularTramo(tramo);
+  tramos.push(tramo);
+  
+  ordenarTramos();
+  limpiarFormTramo();
+  actualizarTodo();
+  $("fIni").focus();
+}
+
+function ordenarTramos(){
+  tramos.sort(function(a,b){
+    if(a.fecha < b.fecha) return -1;
+    if(a.fecha > b.fecha) return 1;
+    return a.progIni - b.progIni;
+  });
+  tramos.forEach(function(t,i){ t.num = i+1; });
+  recalcularAcumulados();
+}
+
+function limpiarFormTramo(){
+  ["fIni","fFin","fAncho","fFecha"].forEach(function(id){ $(id).value = ""; });
+  $("fSellador").value = "";
+  $("fLosaTipo").value = "";
+  $("fObs").value = "INTERNA";
+  actualizarLongitudViva();
+}
+
+function duplicarUltimo(){
+  if(tramos.length === 0){ mostrarError("尚无记录段可复制。"); return; }
+  var u = tramos[tramos.length-1];
+  $("fIni").value = fmtProg(u.progFin);
+  $("fFin").value = fmtProg(u.progFin + u.dist);
+  $("fSellador").value = u.sellador;
+  $("fLosaTipo").value = u.losaTipo;
+  $("fAncho").value = u.ancho;
+  $("fVia").value = u.via;
+  $("fObs").value = u.obs;
+  $("fFecha").value = u.fecha;
+  actualizarLongitudViva();
+  $("fIni").focus();
+}
+
+function editarCampo(idx, campo, valor, input){
+  var t = tramos[idx];
+  if(!t) return;
+  var ant = t[campo];
+  var n;
+  
+  if(campo === "progIni" || campo === "progFin"){
+    n = parseProg(valor);
+    if(!Number.isFinite(n) || n<0){ restaurar(input, ant); return; }
+    t[campo] = n;
+    if(t.progFin <= t.progIni){
+      restaurar(input, ant);
+      mostrarError("终止桩号必须大于起始桩号。");
+      return;
+    }
+    t.dist = t.progFin - t.progIni;
+    recalcularTramo(t);
+    if(input) input.value = fmtProg(n);
+  } else if(campo === "ancho"){
+    n = parseFloat(valor);
+    if(!Number.isFinite(n) || n<=0){ restaurar(input, ant); return; }
+    t.ancho = n;
+    recalcularTramo(t);
+  } else if(campo === "fecha"){
+    t.fecha = valor;
+  } else if(campo === "sellador"){
+    t.sellador = valor;
+    recalcularTramo(t);
+  } else if(campo === "losaTipo"){
+    t.losaTipo = valor;
+    var lt = tiposLosa.find(function(x){ return x.codigo === valor; });
+    if(lt){ t.ancho = lt.ancho; }
+    recalcularTramo(t);
+  } else if(campo === "via"){
+    t.via = valor;
+  } else if(campo === "obs"){
+    t.obs = valor;
+  }
+  
+  if(input){
+    input.classList.add("modificado");
+    setTimeout(function(){ input.classList.remove("modificado"); }, 1500);
+  }
+  ordenarTramos();
+  actualizarTodo();
+}
+
+function restaurar(input, valor){
+  if(input){
+    input.value = (typeof valor === "number" && valor > 10000) ? fmtProg(valor) : valor;
+    input.classList.add("invalido");
+    setTimeout(function(){ input.classList.remove("invalido"); }, 1500);
+  }
+}
+
+function eliminarTramo(idx){
+  if(!confirm("确定删除记录段第 "+(idx+1)+" 条（"+fmtProg(tramos[idx].progIni)+" → "+fmtProg(tramos[idx].progFin)+"）？")) return;
+  tramos.splice(idx, 1);
+  ordenarTramos();
+  actualizarTodo();
+}
+
+function recalcularAcumulados(){
+  var longA = 0, montoA = 0;
+  tramos.forEach(function(t){
+    longA += t.longTotal;
+    montoA += t.monto;
+    t.longAcum = longA;
+    t.montoAcum = montoA;
+  });
+}
+
+function ordenarPor(campo){
+  if(ordenActual.campo === campo) ordenActual.asc = !ordenActual.asc;
+  else { ordenActual.campo = campo; ordenActual.asc = true; }
+  renderTabla();
+}
+
+/* =========================================================
+   渲染表格
+   ========================================================= */
+function renderTabla(){
+  var filtroSellador = txt("filtroSellador") || "todas";
+  var filtroVia = txt("filtroVia") || "todas";
+  var filtroMes = txt("filtroMes") || "todos";
+  var filtroAnio = txt("filtroAnio") || "todos";
+  
+  var selAnio = $("filtroAnio");
+  if(selAnio.options.length <= 1){
+    var anios = new Set();
+    tramos.forEach(function(t){ if(t.fecha) anios.add(t.fecha.split("-")[0]); });
+    Array.from(anios).sort().forEach(function(a){
+      var opt = document.createElement("option");
+      opt.value = a;
+      opt.textContent = a;
+      selAnio.appendChild(opt);
+    });
+  }
+  
+  var lista = tramos.map(function(t,i){ return {t:t, i:i}; });
+  
+  if(filtroSellador !== "todas") lista = lista.filter(function(o){ return o.t.sellador === filtroSellador; });
+  if(filtroVia !== "todas") lista = lista.filter(function(o){ return o.t.via === filtroVia; });
+  if(filtroMes !== "todos") lista = lista.filter(function(o){ return o.t.fecha && o.t.fecha.split("-")[1] === filtroMes; });
+  if(filtroAnio !== "todos") lista = lista.filter(function(o){ return o.t.fecha && o.t.fecha.split("-")[0] === filtroAnio; });
+  
+  var cmp = ordenActual.campo;
+  lista.sort(function(a,b){
+    var va = a.t[cmp], vb = b.t[cmp];
+    if(typeof va === "string" && typeof vb === "string") return ordenActual.asc ? va.localeCompare(vb) : vb.localeCompare(va);
+    return ordenActual.asc ? (va-vb) : (vb-va);
+  });
+  
+  var html = "";
+  lista.forEach(function(o){
+    var idx = o.i, t = o.t;
+    var clase = "";
+    if(t.progFin > geometria.progFin && geometria.progFin > 0) clase = "alerta";
+    html += '<tr class="'+clase+'">';
+    html += '<td><b>'+t.num+'</b></td>';
+    html += '<td class="celda-editable"><input class="celda-edit" type="text" data-idx="'+idx+'" data-campo="progIni" value="'+fmtProg(t.progIni)+'" onchange="editarCampo('+idx+',\'progIni\',this.value,this)" onblur="formatearInputProg(this)"></td>';
+    html += '<td class="celda-editable"><input class="celda-edit" type="text" data-idx="'+idx+'" data-campo="progFin" value="'+fmtProg(t.progFin)+'" onchange="editarCampo('+idx+',\'progFin\',this.value,this)" onblur="formatearInputProg(this)"></td>';
+    html += '<td class="num">'+fmt(t.dist,2)+'</td>';
+    
+    var selectS = '<select class="celda-edit" data-idx="'+idx+'" data-campo="sellador" onchange="editarCampo('+idx+',\'sellador\',this.value,this)">';
+    selladores.forEach(function(s){ selectS += '<option value="'+s.nombre+'" '+(s.nombre===t.sellador?'selected':'')+'>'+s.nombre+'</option>'; });
+    selectS += '</select>';
+    html += '<td class="celda-editable">'+selectS+'</td>';
+    
+    var selectL = '<select class="celda-edit" data-idx="'+idx+'" data-campo="losaTipo" onchange="editarCampo('+idx+',\'losaTipo\',this.value,this)">';
+    tiposLosa.forEach(function(m){ selectL += '<option value="'+m.codigo+'" '+(m.codigo===t.losaTipo?'selected':'')+'>'+m.codigo+'</option>'; });
+    selectL += '</select>';
+    html += '<td class="celda-editable">'+selectL+'</td>';
+    
+    html += '<td class="celda-editable"><input class="celda-edit" type="number" step="0.01" data-idx="'+idx+'" data-campo="ancho" value="'+t.ancho+'" onchange="editarCampo('+idx+',\'ancho\',this.value,this)"></td>';
+    
+    var selectVia = '<select class="celda-edit" data-idx="'+idx+'" data-campo="via" onchange="editarCampo('+idx+',\'via\',this.value,this)">'+
+      '<option value="IZQUIERDA" '+(t.via==="IZQUIERDA"?'selected':'')+'>左</option>'+
+      '<option value="DERECHA" '+(t.via==="DERECHA"?'selected':'')+'>右</option>'+
+      '<option value="COMPLETA" '+(t.via==="COMPLETA"?'selected':'')+'>全</option>'+
+    '</select>';
+    html += '<td class="celda-editable">'+selectVia+'</td>';
+    
+    var selectObs = '<select class="celda-edit" data-idx="'+idx+'" data-campo="obs" onchange="editarCampo('+idx+',\'obs\',this.value,this)">'+
+      '<option value="INTERNA" '+(t.obs==="INTERNA"?'selected':'')+'>内</option>'+
+      '<option value="EXTERNA" '+(t.obs==="EXTERNA"?'selected':'')+'>外</option>'+
+      '<option value="PC" '+(t.obs==="PC"?'selected':'')+'>全</option>'+
+    '</select>';
+    html += '<td class="celda-editable">'+selectObs+'</td>';
+    
+    html += '<td class="celda-editable"><input class="celda-edit" type="date" data-idx="'+idx+'" data-campo="fecha" value="'+t.fecha+'" onchange="editarCampo('+idx+',\'fecha\',this.value,this)" style="font-size:11px"></td>';
+    
+    html += '<td class="num">'+fmt(t.longTransv,2)+'</td>';
+    html += '<td class="num">'+fmt(t.longLong,2)+'</td>';
+    html += '<td class="num" style="background:#e8f5e9">'+fmt(t.longTotal,2)+'</td>';
+    html += '<td class="num">'+fmt(t.monto,2)+'</td>';
+    html += '<td class="num" style="background:#e0f7fa;color:#006064">'+fmt(t.litros,2)+'</td>';
+    html += '<td class="num">'+fmt(t.longAcum,2)+'</td>';
+    html += '<td class="no-print"><button class="btn-x" onclick="eliminarTramo('+idx+')" title="删除">×</button></td>';
+    html += '</tr>';
+  });
+  
+  if(tramos.length === 0){
+    html = '<tr><td colspan="17" style="text-align:center;padding:20px;color:#607d8b;font-style:italic;">尚未录入记录段。请使用上方表单添加第一条记录。</td></tr>';
+  } else if(lista.length === 0){
+    html = '<tr><td colspan="17" style="text-align:center;padding:20px;color:#607d8b;font-style:italic;">没有符合筛选条件的记录段。</td></tr>';
+  }
+  $("cuerpoTramos").innerHTML = html;
+  $("badgeTramos").textContent = tramos.length + (tramos.length===1?" 条记录段":" 条记录段");
+}
+
+/* =========================================================
+   汇总
+   ========================================================= */
+function calcularVolTotalItem(){
+  if(geometria.volTotal > 0) return geometria.volTotal;
+  if(geometria.progFin > geometria.progIni) return geometria.progFin - geometria.progIni;
+  return 0;
+}
+
+function actualizarTodo(){
+  renderTabla();
+  renderResumen();
+  renderPapiro();
+  renderGraficos();
+}
+
+function calcular(){
+  var totalLong = tramos.reduce(function(s,t){ return s+t.longTotal; }, 0);
+  var totalTransv = tramos.reduce(function(s,t){ return s+t.longTransv; }, 0);
+  var totalLong_ = tramos.reduce(function(s,t){ return s+t.longLong; }, 0);
+  var totalMonto = tramos.reduce(function(s,t){ return s+t.monto; }, 0);
+  var totalTransvN = tramos.reduce(function(s,t){ return s+t.nTransv; }, 0);
+  var totalLitros = tramos.reduce(function(s,t){ return s+(t.litros||0); }, 0);
+  var totalM3 = tramos.reduce(function(s,t){ return s+(t.m3||0); }, 0);
+  
+  var volTotal = calcularVolTotalItem();
+  var pct = volTotal > 0 ? (totalLong/volTotal)*100 : 0;
+  var restante = volTotal - totalLong;
+  var montoTotal = volTotal * geometria.precio;
+  var montoRestante = montoTotal - totalMonto;
+  
+  // 按密封胶分类
+  var porSellador = {};
+  tramos.forEach(function(t){
+    var k = t.sellador || "(未指定)";
+    if(!porSellador[k]) porSellador[k] = {long:0, litros:0, m3:0, monto:0, n:0};
+    porSellador[k].long += t.longTotal;
+    porSellador[k].litros += t.litros || 0;
+    porSellador[k].m3 += t.m3 || 0;
+    porSellador[k].monto += t.monto;
+    porSellador[k].n++;
+  });
+  
+  var porVia = {IZQUIERDA:{long:0,monto:0,n:0},DERECHA:{long:0,monto:0,n:0},COMPLETA:{long:0,monto:0,n:0}};
+  tramos.forEach(function(t){
+    if(porVia[t.via]){ porVia[t.via].long += t.longTotal; porVia[t.via].monto += t.monto; porVia[t.via].n++; }
+  });
+  
+  var porFecha = {};
+  tramos.forEach(function(t){
+    if(!porFecha[t.fecha]) porFecha[t.fecha] = {long:0, monto:0, n:0};
+    porFecha[t.fecha].long += t.longTotal;
+    porFecha[t.fecha].monto += t.monto;
+    porFecha[t.fecha].n++;
+  });
+  
+  var porMes = {};
+  tramos.forEach(function(t){
+    if(!t.fecha) return;
+    var k = t.fecha.substring(0,7);
+    if(!porMes[k]) porMes[k] = {long:0, monto:0, n:0};
+    porMes[k].long += t.longTotal;
+    porMes[k].monto += t.monto;
+    porMes[k].n++;
+  });
+  
+  var porUbic = {INTERNA:{long:0,n:0},EXTERNA:{long:0,n:0},PC:{long:0,n:0}};
+  tramos.forEach(function(t){
+    if(porUbic[t.obs]){ porUbic[t.obs].long += t.longTotal; porUbic[t.obs].n++; }
+  });
+  
+  return {
+    totalTramos: tramos.length, totalLong: totalLong, totalMonto: totalMonto,
+    totalTransv: totalTransv, totalLong_: totalLong_, totalTransvN: totalTransvN,
+    totalLitros: totalLitros, totalM3: totalM3,
+    volTotal: volTotal, montoTotal: montoTotal, pct: pct,
+    restante: restante, montoRestante: montoRestante,
+    porSellador: porSellador, porVia: porVia, porFecha: porFecha,
+    porMes: porMes, porUbic: porUbic
+  };
+}
+
+function renderResumen(){
+  var c = calcular();
+  var html = "";
+  html += '<div class="tarjeta-res viajes"><div class="titulo">已录入记录段</div><div class="valor">'+c.totalTramos+'</div></div>';
+  html += '<div class="tarjeta-res acum"><div class="titulo">已完成 ML</div><div class="valor">'+fmt(c.totalLong,2)+'<span class="unidad">ml</span></div></div>';
+  html += '<div class="tarjeta-res obra"><div class="titulo">项目总 ML</div><div class="valor">'+fmt(c.volTotal,2)+'<span class="unidad">ml</span></div></div>';
+  var claseRest = c.restante < 0 ? "cierre negativo" : "cierre";
+  html += '<div class="tarjeta-res '+claseRest+'"><div class="titulo">剩余 ML</div><div class="valor">'+fmt(c.restante,2)+'<span class="unidad">ml</span></div></div>';
+  html += '<div class="tarjeta-res '+(c.pct>=100?"ok":"acum")+'"><div class="titulo">实际进度</div><div class="valor">'+fmt(c.pct,1)+'<span class="unidad">%</span></div></div>';
+  html += '<div class="tarjeta-res acum"><div class="titulo">已执行金额</div><div class="valor">'+fmt(c.totalMonto,2)+'<span class="unidad">Bs</span></div></div>';
+  html += '<div class="tarjeta-res obra"><div class="titulo">项目总金额</div><div class="valor">'+fmt(c.montoTotal,2)+'<span class="unidad">Bs</span></div></div>';
+  html += '<div class="tarjeta-res '+(c.montoRestante<0?"cierre negativo":"cierre")+'"><div class="titulo">剩余金额</div><div class="valor">'+fmt(c.montoRestante,2)+'<span class="unidad">Bs</span></div></div>';
+  
+  html += '<div class="tarjeta-res viajes"><div class="titulo">横向 ML</div><div class="valor">'+fmt(c.totalTransv,2)+'<span class="unidad">ml</span></div><div class="sub">已完成 '+c.totalTransvN+' 条接缝</div></div>';
+  html += '<div class="tarjeta-res viajes"><div class="titulo">纵向 ML</div><div class="valor">'+fmt(c.totalLong_,2)+'<span class="unidad">ml</span></div></div>';
+  html += '<div class="tarjeta-res material"><div class="titulo">密封胶体积</div><div class="valor">'+fmt(c.totalLitros,2)+'<span class="unidad">L</span></div><div class="sub">'+fmt(c.totalM3,4)+' m³</div></div>';
+  
+  $("tarjetasResumen").innerHTML = html;
+  
+  var vh = "";
+  if(c.totalTramos === 0){
+    vh = '<div class="aviso info"><b>ℹ️</b> 尚未录入记录段。</div>';
+  } else if(c.restante > 0){
+    vh = '<div class="aviso"><b>🚧 施工进行中：</b> 尚余 <b>'+fmt(c.restante,2)+' ml</b>。进度：<b>'+fmt(c.pct,1)+'%</b>。</div>';
+  } else if(c.restante > -0.5){
+    vh = '<div class="aviso ok"><b>✓ 工程完工：</b> 已执行长度与项目总量一致。</div>';
+  } else {
+    vh = '<div class="aviso error visible"><b>⚠ 长度超出：</b> 超出项目总量 <b>'+fmt(Math.abs(c.restante),2)+' ml</b>。</div>';
+  }
+  $("zonaVeredicto").innerHTML = vh;
+  
+  var br = "";
+  br += '<div class="bloque-rendimiento">';
+  br += '<h3>🧪 按密封胶类型统计的材料消耗</h3>';
+  br += '<div style="font-size:11.5px;color:#33691e;margin-bottom:8px">实际升数 = m³ × 比重 × 1000。若密封胶未定义比重，则默认取 1.0（水）。</div>';
+  
+  var keysS = Object.keys(c.porSellador);
+  if(keysS.length > 0){
+    br += '<div class="grid-rend">';
+    keysS.forEach(function(k){
+      var s = c.porSellador[k];
+      var sellInfo = selladores.find(function(x){return x.nombre === k;});
+      var tipoTxt = sellInfo ? ' · '+sellInfo.tipo : '';
+      br += '<div class="dato">';
+      br += '<div class="lbl">'+k+tipoTxt+'</div>';
+      br += '<div class="val">'+fmt(s.litros,2)+'<small>升</small></div>';
+      br += '<div style="font-size:10.5px;color:#33691e;margin-top:2px">'+fmt(s.m3,4)+' m³ · '+fmt(s.long,2)+' ml 已执行</div>';
+      br += '</div>';
+    });
+    br += '</div>';
+  }
+  
+  br += '<div class="nota">ℹ️ <b>计算公式：</b> m³ = ML × (切割宽度_mm/1000) × (深度_mm/1000)。升数 = m³ × 比重 × 1000。工程量根据所选板块类型及激活线数乘以记录段的米数得出。</div>';
+  br += '</div>';
+  $("bloqueRendimiento").innerHTML = br;
+}
+
+/* =========================================================
+   图纸 SVG
+   ========================================================= */
+function renderPapiro(){
+  var svg = $("papiroSvg");
+  if(!svg) return;
+  
+  var W = 1200 * zoomPapiro;
+  var H = 320;
+  var margen = {top: 50, right: 110, bottom: 50, left: 110};
+  var pW = W - margen.left - margen.right;
+  var pH = H - margen.top - margen.bottom;
+  var yEje = margen.top + pH/2;
+  
+  var pMin = geometria.progIni;
+  var pMax = geometria.progFin;
+  if(tramos.length > 0){
+    var minT = Math.min.apply(null, tramos.map(function(t){ return t.progIni; }));
+    var maxT = Math.max.apply(null, tramos.map(function(t){ return t.progFin; }));
+    if(!pMin || pMin > minT) pMin = Math.floor(minT/100)*100;
+    if(!pMax || pMax < maxT) pMax = Math.ceil(maxT/100)*100;
+  }
+  if(!pMin || !pMax || pMax <= pMin){ pMin = 0; pMax = 1000; }
+  
+  function xEsc(prog){
+    return margen.left + ((prog - pMin)/(pMax - pMin))*pW;
+  }
+  
+  var maxAnchoEscala = geometria.anchoMax * 1.10;
+  var alturaMaxVia = pH/2;
+  var offsetEjeMetros = 0.5;
+  var offsetEjePx = (offsetEjeMetros / maxAnchoEscala) * alturaMaxVia;
+  
+  var html = "";
+  html += '<title>施工图纸</title>';
+  html += '<rect x="'+margen.left+'" y="'+margen.top+'" width="'+pW+'" height="'+pH+'" fill="#fafcfd" stroke="#e0e8f0"/>';
+  html += '<rect x="'+margen.left+'" y="'+margen.top+'" width="'+pW+'" height="'+alturaMaxVia+'" fill="#f0f7f2" opacity="0.5"/>';
+  html += '<rect x="'+margen.left+'" y="'+yEje+'" width="'+pW+'" height="'+alturaMaxVia+'" fill="#fffbf0" opacity="0.5"/>';
+  html += '<text x="'+(margen.left-8)+'" y="'+(margen.top+alturaMaxVia/2)+'" text-anchor="end" font-size="11" font-weight="bold" fill="#1e7a4a">左侧车道</text>';
+  html += '<text x="'+(margen.left-8)+'" y="'+(yEje+alturaMaxVia/2)+'" text-anchor="end" font-size="11" font-weight="bold" fill="#c05621">右侧车道</text>';
+  html += '<line x1="'+margen.left+'" y1="'+yEje+'" x2="'+(margen.left+pW)+'" y2="'+yEje+'" stroke="#78909c" stroke-width="2" stroke-dasharray="4 3"/>';
+  
+  html += '<rect x="'+(margen.left-30)+'" y="10" width="60" height="26" fill="#fff9c4" stroke="#90a4ae" stroke-width="1" rx="3"/>';
+  html += '<text x="'+margen.left+'" y="21" text-anchor="middle" font-size="8" font-weight="bold" fill="#546e7a">起点</text>';
+  html += '<text x="'+margen.left+'" y="32" text-anchor="middle" font-size="10" font-weight="bold" fill="#004B87">'+fmtProg(pMin)+'</text>';
+  
+  html += '<rect x="'+(margen.left+pW-30)+'" y="10" width="60" height="26" fill="#fff9c4" stroke="#90a4ae" stroke-width="1" rx="3"/>';
+  html += '<text x="'+(margen.left+pW)+'" y="21" text-anchor="middle" font-size="8" font-weight="bold" fill="#546e7a">终点</text>';
+  html += '<text x="'+(margen.left+pW)+'" y="32" text-anchor="middle" font-size="10" font-weight="bold" fill="#004B87">'+fmtProg(pMax)+'</text>';
+  
+  var pxPorMetro = pW / (pMax - pMin);
+  var paso = 100;
+  var pasosPosibles = [100, 200, 500, 1000, 2000, 5000, 10000];
+  for(var i=0; i<pasosPosibles.length; i++){
+    if(pasosPosibles[i] * pxPorMetro >= 80){ paso = pasosPosibles[i]; break; }
+  }
+  if(paso * pxPorMetro < 80) paso = pasosPosibles[pasosPosibles.length-1];
+  
+  var inicio = Math.floor(pMin / paso) * paso;
+  for(var p=inicio; p<=pMax; p+=paso){
+    var x = xEsc(p);
+    if(x < margen.left-1 || x > margen.left+pW+1) continue;
+    html += '<line x1="'+x+'" y1="'+margen.top+'" x2="'+x+'" y2="'+(margen.top+pH)+'" stroke="#e8edf2" stroke-width="0.8"/>';
+    html += '<text x="'+x+'" y="'+(margen.top+pH+16)+'" text-anchor="middle" font-size="10" fill="#546e7a">'+fmtProg(p)+'</text>';
+  }
+  
+  html += '<text x="'+(margen.left+pW/2)+'" y="'+(H-6)+'" text-anchor="middle" font-size="11" font-weight="bold" fill="#263238">桩号（m）</text>';
+  html += '<text x="15" y="'+(margen.top+pH/2)+'" text-anchor="middle" font-size="11" font-weight="bold" fill="#263238" transform="rotate(-90 15 '+(margen.top+pH/2)+')">车道</text>';
+  
+  tramos.forEach(function(t){
+    var x1 = xEsc(t.progIni);
+    var x2 = xEsc(t.progFin);
+    var w = Math.max(1, x2-x1);
+    
+    var s = selladores.find(function(x){ return x.nombre === t.sellador; });
+    var colorFill = s ? s.color : "#1e7a4a";
+    
+    var altoBarra = (t.ancho / maxAnchoEscala) * alturaMaxVia;
+    var obs = t.obs === "N/A" ? "PC" : t.obs;
+    
+    var esIzq = (t.via === "IZQUIERDA" || t.via === "COMPLETA");
+    var offsetAnchoMetros = 0;
+    
+    if(obs === "EXTERNA"){
+      var internas = tramos.filter(function(o){ return o.via === t.via && o.obs === "INTERNA"; });
+      var solapadas = internas.filter(function(o){
+        return Math.max(0, Math.min(o.progFin, t.progFin) - Math.max(o.progIni, t.progIni)) > 0;
+      });
+      if(solapadas.length > 0){
+        offsetAnchoMetros = Math.max.apply(null, solapadas.map(function(o){ return o.ancho; }));
+      } else {
+        offsetAnchoMetros = t.ancho;
+      }
+    }
+    
+    var offsetPx = (offsetAnchoMetros / maxAnchoEscala) * alturaMaxVia;
+    var yPos = esIzq ? (yEje - offsetEjePx - offsetPx - altoBarra) : (yEje + offsetEjePx + offsetPx);
+    
+    html += '<rect x="'+x1+'" y="'+yPos+'" width="'+w+'" height="'+altoBarra+'" fill="'+colorFill+'" fill-opacity="0.85" stroke="#263238" stroke-width="0.5"><title>'+fmtProg(t.progIni)+' → '+fmtProg(t.progFin)+'\n'+t.sellador+' | ML: '+fmt(t.longTotal,2)+' | '+fmt(t.litros,2)+' L ('+fmt(t.m3,4)+' m³)</title></rect>';
+  });
+  
+  var progMaxReg = 0;
+  tramos.forEach(function(t){ if(t.progFin > progMaxReg) progMaxReg = t.progFin; });
+  if(progMaxReg > 0){
+    var xF = xEsc(progMaxReg);
+    if(xF >= margen.left && xF <= margen.left+pW){
+      html += '<line x1="'+xF+'" y1="'+margen.top+'" x2="'+xF+'" y2="'+(margen.top+pH)+'" stroke="#c62828" stroke-width="2" stroke-dasharray="5 3"/>';
+      html += '<text x="'+xF+'" y="'+(margen.top-10)+'" text-anchor="middle" font-size="10" font-weight="bold" fill="#c62828">工作面</text>';
+    }
+  }
+  
+  html += '<rect x="'+margen.left+'" y="'+margen.top+'" width="'+pW+'" height="'+pH+'" fill="none" stroke="#263238" stroke-width="1.5"/>';
+  
+  svg.setAttribute("viewBox", "0 0 "+W+" "+H);
+  svg.innerHTML = html;
+  
+  var leg = '';
+  selladores.forEach(function(s){
+    leg += '<div class="item"><span class="swatch" style="background:'+s.color+'"></span> '+s.nombre+' ('+s.tipo+')</div>';
+  });
+  leg += '<div class="item"><span class="swatch" style="background:#c62828;height:2px"></span> 施工工作面</div>';
+  $("papiroLeyenda").innerHTML = leg;
+}
+
+function ajustarZoomPapiro(f){
+  zoomPapiro = Math.max(0.3, Math.min(3, zoomPapiro*f));
+  var svg = $("papiroSvg");
+  svg.style.width = (100*zoomPapiro)+"%";
+  $("zoomLabel").textContent = Math.round(zoomPapiro*100)+"%";
+  renderPapiro();
+}
+
+function exportarPapiroPNG(){
+  var svg = $("papiroSvg");
+  if(!svg) return;
+  var svgData = new XMLSerializer().serializeToString(svg);
+  var canvas = document.createElement("canvas");
+  var ratio = 2400/svg.viewBox.baseVal.width;
+  canvas.width = 2400;
+  canvas.height = svg.viewBox.baseVal.height*ratio;
+  var ctx = canvas.getContext("2d");
+  var img = new Image();
+  var blob = new Blob([svgData], {type:"image/svg+xml;charset=utf-8"});
+  var url = URL.createObjectURL(blob);
+  img.onload = function(){
+    ctx.fillStyle = "#ffffff"; ctx.fillRect(0,0,canvas.width,canvas.height);
+    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+    URL.revokeObjectURL(url);
+    var pngUrl = canvas.toDataURL("image/png");
+    var a = document.createElement("a");
+    a.href = pngUrl;
+    a.download = "图纸_"+(txt("nombreObra").replace(/[^a-z0-9]/gi,"_")||"工程")+".png";
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  };
+  img.onerror = function(){ URL.revokeObjectURL(url); alert("导出失败。"); };
+  img.src = url;
+}
+
+/* =========================================================
+   图表
+   ========================================================= */
+function renderGraficos(){
+  var c = calcular();
+  dibujarCurvaSConIdeal(c);
+  dibujarPorSellador(c);
+  dibujarMensual(c);
+  dibujarViaUbicacion(c);
+  dibujarOrientacion(c);
+}
+
+function dibujarCurvaSConIdeal(c){
+  var svg = $("graficoCurvaS");
+  if(!svg) return;
+  var W = 900, H = 300;
+  var m = {top:30, right:30, bottom:50, left:70};
+  var pW = W - m.left - m.right, pH = H - m.top - m.bottom;
+  
+  var fechas = Object.keys(c.porFecha).sort();
+  if(fechas.length === 0){
+    svg.innerHTML = '<text x="450" y="150" text-anchor="middle" font-size="13" fill="#90a4ae" font-style="italic">无数据</text>';
+    return;
+  }
+  
+  var longAcum = [], acum = 0;
+  fechas.forEach(function(f){ acum += c.porFecha[f].long; longAcum.push(acum); });
+  var maxLongTotal = Math.max(Math.max.apply(null, longAcum), c.volTotal);
+  
+  function xEsc(i){ return m.left + (fechas.length===1 ? pW/2 : (i/(fechas.length-1))*pW); }
+  function yEsc(v){ return m.top + pH - ((v)/(maxLongTotal||1))*pH; }
+  
+  var html = '<rect x="'+m.left+'" y="'+m.top+'" width="'+pW+'" height="'+pH+'" fill="#fafcfd" stroke="#e0e8f0"/>';
+  for(var i=0; i<=5; i++){
+    var yv = maxLongTotal*i/5;
+    html += '<line x1="'+m.left+'" y1="'+yEsc(yv)+'" x2="'+(m.left+pW)+'" y2="'+yEsc(yv)+'" stroke="#e8edf2"/>';
+    html += '<text x="'+(m.left-8)+'" y="'+(yEsc(yv)+4)+'" text-anchor="end" font-size="10" fill="#546e7a">'+fmt0(yv)+'</text>';
+  }
+  
+  var fIni = txt("fechaInicioObra");
+  var fFin = txt("fechaFinObra");
+  if(fIni && fFin && c.volTotal > 0){
+    var tIni = new Date(fIni).getTime();
+    var tFin = new Date(fFin).getTime();
+    var span = tFin - tIni;
+    if(span > 0){
+      var puntosIdeal = [];
+      fechas.forEach(function(f, i){
+        var tf = new Date(f).getTime();
+        var frac = Math.max(0, Math.min(1, (tf - tIni) / span));
+        var mlIdeal = c.volTotal * frac;
+        puntosIdeal.push({i: i, ml: mlIdeal});
+      });
+      var pathIdeal = "";
+      puntosIdeal.forEach(function(p, k){ pathIdeal += (k===0?"M ":" L ")+xEsc(p.i)+" "+yEsc(p.ml); });
+      html += '<path d="'+pathIdeal+'" fill="none" stroke="#c05621" stroke-width="2" stroke-dasharray="6 4" opacity="0.8"/>';
+    }
+  }
+  
+  var path = "";
+  longAcum.forEach(function(v,i){ path += (i===0?"M ":" L ")+xEsc(i)+" "+yEsc(v); });
+  html += '<path d="'+path+'" fill="none" stroke="#087f5b" stroke-width="3"/>';
+  longAcum.forEach(function(v,i){
+    html += '<circle cx="'+xEsc(i)+'" cy="'+yEsc(v)+'" r="4" fill="#087f5b" stroke="#fff" stroke-width="1.5"/>';
+  });
+  
+  fechas.forEach(function(f,i){
+    if(i===0 || i===fechas.length-1 || i%Math.max(1,Math.ceil(fechas.length/8))===0){
+      html += '<text x="'+xEsc(i)+'" y="'+(m.top+pH+18)+'" text-anchor="middle" font-size="9" fill="#546e7a">'+fechaISOaLocal(f)+'</text>';
+    }
+  });
+  
+  html += '<rect x="'+(m.left+pW-260)+'" y="'+(m.top+5)+'" width="250" height="48" fill="#fff" stroke="#e0e8f0" rx="6"/>';
+  html += '<line x1="'+(m.left+pW-250)+'" y1="'+(m.top+20)+'" x2="'+(m.left+pW-220)+'" y2="'+(m.top+20)+'" stroke="#087f5b" stroke-width="3"/>';
+  html += '<text x="'+(m.left+pW-215)+'" y="'+(m.top+24)+'" font-size="10" fill="#263238">实际</text>';
+  html += '<line x1="'+(m.left+pW-250)+'" y1="'+(m.top+38)+'" x2="'+(m.left+pW-220)+'" y2="'+(m.top+38)+'" stroke="#c05621" stroke-width="2" stroke-dasharray="6 4"/>';
+  html += '<text x="'+(m.left+pW-215)+'" y="'+(m.top+42)+'" font-size="10" fill="#263238">理想（时间）</text>';
+  
+  svg.innerHTML = html;
+}
+
+function dibujarPorSellador(c){
+  var svg = $("graficoPorSellador");
+  if(!svg) return;
+  var W = 900, H = 300;
+  var m = {top:30, right:30, bottom:60, left:70};
+  var pW = W - m.left - m.right, pH = H - m.top - m.bottom;
+  
+  var claves = Object.keys(c.porSellador).filter(function(k){ return c.porSellador[k].long > 0; });
+  if(claves.length === 0){
+    svg.innerHTML = '<text x="450" y="150" text-anchor="middle" font-size="13" fill="#90a4ae" font-style="italic">无数据</text>';
+    return;
+  }
+  
+  var maxLitros = Math.max.apply(null, claves.map(function(k){ return c.porSellador[k].litros; }));
+  var html = '<rect x="'+m.left+'" y="'+m.top+'" width="'+pW+'" height="'+pH+'" fill="#fafcfd" stroke="#e0e8f0"/>';
+  for(var i=0; i<=5; i++){
+    var yv = maxLitros*i/5;
+    var yp = m.top + pH - (yv/maxLitros)*pH;
+    html += '<line x1="'+m.left+'" y1="'+yp+'" x2="'+(m.left+pW)+'" y2="'+yp+'" stroke="#e8edf2"/>';
+    html += '<text x="'+(m.left-8)+'" y="'+(yp+4)+'" text-anchor="end" font-size="10" fill="#546e7a">'+fmt0(yv)+'</text>';
+  }
+  
+  var anchoB = pW/claves.length;
+  claves.forEach(function(k,i){
+    var s = c.porSellador[k];
+    var sInfo = selladores.find(function(x){ return x.nombre === k; });
+    var color = sInfo ? sInfo.color : "#546e7a";
+    var x = m.left + i*anchoB + anchoB*0.15;
+    var alto = (s.litros/maxLitros)*pH;
+    var y = m.top + pH - alto;
+    html += '<rect x="'+x+'" y="'+y+'" width="'+(anchoB*0.7)+'" height="'+alto+'" fill="'+color+'" rx="3" opacity="0.85"/>';
+    html += '<text x="'+(x+anchoB*0.35)+'" y="'+(y-6)+'" text-anchor="middle" font-size="10" font-weight="bold" fill="'+color+'">'+fmt0(s.litros)+' L</text>';
+    html += '<text x="'+(x+anchoB*0.35)+'" y="'+(m.top+pH+16)+'" text-anchor="middle" font-size="10" fill="#37474f">'+k.substring(0,14)+'</text>';
+    if(sInfo){
+      html += '<text x="'+(x+anchoB*0.35)+'" y="'+(m.top+pH+30)+'" text-anchor="middle" font-size="9" fill="#607d8b" font-style="italic">'+sInfo.tipo+'</text>';
+    }
+    html += '<text x="'+(x+anchoB*0.35)+'" y="'+(m.top+pH+44)+'" text-anchor="middle" font-size="9" fill="#607d8b">'+fmt0(s.long)+' ml</text>';
+  });
+  
+  svg.innerHTML = html;
+}
+
+function dibujarMensual(c){
+  var svg = $("graficoMensual");
+  if(!svg) return;
+  var W = 900, H = 300;
+  var m = {top:30, right:30, bottom:60, left:70};
+  var pW = W - m.left - m.right, pH = H - m.top - m.bottom;
+  
+  var meses = Object.keys(c.porMes).sort();
+  if(meses.length === 0){
+    svg.innerHTML = '<text x="450" y="150" text-anchor="middle" font-size="13" fill="#90a4ae" font-style="italic">无数据</text>';
+    return;
+  }
+  
+  var maxLong = Math.max.apply(null, meses.map(function(k){ return c.porMes[k].long; }));
+  var html = '<rect x="'+m.left+'" y="'+m.top+'" width="'+pW+'" height="'+pH+'" fill="#fafcfd" stroke="#e0e8f0"/>';
+  for(var i=0; i<=5; i++){
+    var yv = maxLong*i/5;
+    var yp = m.top + pH - (yv/maxLong)*pH;
+    html += '<line x1="'+m.left+'" y1="'+yp+'" x2="'+(m.left+pW)+'" y2="'+yp+'" stroke="#e8edf2"/>';
+    html += '<text x="'+(m.left-8)+'" y="'+(yp+4)+'" text-anchor="end" font-size="10" fill="#546e7a">'+fmt0(yv)+'</text>';
+  }
+  
+  var anchoB = pW/meses.length;
+  var nombresMes = ["1月","2月","3月","4月","5月","6月","7月","8月","9月","10月","11月","12月"];
+  meses.forEach(function(k,i){
+    var s = c.porMes[k];
+    var partes = k.split("-");
+    var etiq = nombresMes[parseInt(partes[1],10)-1] + " " + partes[0].substring(2);
+    var x = m.left + i*anchoB + anchoB*0.15;
+    var alto = (s.long/maxLong)*pH;
+    var y = m.top + pH - alto;
+    html += '<rect x="'+x+'" y="'+y+'" width="'+(anchoB*0.7)+'" height="'+alto+'" fill="#1976d2" rx="3" opacity="0.85"/>';
+    html += '<text x="'+(x+anchoB*0.35)+'" y="'+(y-6)+'" text-anchor="middle" font-size="10" font-weight="bold" fill="#1976d2">'+fmt0(s.long)+'</text>';
+    html += '<text x="'+(x+anchoB*0.35)+'" y="'+(m.top+pH+18)+'" text-anchor="middle" font-size="10" fill="#37474f">'+etiq+'</text>';
+  });
+  
+  svg.innerHTML = html;
+}
+
+function dibujarViaUbicacion(c){
+  var svg = $("graficoViaUbic");
+  if(!svg) return;
+  var W = 900, H = 300;
+  var m = {top:30, right:30, bottom:60, left:70};
+  var pW = W - m.left - m.right, pH = H - m.top - m.bottom;
+  
+  var grupos = ["IZQUIERDA","DERECHA","COMPLETA"];
+  var ubic = ["INTERNA","EXTERNA","PC"];
+  
+  var matriz = {};
+  grupos.forEach(function(g){ matriz[g] = {INTERNA:0, EXTERNA:0, PC:0}; });
+  tramos.forEach(function(t){
+    if(matriz[t.via] && matriz[t.via][t.obs] !== undefined){
+      matriz[t.via][t.obs] += t.longTotal;
+    }
+  });
+  
+  var maxTotal = 0;
+  grupos.forEach(function(g){
+    var tot = ubic.reduce(function(a,u){ return a + matriz[g][u]; }, 0);
+    if(tot > maxTotal) maxTotal = tot;
+  });
+  if(maxTotal === 0){
+    svg.innerHTML = '<text x="450" y="150" text-anchor="middle" font-size="13" fill="#90a4ae" font-style="italic">无数据</text>';
+    return;
+  }
+  
+  var html = '<rect x="'+m.left+'" y="'+m.top+'" width="'+pW+'" height="'+pH+'" fill="#fafcfd" stroke="#e0e8f0"/>';
+  for(var i=0; i<=5; i++){
+    var yv = maxTotal*i/5;
+    var yp = m.top + pH - (yv/maxTotal)*pH;
+    html += '<line x1="'+m.left+'" y1="'+yp+'" x2="'+(m.left+pW)+'" y2="'+yp+'" stroke="#e8edf2"/>';
+    html += '<text x="'+(m.left-8)+'" y="'+(yp+4)+'" text-anchor="end" font-size="10" fill="#546e7a">'+fmt0(yv)+'</text>';
+  }
+  
+  var colores = {INTERNA:"#004B87", EXTERNA:"#c05621", PC:"#6a1b9a"};
+  var anchoB = pW/grupos.length;
+  grupos.forEach(function(g,i){
+    var xBase = m.left + i*anchoB + anchoB*0.1;
+    var wGrupo = anchoB*0.8;
+    var yBase = m.top + pH;
+    var acum = 0;
+    ubic.forEach(function(u){
+      var val = matriz[g][u];
+      if(val <= 0) return;
+      var alto = (val/maxTotal)*pH;
+      var y = yBase - acum - alto;
+      html += '<rect x="'+xBase+'" y="'+y+'" width="'+wGrupo+'" height="'+alto+'" fill="'+colores[u]+'" opacity="0.85"/>';
+      acum += alto;
+    });
+    html += '<text x="'+(xBase+wGrupo/2)+'" y="'+(m.top+pH+18)+'" text-anchor="middle" font-size="10" fill="#37474f">'+
+      (g==="IZQUIERDA"?"左侧":g==="DERECHA"?"右侧":"全幅")+'</text>';
+  });
+  
+  // 图例
+  var xLeg = m.left + pW - 150;
+  var yLeg = m.top + 10;
+  html += '<rect x="'+xLeg+'" y="'+yLeg+'" width="140" height="60" fill="#fff" stroke="#e0e8f0" rx="6"/>';
+  html += '<rect x="'+(xLeg+8)+'" y="'+(yLeg+8)+'" width="14" height="10" fill="'+colores.INTERNA+'"/>';
+  html += '<text x="'+(xLeg+28)+'" y="'+(yLeg+17)+'" font-size="10" fill="#263238">内侧</text>';
+  html += '<rect x="'+(xLeg+8)+'" y="'+(yLeg+26)+'" width="14" height="10" fill="'+colores.EXTERNA+'"/>';
+  html += '<text x="'+(xLeg+28)+'" y="'+(yLeg+35)+'" font-size="10" fill="#263238">外侧</text>';
+  html += '<rect x="'+(xLeg+8)+'" y="'+(yLeg+44)+'" width="14" height="10" fill="'+colores.PC+'"/>';
+  html += '<text x="'+(xLeg+28)+'" y="'+(yLeg+53)+'" font-size="10" fill="#263238">全断面</text>';
+  
+  svg.innerHTML = html;
+}
+
+function dibujarOrientacion(c){
+  var svg = $("graficoOrientacion");
+  if(!svg) return;
+  var W = 900, H = 220;
+  var m = {top:30, right:30, bottom:40, left:70};
+  var pW = W - m.left - m.right, pH = H - m.top - m.bottom;
+  
+  var datos = [
+    {label:"横向", valor: c.totalTransv, color:"#004B87"},
+    {label:"纵向", valor: c.totalLong_, color:"#087f5b"}
+  ];
+  var maxVal = Math.max(c.totalTransv, c.totalLong_, 1);
+  
+  var html = '<rect x="'+m.left+'" y="'+m.top+'" width="'+pW+'" height="'+pH+'" fill="#fafcfd" stroke="#e0e8f0"/>';
+  
+  var barAncho = pW/2 * 0.5;
+  datos.forEach(function(d, i){
+    var x = m.left + (i+0.5)*(pW/2) - barAncho/2;
+    var alto = (d.valor/maxVal)*pH;
+    var y = m.top + pH - alto;
+    html += '<rect x="'+x+'" y="'+y+'" width="'+barAncho+'" height="'+alto+'" fill="'+d.color+'" rx="4" opacity="0.85"/>';
+    html += '<text x="'+(x+barAncho/2)+'" y="'+(y-8)+'" text-anchor="middle" font-size="12" font-weight="bold" fill="'+d.color+'">'+fmt(d.valor,2)+' ml</text>';
+    html += '<text x="'+(x+barAncho/2)+'" y="'+(m.top+pH+18)+'" text-anchor="middle" font-size="11" fill="#37474f">'+d.label+'</text>';
+  });
+  
+  svg.innerHTML = html;
+}
+
+/* =========================================================
+   保存 / 加载 / 清除 / 导出
+   ========================================================= */
+function guardarProyecto(){
+  var data = {
+    version: "4.5",
+    fecha: new Date().toISOString(),
+    nombreObra: txt("nombreObra"),
+    progIniGlobal: txt("progIniGlobal"),
+    progFinGlobal: txt("progFinGlobal"),
+    profundidadMm: txt("profundidadMm"),
+    anchoCorteMm: txt("anchoCorteMm"),
+    precioUnit: txt("precioUnit"),
+    volTotalItem: txt("volTotalItem"),
+    anchoMaxEscala: txt("anchoMaxEscala"),
+    fechaInicioObra: txt("fechaInicioObra"),
+    fechaFinObra: txt("fechaFinObra"),
+    selladores: selladores,
+    tiposLosa: tiposLosa,
+    tramos: tramos.map(function(t){
+      return {
+        num: t.num, progIni: t.progIni, progFin: t.progFin, dist: t.dist,
+        sellador: t.sellador, losaTipo: t.losaTipo, ancho: t.ancho,
+        via: t.via, obs: t.obs, fecha: t.fecha,
+        nTransv: t.nTransv, longTransv: t.longTransv, nLong: t.nLong,
+        longLong: t.longLong, longTotal: t.longTotal, monto: t.monto,
+        m3: t.m3, litros: t.litros
+      };
+    })
+  };
+  
+  var blob = new Blob([JSON.stringify(data, null, 2)], {type:"application/json;charset=utf-8"});
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement("a");
+  a.href = url;
+  a.download = "proyecto_"+(txt("nombreObra").replace(/[^a-z0-9]/gi,"_")||"obra")+".json";
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  
+  var ind=$("indicadorGuardado");
+  $("textoGuardado").textContent="已保存："+new Date().toLocaleTimeString();
+  ind.classList.add("visible");
+  setTimeout(function(){ind.classList.remove("visible");},3000);
+}
+
+function abrirProyecto(){
+  $("inputArchivo").click();
+}
+
+$("inputArchivo").addEventListener("change", function(e){
+  var file = e.target.files[0];
+  if(!file) return;
+  var reader = new FileReader();
+  reader.onload = function(ev){
+    try{
+      var data = JSON.parse(ev.target.result);
+      cargarEstado(data, false);
+      $("inputArchivo").value = "";
+    }catch(err){
+      mostrarError("无法读取文件："+err.message);
+    }
+  };
+  reader.readAsText(file);
+});
+
+function cargarEstado(data, silencioso){
+  if(!silencioso){
+    if(!confirm("确定加载此项目？当前未保存的数据将丢失。")){
+      return;
+    }
+  }
+  
+  if(data.selladores) selladores = data.selladores;
+  else selladores = [];
+  
+  if(data.tiposLosa) tiposLosa = data.tiposLosa;
+  else tiposLosa = [];
+  
+  if(data.tramos){
+    tramos = data.tramos.map(function(t){
+      return {
+        num: t.num || 0, progIni: t.progIni || 0, progFin: t.progFin || 0, dist: t.dist || 0,
+        sellador: t.sellador || "", losaTipo: t.losaTipo || "", ancho: t.ancho || 0,
+        via: t.via || "IZQUIERDA", obs: t.obs || "INTERNA", fecha: t.fecha || "",
+        nTransv: t.nTransv || 0, longTransv: t.longTransv || 0, nLong: t.nLong || 0,
+        longLong: t.longLong || 0, longTotal: t.longTotal || 0, monto: t.monto || 0,
+        m3: t.m3 || 0, litros: t.litros || 0, longAcum: 0
+      };
+    });
+  } else {
+    tramos = [];
+  }
+  
+  $("nombreObra").value = data.nombreObra || "";
+  $("progIniGlobal").value = data.progIniGlobal || "0+000";
+  $("progFinGlobal").value = data.progFinGlobal || "0+000";
+  $("profundidadMm").value = data.profundidadMm || 6;
+  $("anchoCorteMm").value = data.anchoCorteMm || 6;
+  $("precioUnit").value = data.precioUnit || 22.89;
+  $("volTotalItem").value = data.volTotalItem || 0;
+  $("anchoMaxEscala").value = data.anchoMaxEscala || 10;
+  $("fechaInicioObra").value = data.fechaInicioObra || "";
+  $("fechaFinObra").value = data.fechaFinObra || "";
+  
+  leerEstado();
+  ordenarTramos();
+  
+  renderSelladores();
+  renderTiposLosa();
+  renderFormSelects();
+  actualizarTodo();
+  
+  if(!silencioso){
+    var ind=$("indicadorGuardado");
+    $("textoGuardado").textContent="项目已加载";
+    ind.classList.add("visible");
+    setTimeout(function(){ind.classList.remove("visible");},3000);
+  }
+}
+
+function limpiarTodo(){
+  if(!confirm("⚠️ 确定要清除所有数据吗？此操作不可撤销。")) return;
+  if(!confirm("再次确认：所有记录段、密封胶和板块类型都将被删除。")) return;
+  
+  tramos = [];
+  selladores = [];
+  tiposLosa = [];
+  
+  $("nombreObra").value = "Oruro-Challapata";
+  $("progIniGlobal").value = "235+266";
+  $("progFinGlobal").value = "256+612";
+  $("profundidadMm").value = 6;
+  $("anchoCorteMm").value = 6;
+  $("precioUnit").value = 22.89;
+  $("volTotalItem").value = 262908;
+  $("anchoMaxEscala").value = 10;
+  $("fechaInicioObra").value = "2024-11-16";
+  $("fechaFinObra").value = "2027-01-01";
+  
+  leerEstado();
+  renderSelladores();
+  renderTiposLosa();
+  renderFormSelects();
+  actualizarTodo();
+}
+
+function nuevoProyecto(){
+  if(tramos.length > 0){
+    if(!confirm("当前项目有数据。确定要新建项目吗？")) return;
+  }
+  limpiarTodo();
+}
+
+function exportarCSV(){
+  if(tramos.length === 0){
+    alert("没有数据可导出。");
+    return;
+  }
+  
+  var sep = ";";
+  var lineas = [];
+  
+  lineas.push([
+    "编号","起始桩号","终止桩号","距离(m)","密封胶","板块类型","宽度(m)","车道","位置","日期",
+    "横向ML","纵向ML","总ML","金额(Bs)","升数(L)","累计ML"
+  ].join(sep));
+  
+  tramos.forEach(function(t){
+    lineas.push([
+      t.num,
+      fmtProg(t.progIni),
+      fmtProg(t.progFin),
+      fmt(t.dist,2),
+      t.sellador,
+      t.losaTipo,
+      fmt(t.ancho,2),
+      t.via,
+      t.obs,
+      t.fecha,
+      fmt(t.longTransv,2),
+      fmt(t.longLong,2),
+      fmt(t.longTotal,2),
+      fmt(t.monto,2),
+      fmt(t.litros,2),
+      fmt(t.longAcum,2)
+    ].join(sep));
+  });
+  
+  var blob = new Blob(["\uFEFF"+lineas.join("\n")], {type:"text/csv;charset=utf-8"});
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement("a");
+  a.href = url;
+  a.download = "施工进度_"+(txt("nombreObra").replace(/[^a-z0-9]/gi,"_")||"工程")+".csv";
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+function imprimirResumen(){
+  window.print();
+}
+
+/* =========================================================
+   初始化
+   ========================================================= */
+document.addEventListener("DOMContentLoaded", function(){
+  inicializarPreviewState();
+  actualizarPreviewLosa();
+  
+  $("fFecha").value = new Date().toISOString().split("T")[0];
+  
+  leerEstado();
+  renderSelladores();
+  renderTiposLosa();
+  renderFormSelects();
+  actualizarTodo();
+  
+  setTimeout(function(){
+    actualizarDesdeServidor(true);
+  }, 500);
+});
+</script>
+</body>
+</html>
