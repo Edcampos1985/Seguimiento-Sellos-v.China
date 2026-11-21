@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>工程进度管理 — 接缝扩缝切割与密封 v4.5</title>
+<title>施工进度控制 — 切缝与填缝 v4.5</title>
 <style>
 :root{
   --azul:#004B87;--azul2:#0068c9;--verde:#087f5b;--verde2:#0ca678;
@@ -11,22 +11,22 @@
   --texto:#263238;--muted:#607d8b;--borde:#dce4e8;--bg:#eef2f7;
 }
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Segoe UI',Arial,Helvetica,sans-serif;background:linear-gradient(135deg,#eef2f7 0%,#dfe8f0 100%);min-height:100vh;color:var(--texto);padding:20px 12px}
+body{font-family:'Segoe UI','Microsoft YaHei',Arial,Helvetica,sans-serif;background:linear-gradient(135deg,#eef2f7 0%,#dfe8f0 100%);min-height:100vh;color:var(--texto);padding:20px 12px}
 .contenedor{max-width:1500px;margin:0 auto}
 
-/* CABECERA */
+/* 页眉 */
 .cabecera{background:linear-gradient(135deg,#004B87,#0068c9);color:#fff;border-radius:14px;padding:24px;text-align:center;box-shadow:0 8px 22px rgba(0,75,135,.25);margin-bottom:18px}
 .cabecera h1{font-size:22px;margin-bottom:6px}
 .cabecera p{font-size:12.5px;opacity:.9}
 .cabecera .autor{margin-top:10px;font-size:11.5px;font-weight:bold;opacity:.85;line-height:1.6}
 .cabecera .autor span{display:block}
 
-/* SECCIONES */
+/* 区块 */
 .seccion{background:#fff;border-radius:12px;box-shadow:0 4px 14px rgba(0,0,0,.08);padding:20px;margin-bottom:16px}
 .seccion h2{color:var(--azul);font-size:16px;margin-bottom:16px;padding-bottom:8px;border-bottom:2px solid #e0e8f0;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px}
 .seccion h2 .badge{font-size:11px;font-weight:normal;color:var(--muted);background:#f0f4f8;padding:4px 12px;border-radius:20px}
 
-/* GRID */
+/* 网格 */
 .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px}
 .campo label{display:block;font-size:12.5px;font-weight:bold;color:#37474f;margin-bottom:5px}
 .campo input,.campo select,.campo textarea{width:100%;padding:9px 11px;border:1px solid #cfd8dc;border-radius:8px;font-size:13.5px;background:#fafcfc;font-family:inherit}
@@ -35,7 +35,7 @@ body{font-family:'Segoe UI',Arial,Helvetica,sans-serif;background:linear-gradien
 .campo input[readonly]{background:#eef2f7;font-weight:bold;color:var(--azul)}
 .campo .ayuda{font-size:10.5px;color:var(--muted);margin-top:3px;font-style:italic}
 
-/* BOTONES */
+/* 按钮 */
 .btn-grande{display:block;width:100%;padding:14px;background:linear-gradient(135deg,#004B87,#0068c9);color:#fff;border:none;border-radius:9px;font-size:15px;font-weight:bold;cursor:pointer;transition:.2s;font-family:inherit;letter-spacing:.5px;margin-top:16px}
 .btn-grande:hover{transform:translateY(-2px);box-shadow:0 6px 16px rgba(0,75,135,.3)}
 .btn-mediano{padding:10px 20px;background:var(--verde);color:#fff;border:none;border-radius:8px;font-size:14px;font-weight:bold;cursor:pointer;font-family:inherit;transition:.2s}
@@ -45,7 +45,7 @@ body{font-family:'Segoe UI',Arial,Helvetica,sans-serif;background:linear-gradien
 .btn-peligro{background:#fff;color:var(--rojo);border-color:var(--rojo)}
 .btn-peligro:hover{background:var(--rojo);color:#fff}
 
-/* BARRA DE ARCHIVO */
+/* 文件栏 */
 .barra-archivo{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px;background:#fff;border-radius:12px;padding:14px 18px;box-shadow:0 4px 14px rgba(0,0,0,.08);align-items:center;justify-content:space-between}
 .barra-archivo .grupo-btn{display:flex;gap:8px;flex-wrap:wrap}
 .btn-arch{padding:9px 16px;border-radius:8px;font-size:12.5px;font-weight:bold;cursor:pointer;font-family:inherit;transition:.2s;border:2px solid transparent;display:inline-flex;align-items:center;gap:6px}
@@ -60,7 +60,7 @@ body{font-family:'Segoe UI',Arial,Helvetica,sans-serif;background:linear-gradien
 .btn-arch.limpiar{background:#fff;color:var(--rojo);border-color:var(--rojo)}
 .btn-arch.limpiar:hover{background:var(--rojo);color:#fff}
 
-/* ERROR */
+/* 错误提示 */
 .aviso{background:#fff8e1;border-left:4px solid #e9a23b;padding:11px 14px;border-radius:6px;font-size:12px;color:#76551c;line-height:1.5;margin-bottom:14px}
 .aviso b{color:#c05621}
 .aviso.info{background:#e3f2fd;border-color:#1976d2;color:#0d47a1}
@@ -69,7 +69,7 @@ body{font-family:'Segoe UI',Arial,Helvetica,sans-serif;background:linear-gradien
 .aviso.error.visible{display:block}
 .aviso.ok{background:#e8f5e9;border-color:var(--verde);color:#1b5e20}
 
-/* TABLA */
+/* 表格 */
 .tabla-toolbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;flex-wrap:wrap;gap:10px}
 .tabla-toolbar .info-edicion{font-size:11.5px;color:var(--muted);font-style:italic}
 .tabla-toolbar .info-edicion b{color:var(--azul)}
@@ -96,14 +96,14 @@ body{font-family:'Segoe UI',Arial,Helvetica,sans-serif;background:linear-gradien
 .tabla-viajes .btn-x:hover{background:#ffcdd2;transform:scale(1.1)}
 .scroll-tabla{max-height:480px;overflow-y:auto;border-radius:10px;border:1px solid #e0e8f0}
 
-/* FORMULARIO VIAJE */
+/* 行程表单 */
 .form-viaje{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:10px;align-items:end;background:#f5f9fc;border:1px solid #d5e0ea;border-radius:10px;padding:14px;margin-bottom:14px}
 .form-viaje .campo label{font-size:11px}
 .form-viaje .campo input, .form-viaje .campo select{padding:7px 9px;font-size:13px}
 .form-viaje .btn-group{grid-column:span 2;display:flex;gap:6px}
 .form-viaje .btn-group button{flex:1;padding:8px 6px;font-size:12px}
 
-/* CONSTRUCTOR DE LOSA */
+/* 楼板构建器 */
 .losa-builder{display:flex;flex-wrap:wrap;gap:16px;align-items:flex-start}
 .losa-form{flex:1;min-width:280px}
 .losa-form .grid{grid-template-columns:1fr 1fr}
@@ -117,7 +117,7 @@ body{font-family:'Segoe UI',Arial,Helvetica,sans-serif;background:linear-gradien
 .losa-info{font-size:11.5px;color:var(--muted);text-align:center;line-height:1.5}
 .losa-info b{color:var(--azul)}
 
-/* TARJETAS TIPOS DE LOSA */
+/* 楼板类型卡片 */
 .lista-losatipos{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px;margin-top:14px}
 .tarjeta-losatipo{background:#fff;border:2px solid #d5e0ea;border-radius:10px;padding:12px;display:flex;flex-direction:column;gap:8px;transition:.2s;position:relative}
 .tarjeta-losatipo:hover{border-color:var(--azul);box-shadow:0 4px 12px rgba(0,75,135,.12)}
@@ -129,7 +129,7 @@ body{font-family:'Segoe UI',Arial,Helvetica,sans-serif;background:linear-gradien
 .tarjeta-losatipo .acciones{display:flex;gap:6px;margin-top:auto}
 .tarjeta-losatipo .acciones button{flex:1;padding:6px;font-size:11px}
 
-/* TARJETAS RESUMEN */
+/* 摘要卡片 */
 .tarjetas-resumen{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin-bottom:18px}
 .tarjeta-res{background:#fff;border-radius:10px;padding:14px;border-left:5px solid var(--azul);box-shadow:0 3px 10px rgba(0,0,0,.06)}
 .tarjeta-res .titulo{font-size:10.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;font-weight:bold;margin-bottom:6px;line-height:1.3}
@@ -151,7 +151,7 @@ body{font-family:'Segoe UI',Arial,Helvetica,sans-serif;background:linear-gradien
 .tarjeta-res.material{border-left-color:#00838f;background:linear-gradient(135deg,#e0f7fa,#f1fbfc)}
 .tarjeta-res.material .valor{color:#006064}
 
-/* BLOQUE RENDIMIENTO */
+/* 效率区块 */
 .bloque-rendimiento{background:linear-gradient(135deg,#f1f8e9,#f9fdf5);border:1px solid #c5e1a5;border-radius:10px;padding:14px;margin-top:14px}
 .bloque-rendimiento h3{color:#33691e;font-size:13.5px;margin-bottom:10px;display:flex;align-items:center;gap:6px}
 .bloque-rendimiento .grid-rend{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
@@ -161,20 +161,20 @@ body{font-family:'Segoe UI',Arial,Helvetica,sans-serif;background:linear-gradien
 .bloque-rendimiento .dato .val small{font-size:10px;color:var(--muted);font-weight:normal;margin-left:3px}
 .bloque-rendimiento .nota{font-size:10.5px;color:#558b2f;margin-top:8px;font-style:italic;line-height:1.4}
 
-/* PAPIRO SVG */
+/* 纸草图 SVG */
 .papiro-container{background:#fff;border-radius:12px;padding:16px;border:1px solid var(--borde);margin-bottom:16px;overflow-x:auto}
 .papiro-svg{display:block;min-height:320px}
 .papiro-leyenda{display:flex;flex-wrap:wrap;gap:16px;justify-content:center;margin-top:14px;font-size:11.5px}
 .papiro-leyenda .item{display:flex;align-items:center;gap:6px}
 .papiro-leyenda .swatch{width:22px;height:12px;border-radius:2px;border:1px solid rgba(0,0,0,.15)}
 
-/* GRÁFICOS */
+/* 图表 */
 .grafico{background:#fff;border-radius:12px;padding:16px;border:1px solid var(--borde);margin-bottom:16px}
 .grafico h3{color:var(--azul);font-size:14px;margin-bottom:6px;text-align:center}
 .grafico .subtitulo{text-align:center;font-size:11px;color:var(--muted);margin-bottom:10px}
 .grafico svg{display:block;width:100%;height:auto;max-height:340px;margin:0 auto}
 
-/* BOTONES INFERIORES */
+/* 底部按钮 */
 .botones-inferiores{display:flex;gap:10px;margin-top:18px;flex-wrap:wrap}
 .botones-inferiores button{flex:1;min-width:140px;padding:12px;border:none;border-radius:8px;font-size:13.5px;font-weight:bold;cursor:pointer;font-family:inherit;transition:.2s}
 .btn-imprimir{background:var(--verde);color:#fff}
@@ -184,18 +184,18 @@ body{font-family:'Segoe UI',Arial,Helvetica,sans-serif;background:linear-gradien
 .btn-resumen{background:var(--azul);color:#fff}
 .btn-resumen:hover{background:#003a6b}
 
-/* FIRMA IMPRESIÓN */
+/* 打印签名 */
 .firma-impresion{display:none;margin-top:50px;text-align:center;font-size:12px}
 .firma-impresion .linea{width:280px;border-top:1px solid #333;margin:0 auto 6px}
 .firma-impresion .fila{display:flex;justify-content:space-around;gap:40px;flex-wrap:wrap}
 .firma-impresion .bloque{flex:1;min-width:240px}
 
-/* INDICADOR */
+/* 指示器 */
 .indicador-guardado{font-size:11px;color:var(--verde);font-weight:bold;display:none;align-items:center;gap:4px}
 .indicador-guardado.visible{display:inline-flex;animation:fadeIn .3s}
 @keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
 
-/* RESPONSIVE */
+/* 响应式 */
 @media(max-width:700px){
   .form-viaje{grid-template-columns:repeat(2,1fr)}
   .form-viaje .btn-group{grid-column:span 2}
@@ -217,676 +217,344 @@ body{font-family:'Segoe UI',Arial,Helvetica,sans-serif;background:linear-gradien
   .tabla-viajes td input.celda-edit, .tabla-viajes td select.celda-edit{border:none;background:transparent}
   .firma-impresion{display:block !important}
 }
-body{font-family:'Microsoft YaHei','微软雅黑','Noto Sans CJK SC','Segoe UI',Arial,sans-serif}
 </style>
 </head>
-
 <body>
-
-
 
 <div class="contenedor">
 
-  
-
-  <!-- BARRA DE ARCHIVO -->
-  
+  <!-- 文件栏 -->
   <div class="barra-archivo no-print">
-    
     <div class="titulo-archivo" style="font-size:12.5px;color:var(--muted);font-weight:bold;display:flex;align-items:center;gap:6px;flex-wrap:wrap">
       📁 项目：
       <span class="indicador-guardado" id="indicadorGuardado">✓ <span id="textoGuardado">已保存</span></span>
-    
     </div>
-    
     <div class="grupo-btn">
-      
       <button class="btn-arch actualizar" onclick="actualizarDesdeServidor()" title="从 GitHub 检查更新">🔄 更新数据</button>
-      
-      <button class="btn-arch guardar" onclick="guardarProyecto()" title="下载 .json 项目文件">💾 保存</button>
-      
-      <button class="btn-arch abrir" onclick="abrirProyecto()" title="从本地加载 .json 项目文件">📂 打开</button>
-      
-      <button class="btn-arch csv" onclick="exportarCSV()" title="导出为 CSV（Excel）">📊 CSV</button>
-      
+      <button class="btn-arch guardar" onclick="guardarProyecto()" title="下载 .json 文件">💾 保存</button>
+      <button class="btn-arch abrir" onclick="abrirProyecto()" title="加载本地 .json 文件">📂 打开</button>
+      <button class="btn-arch csv" onclick="exportarCSV()" title="导出为 CSV (Excel)">📊 CSV</button>
       <button class="btn-arch limpiar" onclick="limpiarTodo()" title="清除所有数据">🗑 清空</button>
-    
     </div>
-  
   </div>
-  
   <input type="file" id="inputArchivo" accept=".json,application/json" style="display:none">
 
-  
-
-  <!-- CABECERA -->
-  
+  <!-- 页眉 -->
   <div class="cabecera">
-    
-    <h1>🏗️ 工程进度管理 — 接缝扩缝切割与密封 v4.5</h1>
-    
-    <p>施工记录 · 混凝土板类型 · 施工进度示意图 · 实时进度</p>
-    
+    <h1>🏗️ 施工进度控制 — 切缝与填缝 v4.5</h1>
+    <p>工序 · 楼板类型 · 施工纸草图 · 实时进度</p>
     <div class="autor">
-      
-      <span>ING. JOSÉ EDGAR CAMPOS CESPEDES · RNI: 30-222 · TEL: +591 73433166</span>
-      
+      <span>工程师 JOSÉ EDGAR CAMPOS CESPEDES · RNI: 30-222 · 电话: +591 73433166</span>
+      <span>玻利维亚与中国兄弟民族携手共促发展</span>
       <span>版本 4.5 - 2026</span>
-    
     </div>
-  
   </div>
-
-  
 
   <div class="aviso error" id="alertaError">
-    
-    <b>❌ 错误：</b>  <span id="textoError"></span>
-  
+    <b>❌ 错误：</b> <span id="textoError"></span>
   </div>
 
-  
-
-  <!-- SECCIÓN 1: CONFIGURACIÓN DE LA OBRA -->
-  
+  <!-- 第1部分：工程配置 -->
   <div class="seccion">
-    
-    <h2>⚙️ 1. 工程项目设置</h2>
-    
+    <h2>⚙️ 1. 工程配置</h2>
     <div class="grid">
-      
       <div class="campo">
-        
         <label>工程名称</label>
-        
         <input id="nombreObra" type="text" value="Oruro-Challapata" oninput="sincronizarYRenderizar()">
-      
       </div>
-      
       <div class="campo">
-        
-        <label>全线起始桩号</label>
-        
+        <label>全局起始桩号</label>
         <input id="progIniGlobal" type="text" value="235+266" oninput="sincronizarYRenderizar()">
-      
       </div>
-      
       <div class="campo">
-        
-        <label>全线终止桩号</label>
-        
+        <label>全局终点桩号</label>
         <input id="progFinGlobal" type="text" value="256+612" oninput="sincronizarYRenderizar()">
-      
       </div>
-      
       <div class="campo">
-        
-        <label style="color:var(--azul)">密封胶平均深度 (mm)</label>
-        
+        <label style="color:var(--azul)">平均填缝深度 (mm)</label>
         <input id="profundidadMm" type="number" step="0.1" value="6" oninput="sincronizarYRenderizar()">
-        
-        <div class="ayuda">Vulkem 45SSL 最小深度：6 mm</div>
-      
+        <div class="ayuda">Vulkem 45SSL 最小值：6 mm</div>
       </div>
-      
       <div class="campo">
-        
         <label style="color:var(--azul)">扩缝切割宽度 (mm)</label>
-        
         <input id="anchoCorteMm" type="number" step="0.1" value="6" oninput="sincronizarYRenderizar()">
-        
-        <div class="ayuda">Vulkem 45SSL 最小深度：6 mm</div>
-      
+        <div class="ayuda">Vulkem 45SSL 最小值：6 mm</div>
       </div>
-      
       <div class="campo">
-        
-        <label>综合单价 (Bs/线性米)</label>
-        
+        <label>单价 (Bs/ml)</label>
         <input id="precioUnit" type="number" step="0.01" value="22.89" oninput="sincronizarYRenderizar()">
-        
-        <div class="ayuda">接缝扩缝切割与密封</div>
-      
+        <div class="ayuda">扩缝切割及填缝</div>
       </div>
-      
       <div class="campo">
-        
-        <label>工程总长度 (线性米)</label>
-        
+        <label>工程总长度 (ml)</label>
         <input id="volTotalItem" type="number" step="0.01" value="262908" oninput="sincronizarYRenderizar()">
-        
         <div class="ayuda" id="ayudaVolTotal"></div>
-      
       </div>
-      
       <div class="campo">
-        
-        <label style="color:var(--azul)">混凝土板最大宽度 (m)</label>
-        
-        <input id="anchoMaxEscala" type="number" step="0.1" value="10" oninput="sincronizarYRenderizar()" title="设置施工进度示意图的纵向比例尺">
-        
-        <div class="ayuda">施工进度示意图显示比例尺</div>
-      
+        <label style="color:var(--azul)">最大楼板宽度 (m)</label>
+        <input id="anchoMaxEscala" type="number" step="0.1" value="10" oninput="sincronizarYRenderizar()" title="定义纸草图的垂直比例">
+        <div class="ayuda">纸草图视觉比例</div>
       </div>
-      
       <div class="campo">
-        
-        <label>工程开工日期</label>
-        
+        <label>工程开始日期</label>
         <input id="fechaInicioObra" type="date" value="2024-11-16" oninput="sincronizarYRenderizar()">
-      
       </div>
-      
       <div class="campo">
-        
-        <label>计划完工日期</label>
-        
+        <label>预计竣工日期</label>
         <input id="fechaFinObra" type="date" value="2027-01-01" oninput="sincronizarYRenderizar()">
-      
       </div>
-    
     </div>
-  
   </div>
 
-  
-
-  <!-- SECCIÓN 2: TIPOS DE SELLADOR -->
-  
+  <!-- 第2部分：密封胶类型 -->
   <div class="seccion">
-    
     <h2>🧴 2. 密封胶类型 <span class="badge" id="badgeSelladores">0 种密封胶</span></h2>
-    
     <div class="aviso info">
-      
-      <b>ℹ️ 说明：</b> 本工程清单仅包含 <b>一个项目</b> (接缝扩缝切割与密封). 在此定义将使用的 <b>密封胶材料</b> ，包括材料类型（聚氨酯、硅酮、沥青类等）、施工进度示意图中显示的颜色，以及用于精确计算用量的相对密度。
+      <b>ℹ️ 说明：</b> 工程分项仅为 <b>一项</b>（扩缝切割及填缝）。在此定义您将使用的 <b>密封胶</b>，包括类型（聚氨酯、硅酮、沥青等）、纸草图颜色及比重（用于精确计算升数）。
     </div>
-    
-    <div class="form-viaje no-print" style="grid-template-columns:repeat(auto-fit,minmax(140px,1fr)">
-      
+    <div class="form-viaje no-print" style="grid-template-columns:repeat(auto-fit,minmax(140px,1fr))">
       <div class="campo"><label>密封胶名称</label><input id="sNombre" type="text" placeholder="例如：Vulkem 45SSL"></div>
-      
       <div class="campo">
-        
         <label>类型</label>
-        
         <select id="sTipo">
-          
           <option value="Poliuretano">聚氨酯</option>
-          
           <option value="Silicona">硅酮</option>
-          
-          <option value="Asfáltico">沥青类</option>
-          
-          <option value="Acrílico">丙烯酸类</option>
-          
-          <option value="Epóxico">环氧类</option>
-          
+          <option value="Asfáltico">沥青</option>
+          <option value="Acrílico">丙烯酸</option>
+          <option value="Epóxico">环氧</option>
           <option value="Otro">其他</option>
-        
         </select>
-      
       </div>
-      
       <div class="campo"><label>颜色</label><input id="sColor" type="color" value="#004B87" style="height:38px;padding:4px"></div>
-      
-      <div class="campo"><label>相对密度</label><input id="sGravedad" type="number" step="0.01" placeholder="例如：1.32"></div>
-      
+      <div class="campo"><label>比重</label><input id="sGravedad" type="number" step="0.01" placeholder="例如：1.32"></div>
       <div class="campo" style="grid-column:span 1"><label>&nbsp;</label><button class="btn-mediano" style="width:100%" onclick="agregarSellador()">➕ 添加</button></div>
-    
     </div>
-    
     <div id="listaSelladores" style="display:flex;flex-wrap:wrap;gap:8px;margin-top:10px"></div>
-  
   </div>
 
-  
-
-  <!-- SECCIÓN 3: TIPOS DE LOSA Y CORTES -->
-  
+  <!-- 第3部分：楼板类型与切割 -->
   <div class="seccion">
-    
-    <h2>📐 3. 混凝土板类型与切缝布置 <span class="badge" id="badgeLosas">0 种板型</span></h2>
-    
+    <h2>📐 3. 楼板类型与切割 <span class="badge" id="badgeLosas">0 种类型</span></h2>
     <div class="aviso info">
-      
-      <b>ℹ️ 使用说明：</b> 定义混凝土板模板，输入各切缝间距，并在网格图中勾选需要计量的接缝线。
+      <b>ℹ️ 使用方法：</b> 定义楼板模板。设置切割距离，并在网格中标记哪些需要计入。
     </div>
-    
-    
     
     <div class="losa-builder">
-      
       <div class="losa-form">
-        
         <div class="grid">
-          
           <div class="campo">
-            
             <label>类型名称</label>
-            
-            <input id="mCodigo" type="text" placeholder="例如：8 m 标准板">
-          
+            <input id="mCodigo" type="text" placeholder="例如：8m 标准楼板">
           </div>
-          
           <div class="campo">
-            
             <label>颜色</label>
-            
             <input id="mColor" type="color" value="#1e7a4a" style="height:38px;padding:4px">
-          
           </div>
-          
           <div class="campo">
-            
             <label>总宽度 (m)</label>
-            
             <input id="mAncho" type="number" step="0.01" value="8" oninput="actualizarPreviewLosa()">
-          
           </div>
-          
           <div class="campo">
-            
             <label>参考长度 (m)</label>
-            
             <input id="mLargoRef" type="number" step="0.01" value="9" oninput="actualizarPreviewLosa()">
-          
           </div>
-          
           <div class="campo" style="grid-column:1/-1; background:#eef2f7; padding:10px; border-radius:8px">
-            
-            <label style="color:var(--azul)">切缝间距布置 (m)</label>
-            
+            <label style="color:var(--azul)">切割分布 (米)</label>
             <div id="inputsDistancias" style="display:flex;flex-direction:column;gap:8px;margin-top:6px"></div>
-          
           </div>
-        
         </div>
-        
         <div style="margin-top:12px;display:flex;gap:6px">
-          
-          <button class="btn-mediano" style="flex:1" onclick="agregarLosaTipo()">➕ 添加板型</button>
-          
+          <button class="btn-mediano" style="flex:1" onclick="agregarLosaTipo()">➕ 添加楼板类型</button>
           <button class="btn-outline" style="flex:1" onclick="resetPreviewLosa()">↺ 重置</button>
-        
         </div>
-      
       </div>
-      
-      
       
       <div class="losa-preview">
-        
         <div style="font-size:12px;font-weight:bold;color:var(--azul);align-self:flex-start">👁️ 交互式预览：</div>
-        
         <div class="losa-svg-container">
-          
           <svg id="losaPreviewSvg" viewBox="0 0 400 300" preserveAspectRatio="xMidYMid meet"></svg>
-        
         </div>
-        
         <div class="losa-checks" id="losaChecks"></div>
-        
         <div class="losa-info" id="losaInfo"></div>
-      
       </div>
-    
     </div>
-
-    
 
     <div style="margin-top:20px;border-top:2px solid #e0e8f0;padding-top:14px">
-      
-      <div style="font-size:13px;font-weight:bold;color:var(--azul);margin-bottom:10px">📋 已登记的混凝土板类型：</div>
-      
+      <div style="font-size:13px;font-weight:bold;color:var(--azul);margin-bottom:10px">📋 已登记的楼板类型：</div>
       <div class="lista-losatipos" id="listaLosas"></div>
-    
     </div>
-  
   </div>
 
-  
-
-  <!-- SECCIÓN 4: REGISTRO DE AVANCE -->
-  
+  <!-- 第4部分：进度记录 -->
   <div class="seccion">
-    
-    <h2>📋 4. 施工进度登记 <span class="badge" id="badgeTramos">0 个施工段已登记</span></h2>
-    
-    
+    <h2>📋 4. 进度记录 <span class="badge" id="badgeTramos">0 条记录</span></h2>
     
     <div class="form-viaje no-print">
-      
       <div class="campo">
-        
         <label>起始桩号</label>
-        
         <input id="fIni" type="text" placeholder="235+266" oninput="actualizarLongitudViva()">
-      
       </div>
-      
       <div class="campo">
-        
-        <label>终止桩号</label>
-        
+        <label>终点桩号</label>
         <input id="fFin" type="text" placeholder="235+275" oninput="actualizarLongitudViva()">
-      
       </div>
-      
       <div class="campo" style="background:#eef2f7;border-radius:8px;padding:0 8px;">
-        
-        <label style="color:var(--azul)">长度</label>
-        
+        <label style="color:var(--azul)">距离</label>
         <input id="fDistViva" type="text" readonly value="0.00 m" style="border:none;background:transparent;font-weight:bold;color:var(--azul);padding-left:0">
-      
       </div>
-      
       <div class="campo"><label>密封胶</label><select id="fSellador" onchange="autocompletarSellador()"></select></div>
-      
-      <div class="campo"><label>混凝土板类型</label><select id="fLosaTipo" onchange="autocompletarAnchoLosa()"></select></div>
-      
+      <div class="campo"><label>楼板类型</label><select id="fLosaTipo" onchange="autocompletarAnchoLosa()"></select></div>
       <div class="campo"><label>实际宽度 (m)</label><input id="fAncho" type="number" step="0.01" placeholder="8"></div>
-      
-      <div class="campo"><label>幅别</label><select id="fVia"><option value="IZQUIERDA">左幅</option><option value="DERECHA">右幅</option><option value="COMPLETA">全幅</option></select></div>
-      
+      <div class="campo"><label>车道</label><select id="fVia"><option value="IZQUIERDA">左侧</option><option value="DERECHA">右侧</option><option value="COMPLETA">全幅</option></select></div>
       <div class="campo">
-        
-        <label>接缝位置</label>
-        
+        <label>位置</label>
         <select id="fObs">
-          
           <option value="INTERNA">内侧</option>
-          
           <option value="EXTERNA">外侧</option>
-          
           <option value="PC">PC（全幅）</option>
-        
         </select>
-      
       </div>
-      
       <div class="campo"><label>日期</label><input id="fFecha" type="date"></div>
-      
       <div class="btn-group">
-        
-        <button class="btn-mediano" onclick="agregarTramo()">➕ 添加施工段</button>
-        
-        <button class="btn-outline" onclick="duplicarUltimo()" title="复制上一施工段">⧉ 复制上一段</button>
-      
+        <button class="btn-mediano" onclick="agregarTramo()">➕ 添加记录</button>
+        <button class="btn-outline" onclick="duplicarUltimo()" title="复制最后一条">⧉ 复制</button>
       </div>
-    
     </div>
-
-    
 
     <div class="tabla-toolbar no-print">
-      
-      <div class="info-edicion">ℹ️ <b>提示：</b> 单击单元格即可编辑。按 Enter 键跳转到下一项。合计数据将自动重新计算。</div>
-      
+      <div class="info-edicion">ℹ️ <b>提示：</b> 点击单元格编辑。回车跳至下一格。总计自动重算。</div>
       <div class="filtros">
-        
-        <label for="filtroSellador">密封胶:</label>
-        
+        <label for="filtroSellador">密封胶：</label>
         <select id="filtroSellador" onchange="renderTabla()"><option value="todas">全部</option></select>
         
-        
-        
-        <label for="filtroVia">幅别:</label>
-        
-        <select id="filtroVia" onchange="renderTabla()"><option value="todas">全部</option><option value="IZQUIERDA">左幅</option><option value="DERECHA">右幅</option><option value="COMPLETA">全幅</option></select>
-        
-        
+        <label for="filtroVia">车道：</label>
+        <select id="filtroVia" onchange="renderTabla()"><option value="todas">全部</option><option value="IZQUIERDA">左侧</option><option value="DERECHA">右侧</option><option value="COMPLETA">全幅</option></select>
         
         <label for="filtroMes">月份：</label>
-        
         <select id="filtroMes" onchange="renderTabla()">
-          
           <option value="todos">全部</option>
-          
           <option value="01">一月</option><option value="02">二月</option><option value="03">三月</option>
-          
           <option value="04">四月</option><option value="05">五月</option><option value="06">六月</option>
-          
           <option value="07">七月</option><option value="08">八月</option><option value="09">九月</option>
-          
           <option value="10">十月</option><option value="11">十一月</option><option value="12">十二月</option>
-        
         </select>
         
-        
-        
         <label for="filtroAnio">年份：</label>
-        
         <select id="filtroAnio" onchange="renderTabla()"><option value="todos">全部</option></select>
-      
       </div>
-    
     </div>
-
-    
 
     <div class="scroll-tabla">
-      
       <table class="tabla-viajes">
-        
         <thead>
-          
           <tr>
-            
             <th onclick="ordenarPor('num')">序号</th>
-            
             <th onclick="ordenarPor('progIni')">起始桩号</th>
-            
-            <th onclick="ordenarPor('progFin')">终止桩号</th>
-            
-            <th onclick="ordenarPor('dist')">长度</th>
-            
+            <th onclick="ordenarPor('progFin')">终点桩号</th>
+            <th onclick="ordenarPor('dist')">距离</th>
             <th onclick="ordenarPor('sellador')">密封胶</th>
-            
-            <th onclick="ordenarPor('losaTipo')">板型</th>
-            
+            <th onclick="ordenarPor('losaTipo')">楼板类型</th>
             <th onclick="ordenarPor('ancho')">宽度</th>
-            
-            <th onclick="ordenarPor('via')">幅别</th>
-            
+            <th onclick="ordenarPor('via')">车道</th>
             <th onclick="ordenarPor('obs')">位置</th>
-            
             <th onclick="ordenarPor('fecha')">日期</th>
-            
-            <th onclick="ordenarPor('longTransv')">横向缝长度</th>
-            
-            <th onclick="ordenarPor('longLong')">纵向缝长度</th>
-            
-            <th onclick="ordenarPor('longTotal')">接缝总长度</th>
-            
+            <th onclick="ordenarPor('longTransv')">横向延米</th>
+            <th onclick="ordenarPor('longLong')">纵向延米</th>
+            <th onclick="ordenarPor('longTotal')">总延米</th>
             <th onclick="ordenarPor('monto')">金额</th>
-            
-            <th onclick="ordenarPor('litros')">用量 (L)</th>
-            
-            <th onclick="ordenarPor('longAcum')">累计长度</th>
-            
+            <th onclick="ordenarPor('litros')">升数</th>
+            <th onclick="ordenarPor('longAcum')">累计延米</th>
             <th class="no-print"></th>
-          
           </tr>
-        
         </thead>
-        
         <tbody id="cuerpoTramos"></tbody>
-      
       </table>
-    
     </div>
-  
   </div>
 
-  
-
-  <!-- SECCIÓN 5: RESUMEN -->
-  
+  <!-- 第5部分：摘要 -->
   <div class="seccion">
-    
-    <h2>📊 5. 工程进度汇总</h2>
-    
+    <h2>📊 5. 进度摘要</h2>
     <div class="tarjetas-resumen" id="tarjetasResumen"></div>
-    
     <div id="zonaVeredicto"></div>
-    
     <div id="bloqueRendimiento"></div>
-  
   </div>
 
-  
-
-  <!-- SECCIÓN 6: PAPIRO -->
-  
+  <!-- 第6部分：纸草图 -->
   <div class="seccion">
-    
-    <h2>🗺️ 6. 施工进度示意图 <span class="badge">接缝扩缝切割与密封</span></h2>
-    
+    <h2>🗺️ 6. 施工纸草图 <span class="badge">切缝与填缝</span></h2>
     <div class="aviso info no-print">
-      
-      <b>ℹ️ 图示说明：</b> 横轴表示桩号，纵轴表示道路幅别。接缝位于 <b>内侧</b> 时，色带靠近中线；位于 <b>外侧</b>时，色带靠近道路边缘。色带厚度按混凝土板实际宽度动态缩放，颜色对应所用密封胶。
+      <b>ℹ️ 阅读说明：</b> 横轴 = 桩号。纵轴 = 车道。内侧接缝条紧贴轴线，外侧接缝条紧贴边缘。条带厚度反映楼板实际宽度（动态比例），颜色为密封胶颜色。
     </div>
-    
     <div class="papiro-container">
-      
-      <svg id="papiroSvg" class="papiro-svg" viewBox="0 0 1200 320" preserveAspectRatio="xMidYMid meet" role="img" aria-label="接缝扩缝切割与密封施工进度示意图"></svg>
-    
+      <svg id="papiroSvg" class="papiro-svg" viewBox="0 0 1200 320" preserveAspectRatio="xMidYMid meet" role="img" aria-label="施工纸草图 切缝与填缝"></svg>
     </div>
-    
     <div class="papiro-leyenda" id="papiroLeyenda"></div>
-    
     <div class="botones-inferiores no-print" style="margin-top:14px">
-      
-      <button class="btn-outline" onclick="exportarPapiroPNG()">📷 导出施工示意图为 PNG</button>
-      
+      <button class="btn-outline" onclick="exportarPapiroPNG()">📷 导出纸草图为 PNG</button>
       <button class="btn-outline" onclick="ajustarZoomPapiro(0.8)">➖ 缩小</button>
-      
       <span style="display:flex;align-items:center;font-size:12px;font-weight:bold;color:var(--muted)" id="zoomLabel">100%</span>
-      
       <button class="btn-outline" onclick="ajustarZoomPapiro(1.25)">➕ 放大</button>
-    
     </div>
-  
   </div>
 
-  
-
-  <!-- SECCIÓN 7: GRÁFICOS DE AVANCE -->
-  
+  <!-- 第7部分：进度图表 -->
   <div class="seccion">
-    
-    <h2>📈 7. 工程进度图表</h2>
-
-    
+    <h2>📈 7. 进度图表</h2>
 
     <div class="grafico">
-      
-      <h3>📊 累计实际进度与理想进度曲线</h3>
-      
-      <div class="subtitulo">实际进度（绿色）与按工期比例计算的理想进度（橙色虚线）</div>
-      
+      <h3>📊 累计进度 vs. 理想时间线</h3>
+      <div class="subtitulo">实际（绿色）vs. 按工期比例的理想进度（橙色虚线）</div>
       <svg id="graficoCurvaS" viewBox="0 0 900 300" preserveAspectRatio="xMidYMid meet"></svg>
-    
     </div>
 
-    
-
     <div class="grafico">
-      
-      <h3>🧪 各类型密封胶消耗量</h3>
-      
-      <div class="subtitulo">各类密封胶的消耗量（升）及已施工接缝长度（线性米）</div>
-      
+      <h3>🧪 各类型密封胶消耗</h3>
+      <div class="subtitulo">每种密封胶消耗的升数及完成的延米</div>
       <svg id="graficoPorSellador" viewBox="0 0 900 300" preserveAspectRatio="xMidYMid meet"></svg>
-    
     </div>
 
-    
-
     <div class="grafico">
-      
-      <h3>📅 月度施工进度</h3>
-      
-      <div class="subtitulo">每月完成的接缝长度（施工产能）</div>
-      
+      <h3>📅 月度进度</h3>
+      <div class="subtitulo">每月完成的延米（生产节奏）</div>
       <svg id="graficoMensual" viewBox="0 0 900 300" preserveAspectRatio="xMidYMid meet"></svg>
-    
     </div>
 
-    
-
     <div class="grafico">
-      
-      <h3>🚧 按道路幅别及接缝位置统计</h3>
-      
-      <div class="subtitulo">按道路幅别（左幅／右幅／全幅）及接缝位置（内侧／外侧／PC）统计已完成长度</div>
-      
+      <h3>🚧 按车道及位置分布</h3>
+      <div class="subtitulo">按车道（左/右/全幅）及位置（内/外/PC）统计的延米</div>
       <svg id="graficoViaUbic" viewBox="0 0 900 300" preserveAspectRatio="xMidYMid meet"></svg>
-    
     </div>
-
-    
 
     <div class="grafico">
-      
-      <h3>📐 横向接缝与纵向接缝对比</h3>
-      
-      <div class="subtitulo">按接缝方向对工程量进行比较</div>
-      
+      <h3>📐 横向 vs. 纵向</h3>
+      <div class="subtitulo">按接缝方向的工程量对比</div>
       <svg id="graficoOrientacion" viewBox="0 0 900 220" preserveAspectRatio="xMidYMid meet"></svg>
-    
     </div>
-  
   </div>
 
-  
-
-  <!-- BOTONES INFERIORES -->
-  
+  <!-- 底部按钮 -->
   <div class="botones-inferiores no-print">
-    
-    <button class="btn-imprimir" onclick="window.print()">🖨️ 打印全部内容</button>
-    
-    <button class="btn-resumen" onclick="imprimirResumen()">📄 仅打印进度汇总</button>
-    
+    <button class="btn-imprimir" onclick="window.print()">🖨️ 打印全部</button>
+    <button class="btn-resumen" onclick="imprimirResumen()">📄 仅打印摘要</button>
     <button class="btn-nuevo" onclick="nuevoProyecto()">➕ 新建项目</button>
-  
   </div>
 
-  
-
-  <!-- FIRMA IMPRESIÓN -->
-  
+  <!-- 打印签名 -->
   <div class="firma-impresion">
-    
     <div class="fila">
-      
       <div class="bloque">
-        
         <div class="linea"></div>
-        
-        <b>施工负责人</b><br>
-        
+        <b>现场负责人</b><br>
         <span id="firmaResidente"></span>
-      
       </div>
-      
       <div class="bloque">
-        
         <div class="linea"></div>
-        
-        <b>工程监理</b><br>
-        
+        <b>监理工程师</b><br>
         <span id="firmaFiscal"></span>
-      
       </div>
-    
     </div>
-  
   </div>
-
-
 
 </div>
 
@@ -894,33 +562,19 @@ body{font-family:'Microsoft YaHei','微软雅黑','Noto Sans CJK SC','Segoe UI',
 "use strict";
 
 /* =========================================================
-   CONFIGURACIÓN DE GITHUB
+   GITHUB 配置
    ========================================================= */
 const URL_DATOS_GITHUB = 'data/proyecto.json';
 
 /* =========================================================
-   UTILIDADES
+   工具函数
    ========================================================= */
-
-function tipoSelladorTexto(tipo){
-  var traducciones = {
-    "Poliuretano":"聚氨酯", "Silicona":"硅酮", "Asfáltico":"沥青类",
-    "Acrílico":"丙烯酸类", "Epóxico":"环氧类", "Otro":"其他"
-  };
-  return traducciones[tipo] || tipo || "其他";
-}
-function viaTexto(via){
-  return ({IZQUIERDA:"左幅", DERECHA:"右幅", COMPLETA:"全幅"})[via] || via || "";
-}
-function ubicacionTexto(ubicacion){
-  return ({INTERNA:"内侧", EXTERNA:"外侧", PC:"PC（全幅）"})[ubicacion] || ubicacion || "";
-}
 function $(id){ return document.getElementById(id); }
 function fmt(v,d){ if(d===undefined)d=2; return Number(v).toLocaleString('zh-CN',{minimumFractionDigits:d,maximumFractionDigits:d}); }
 function fmt0(v){ return Number(v).toLocaleString('zh-CN',{maximumFractionDigits:0}); }
 function num(id){ var v=parseFloat($(id).value); return Number.isFinite(v)?v:NaN; }
 function txt(id){ var el=$(id); return el?el.value:""; }
-function fechaISOaLocal(iso){ if(!iso)return ""; var p=iso.split("T")[0].split("-"); return p[0]+"年"+p[1]+"月"+p[2]+"日"; }
+function fechaISOaLocal(iso){ if(!iso)return ""; var p=iso.split("T")[0].split("-"); return p[2]+"/"+p[1]+"/"+p[0]; }
 
 function parseProg(str){
   if(!str)return NaN;
@@ -963,13 +617,13 @@ function sincronizarYRenderizar(){
 }
 
 /* =========================================================
-   CARGA AUTOMÁTICA DESDE GITHUB
+   从 GitHub 自动加载
    ========================================================= */
 async function actualizarDesdeServidor(silencioso){
   try {
     if(!silencioso) {
       var btn = document.querySelector('.btn-arch.actualizar');
-      btn.innerHTML = '⏳ 正在加载……';
+      btn.innerHTML = '⏳ 正在加载...';
       btn.disabled = true;
     }
     
@@ -991,21 +645,21 @@ async function actualizarDesdeServidor(silencioso){
     
   } catch (error) {
     if(!silencioso) {
-      mostrarError("自动加载数据失败。请确认已将“data/proyecto.json”上传到 GitHub 仓库。详细信息：" + error.message);
+      mostrarError("加载自动数据时出错。请确保已将 'data/proyecto.json' 上传至您的 GitHub 仓库。详情：" + error.message);
     } else {
-      console.log("无法自动加载数据（静默模式）。");
+      console.log("无法加载自动数据（静默模式）。");
     }
   } finally {
     if(!silencioso) {
       var btn = document.querySelector('.btn-arch.actualizar');
-      btn.innerHTML = '🔄 Actualizar Datos';
+      btn.innerHTML = '🔄 更新数据';
       btn.disabled = false;
     }
   }
 }
 
 /* =========================================================
-   ESTADO GLOBAL
+   全局状态
    ========================================================= */
 var tramos = [];
 var selladores = [];
@@ -1060,25 +714,25 @@ function leerEstado(){
 
   var ayuda=$("ayudaVolTotal");
   if(geometria.volTotal>0){
-    ayuda.textContent="已设置："+fmt(geometria.volTotal,2)+" 延米";
+    ayuda.textContent="已定义：" + fmt(geometria.volTotal,2) + " ml";
   }else{
-    ayuda.textContent="留空时将根据全线桩号范围计算";
+    ayuda.textContent="为空 → 将根据全局范围计算";
   }
   return geometria;
 }
 
 /* =========================================================
-   SELLADORES
+   密封胶
    ========================================================= */
 function agregarSellador(){
   ocultarError();
   var nombre=txt("sNombre").trim();
-  var tipo=txt("sTipo") || "Otro";
+  var tipo=txt("sTipo") || "其他";
   var color=txt("sColor");
   var grav = num("sGravedad");
   if(!nombre){mostrarError("请输入密封胶名称。");return;}
   if(selladores.some(function(s){return s.nombre.toLowerCase()===nombre.toLowerCase();})){
-    mostrarError("该密封胶名称已存在。");return;
+    mostrarError("该名称的密封胶已存在。");return;
   }
   selladores.push({
     nombre: nombre,
@@ -1093,7 +747,7 @@ function agregarSellador(){
 }
 
 function eliminarSellador(idx){
-  if(!confirm("确定删除密封胶 "+selladores[idx].nombre+"?"))return;
+  if(!confirm("确定删除密封胶 " + selladores[idx].nombre + "？"))return;
   selladores.splice(idx,1);
   renderSelladores();
   renderFormSelects();
@@ -1103,16 +757,16 @@ function eliminarSellador(idx){
 function renderSelladores(){
   var cont=$("listaSelladores");
   if(selladores.length===0){
-    cont.innerHTML='<div class="aviso info" style="width:100%;margin:0">尚未登记任何密封胶。</div>';
+    cont.innerHTML='<div class="aviso info" style="width:100%;margin:0">尚未登记密封胶。</div>';
     $("badgeSelladores").textContent="0 种密封胶";return;
   }
   var html="";
   selladores.forEach(function(s,i){
-    var grav = s.gravedad ? ' · 相对密度 '+fmt(s.gravedad,2) : '';
+    var grav = s.gravedad ? ' · 比重 ' + fmt(s.gravedad,2) : '';
     html+='<div style="display:flex;align-items:center;gap:8px;background:#f5f9fc;border:1px solid #d5e0ea;border-radius:8px;padding:6px 12px;font-size:12.5px">'+
       '<span style="width:14px;height:14px;border-radius:3px;background:'+s.color+';display:inline-block;border:1px solid rgba(0,0,0,.15)"></span>'+
       '<b>'+s.nombre+'</b>'+
-      '<span style="color:var(--azul);font-size:11px;background:#e3f2fd;padding:2px 8px;border-radius:10px">'+tipoSelladorTexto(s.tipo)+'</span>'+
+      '<span style="color:var(--azul);font-size:11px;background:#e3f2fd;padding:2px 8px;border-radius:10px">'+s.tipo+'</span>'+
       '<span style="color:var(--muted)">'+grav+'</span>'+
       '<button class="btn-x" style="width:20px;height:20px" onclick="eliminarSellador('+i+')" title="删除">×</button>'+
     '</div>';
@@ -1122,7 +776,7 @@ function renderSelladores(){
 }
 
 /* =========================================================
-   TIPOS DE LOSA
+   楼板类型
    ========================================================= */
 function actualizarPreviewLosa(){
   var a = num("mAncho");
@@ -1151,11 +805,11 @@ function generarInputsDistancias(){
   var html = '';
   
   html += '<div style="width:100%;margin-bottom:8px">'+
-            '<b>纵向接缝间距 <span style="font-weight:normal;color:var(--muted)">(suma = ancho de losa = '+fmt(previewState.ancho,2)+'m）：</span> <span id="txtSumaLong" style="color:var(--azul);font-weight:bold">当前合计：0.00m</span></b>'+
+            '<b>纵向 <span style="font-weight:normal;color:var(--muted)">（总和 = 楼板宽度 = ' + fmt(previewState.ancho,2) + 'm）：</span> <span id="txtSumaLong" style="color:var(--azul);font-weight:bold">当前总和：0.00m</span></b>'+
             '<div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:4px" id="inputsLong"></div>'+
           '</div>';
   html += '<div style="width:100%">'+
-            '<b>横向接缝间距 <span style="font-weight:normal;color:var(--muted)">(suma = largo de losa = '+fmt(previewState.largo,2)+'m）：</span> <span id="txtSumaTransv" style="color:var(--azul);font-weight:bold">当前合计：0.00m</span></b>'+
+            '<b>横向 <span style="font-weight:normal;color:var(--muted)">（总和 = 楼板长度 = ' + fmt(previewState.largo,2) + 'm）：</span> <span id="txtSumaTransv" style="color:var(--azul);font-weight:bold">当前总和：0.00m</span></b>'+
             '<div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:4px" id="inputsTransv"></div>'+
           '</div>';
   
@@ -1170,10 +824,10 @@ function renderInputsLong(){
   if(!cont) return;
   var html = '';
   previewState.distanciasLong.forEach(function(d, i){
-    html += '<div style="display:flex;flex-direction:column;gap:2px"><label style="font-size:9px">长度 '+(i+1)+'</label><input type="number" step="0.01" value="'+d+'" style="width:60px;font-size:11px;text-align:center;padding:4px;border:1px solid #cfd8dc;border-radius:4px" oninput="cambiarDistLong('+i+',this.value)"></div>';
+    html += '<div style="display:flex;flex-direction:column;gap:2px"><label style="font-size:9px">距离 ' + (i+1) + '</label><input type="number" step="0.01" value="' + d + '" style="width:60px;font-size:11px;text-align:center;padding:4px;border:1px solid #cfd8dc;border-radius:4px" oninput="cambiarDistLong(' + i + ',this.value)"></div>';
   });
-  html += '<button class="btn-outline" style="padding:4px 8px;font-size:11px;align-self:flex-end;margin-bottom:2px" onclick="addCorteLong()">+ Corte</button>';
-  html += '<button class="btn-peligro" style="padding:4px 8px;font-size:11px;align-self:flex-end;margin-bottom:2px" onclick="removeCorteLong()">- Corte</button>';
+  html += '<button class="btn-outline" style="padding:4px 8px;font-size:11px;align-self:flex-end;margin-bottom:2px" onclick="addCorteLong()">+ 切割</button>';
+  html += '<button class="btn-peligro" style="padding:4px 8px;font-size:11px;align-self:flex-end;margin-bottom:2px" onclick="removeCorteLong()">- 切割</button>';
   cont.innerHTML = html;
   actualizarSumaDist();
 }
@@ -1183,10 +837,10 @@ function renderInputsTransv(){
   if(!cont) return;
   var html = '';
   previewState.distanciasTransv.forEach(function(d, i){
-    html += '<div style="display:flex;flex-direction:column;gap:2px"><label style="font-size:9px">长度 '+(i+1)+'</label><input type="number" step="0.01" value="'+d+'" style="width:60px;font-size:11px;text-align:center;padding:4px;border:1px solid #cfd8dc;border-radius:4px" oninput="cambiarDistTransv('+i+',this.value)"></div>';
+    html += '<div style="display:flex;flex-direction:column;gap:2px"><label style="font-size:9px">距离 ' + (i+1) + '</label><input type="number" step="0.01" value="' + d + '" style="width:60px;font-size:11px;text-align:center;padding:4px;border:1px solid #cfd8dc;border-radius:4px" oninput="cambiarDistTransv(' + i + ',this.value)"></div>';
   });
-  html += '<button class="btn-outline" style="padding:4px 8px;font-size:11px;align-self:flex-end;margin-bottom:2px" onclick="addCorteTransv()">+ Corte</button>';
-  html += '<button class="btn-peligro" style="padding:4px 8px;font-size:11px;align-self:flex-end;margin-bottom:2px" onclick="removeCorteTransv()">- Corte</button>';
+  html += '<button class="btn-outline" style="padding:4px 8px;font-size:11px;align-self:flex-end;margin-bottom:2px" onclick="addCorteTransv()">+ 切割</button>';
+  html += '<button class="btn-peligro" style="padding:4px 8px;font-size:11px;align-self:flex-end;margin-bottom:2px" onclick="removeCorteTransv()">- 切割</button>';
   cont.innerHTML = html;
   actualizarSumaDist();
 }
@@ -1253,63 +907,80 @@ function actualizarSumaDist(){
   var elT = $("txtSumaTransv");
   
   if(elL) {
-    elL.textContent = '当前合计：' + fmt(sumaL,2) + 'm';
+    elL.textContent = '当前总和：' + fmt(sumaL,2) + 'm';
     elL.style.color = (Math.abs(sumaL - previewState.ancho) < 0.01) ? 'var(--verde)' : 'var(--rojo)';
   }
   if(elT) {
-    elT.textContent = '当前合计：' + fmt(sumaT,2) + 'm';
+    elT.textContent = '当前总和：' + fmt(sumaT,2) + 'm';
     elT.style.color = (Math.abs(sumaT - previewState.largo) < 0.01) ? 'var(--verde)' : 'var(--rojo)';
   }
 }
 
+// ---------------------------------------------------------
+// 按比例修正后的预览图
+// ---------------------------------------------------------
 function dibujarPreviewLosa(){
   var svg = $("losaPreviewSvg");
   if(!svg) return;
   
   var W = 400, H = 300;
   var margen = {top: 30, right: 30, bottom: 30, left: 30};
-  var pW = W - margen.left - margen.right;
-  var pH = H - margen.top - margen.bottom;
+  var areaW = W - margen.left - margen.right;   // 340
+  var areaH = H - margen.top - margen.bottom;   // 240
   
-  var a = previewState.ancho;
-  var l = previewState.largo;
+  var a = previewState.ancho;   // 实际宽度 (m)
+  var l = previewState.largo;   // 实际长度 (m)
+  if(!Number.isFinite(a) || a<=0) a = 1;
+  if(!Number.isFinite(l) || l<=0) l = 1;
+  
+  // === 关键：按实际宽:长比例计算矩形 ===
+  var escala = Math.min(areaW / a, areaH / l);
+  var pW = a * escala;   // 绘制宽度 (px)
+  var pH = l * escala;   // 绘制高度 (px)
+  
+  // 在可用区域内居中
+  var offsetX = margen.left + (areaW - pW) / 2;
+  var offsetY = margen.top  + (areaH - pH) / 2;
   
   var sumaL = previewState.distanciasLong.reduce(function(a,b){return a+b;},0) || 1;
   var sumaT = previewState.distanciasTransv.reduce(function(a,b){return a+b;},0) || 1;
   
   var html = '';
   
-  html += '<rect x="'+margen.left+'" y="'+margen.top+'" width="'+pW+'" height="'+pH+'" fill="#f0f7f2" stroke="#90a4ae" stroke-width="1.5" rx="3"/>';
+  html += '<rect x="'+offsetX+'" y="'+offsetY+'" width="'+pW+'" height="'+pH+'" fill="#f0f7f2" stroke="#90a4ae" stroke-width="1.5" rx="3"/>';
   
-  html += '<text x="'+(margen.left+pW/2)+'" y="'+(margen.top-10)+'" text-anchor="middle" font-size="11" font-weight="bold" fill="#004B87">'+fmt(a,2)+' m</text>';
-  html += '<text x="'+(margen.left-15)+'" y="'+(margen.top+pH/2)+'" text-anchor="middle" font-size="11" font-weight="bold" fill="#004B87" transform="rotate(-90 '+(margen.left-15)+' '+(margen.top+pH/2)+')">'+fmt(l,2)+' m</text>';
+  // 尺寸标注（矩形外）
+  html += '<text x="'+(offsetX+pW/2)+'" y="'+(offsetY-10)+'" text-anchor="middle" font-size="11" font-weight="bold" fill="#004B87">'+fmt(a,2)+' m (宽)</text>';
+  html += '<text x="'+(offsetX-15)+'" y="'+(offsetY+pH/2)+'" text-anchor="middle" font-size="11" font-weight="bold" fill="#004B87" transform="rotate(-90 '+(offsetX-15)+' '+(offsetY+pH/2)+')">'+fmt(l,2)+' m (长)</text>';
   
+  // 横向切割线（水平）— 使用 offsetX/offsetY/pW/pH
   var yAcum = 0;
   for(var i=0; i<=previewState.distanciasTransv.length; i++){
-    var y = margen.top + (yAcum/sumaT)*pH;
+    var y = offsetY + (yAcum/sumaT)*pH;
     var activa = previewState.lineasActivas.transv[i] !== false;
     var color = activa ? "#004B87" : "#cfd8dc";
     var strokeW = activa ? 2.5 : 1.5;
     var dash = activa ? "" : "4 3";
-    html += '<line x1="'+margen.left+'" y1="'+y+'" x2="'+(margen.left+pW)+'" y2="'+y+'" stroke="'+color+'" stroke-width="'+strokeW+'" '+(dash?'stroke-dasharray="'+dash+'"':'')+' style="cursor:pointer" onclick="toggleLineaTransv('+i+')"><title>单击以'+(activa?'停用':'启用')+'此横向接缝线</title></line>';
+    html += '<line x1="'+offsetX+'" y1="'+y+'" x2="'+(offsetX+pW)+'" y2="'+y+'" stroke="'+color+'" stroke-width="'+strokeW+'" '+(dash?'stroke-dasharray="'+dash+'"':'')+' style="cursor:pointer" onclick="toggleLineaTransv('+i+')"><title>点击'+(activa?'停用':'启用')+'此横向切割线</title></line>';
     
     var etiq = (i===0) ? "边缘" : (i===previewState.distanciasTransv.length) ? "边缘" : "T"+i;
-    html += '<text x="'+(margen.left-5)+'" y="'+(y+4)+'" text-anchor="end" font-size="9" fill="'+color+'" style="pointer-events:none">'+etiq+'</text>';
+    html += '<text x="'+(offsetX-5)+'" y="'+(y+4)+'" text-anchor="end" font-size="9" fill="'+color+'" style="pointer-events:none">'+etiq+'</text>';
     
     if(i < previewState.distanciasTransv.length) yAcum += previewState.distanciasTransv[i];
   }
   
+  // 纵向切割线（垂直）
   var xAcum = 0;
   for(var j=0; j<=previewState.distanciasLong.length; j++){
-    var x = margen.left + (xAcum/sumaL)*pW;
+    var x = offsetX + (xAcum/sumaL)*pW;
     var activa2 = previewState.lineasActivas.long[j] !== false;
     var color2 = activa2 ? "#087f5b" : "#cfd8dc";
     var strokeW2 = activa2 ? 2.5 : 1.5;
     var dash2 = activa2 ? "" : "4 3";
-    html += '<line x1="'+x+'" y1="'+margen.top+'" x2="'+x+'" y2="'+(margen.top+pH)+'" stroke="'+color2+'" stroke-width="'+strokeW2+'" '+(dash2?'stroke-dasharray="'+dash2+'"':'')+' style="cursor:pointer" onclick="toggleLineaLong('+j+')"><title>单击以'+(activa2?'停用':'启用')+'此纵向接缝线</title></line>';
+    html += '<line x1="'+x+'" y1="'+offsetY+'" x2="'+x+'" y2="'+(offsetY+pH)+'" stroke="'+color2+'" stroke-width="'+strokeW2+'" '+(dash2?'stroke-dasharray="'+dash2+'"':'')+' style="cursor:pointer" onclick="toggleLineaLong('+j+')"><title>点击'+(activa2?'停用':'启用')+'此纵向切割线</title></line>';
     
     var etiq2 = (j===0) ? "边缘" : (j===previewState.distanciasLong.length) ? "边缘" : "L"+j;
-    html += '<text x="'+x+'" y="'+(margen.top+pH+18)+'" text-anchor="middle" font-size="9" fill="'+color2+'" style="pointer-events:none">'+etiq2+'</text>';
+    html += '<text x="'+x+'" y="'+(offsetY+pH+18)+'" text-anchor="middle" font-size="9" fill="'+color2+'" style="pointer-events:none">'+etiq2+'</text>';
     
     if(j < previewState.distanciasLong.length) xAcum += previewState.distanciasLong[j];
   }
@@ -1344,10 +1015,10 @@ function dibujarChecksLosa(){
   var bInf = transv[transv.length-1] !== false;
   
   var html = '';
-  html += '<label><input type="checkbox" '+(bIzq?'checked':'')+' onchange="toggleLineaLong(0)"> 左侧边缘</label>';
-  html += '<label><input type="checkbox" '+(bDer?'checked':'')+' onchange="toggleLineaLong('+(long_.length-1)+')"> 右侧边缘</label>';
-  html += '<label><input type="checkbox" '+(bSup?'checked':'')+' onchange="toggleLineaTransv(0)"> 上侧横向缝</label>';
-  html += '<label><input type="checkbox" '+(bInf?'checked':'')+' onchange="toggleLineaTransv('+(transv.length-1)+')"> 下侧横向缝</label>';
+  html += '<label><input type="checkbox" '+(bIzq?'checked':'')+' onchange="toggleLineaLong(0)"> 左边缘</label>';
+  html += '<label><input type="checkbox" '+(bDer?'checked':'')+' onchange="toggleLineaLong('+(long_.length-1)+')"> 右边缘</label>';
+  html += '<label><input type="checkbox" '+(bSup?'checked':'')+' onchange="toggleLineaTransv(0)"> 上横向</label>';
+  html += '<label><input type="checkbox" '+(bInf?'checked':'')+' onchange="toggleLineaTransv('+(transv.length-1)+')"> 下横向</label>';
   
   cont.innerHTML = html;
 }
@@ -1369,10 +1040,10 @@ function actualizarInfoLosa(){
   var mlTransv = nTransvAct * a;
   var mlTotal = mlLong + mlTransv;
   
-  el.innerHTML = '📊 <b>当前启用接缝线对应的板型工程量：</b><br>'+
-    '• 启用的纵向接缝线：<b>'+nLongAct+'</b> × '+fmt(l,2)+' m = <b>'+fmt(mlLong,2)+' 延米</b><br>'+
-    '• 启用的横向接缝线：<b>'+nTransvAct+'</b> × '+fmt(a,2)+' m = <b>'+fmt(mlTransv,2)+' 延米</b><br>'+
-    '• <b>每块板接缝总长度：'+fmt(mlTotal,2)+' 延米</b>';
+  el.innerHTML = '📊 <b>楼板类型工程量（按当前激活线条）：</b><br>'+
+    '• 激活纵向线：<b>'+nLongAct+'</b> × '+fmt(l,2)+' m = <b>'+fmt(mlLong,2)+' ml</b><br>'+
+    '• 激活横向线：<b>'+nTransvAct+'</b> × '+fmt(a,2)+' m = <b>'+fmt(mlTransv,2)+' ml</b><br>'+
+    '• <b>每块楼板合计：'+fmt(mlTotal,2)+' ml</b>';
 }
 
 function resetPreviewLosa(){
@@ -1396,11 +1067,11 @@ function agregarLosaTipo(){
   var sumaL = previewState.distanciasLong.reduce(function(a,b){return a+b;},0);
   var sumaT = previewState.distanciasTransv.reduce(function(a,b){return a+b;},0);
   
-  if(!cod){ mostrarError("请输入混凝土板类型名称。"); return; }
-  if(Math.abs(sumaL-ancho) > 0.05){ mostrarError("纵向切缝间距之和（"+fmt(sumaL,2)+"m）必须与混凝土板宽度（"+fmt(ancho,2)+"m)."); return; }
-  if(Math.abs(sumaT-largo) > 0.05){ mostrarError("横向切缝间距之和（"+fmt(sumaT,2)+"m）必须与混凝土板长度（"+fmt(largo,2)+"m)."); return; }
+  if(!cod){ mostrarError("请输入楼板类型名称。"); return; }
+  if(Math.abs(sumaL-ancho) > 0.05){ mostrarError("纵向切割总和（" + fmt(sumaL,2) + "m）必须与楼板宽度（" + fmt(ancho,2) + "m）一致。"); return; }
+  if(Math.abs(sumaT-largo) > 0.05){ mostrarError("横向切割总和（" + fmt(sumaT,2) + "m）必须与楼板长度（" + fmt(largo,2) + "m）一致。"); return; }
   if(tiposLosa.some(function(t){return t.codigo.toLowerCase()===cod.toLowerCase();})){
-    mostrarError("该混凝土板类型名称已存在。"); return;
+    mostrarError("该名称的楼板类型已存在。"); return;
   }
   
   tiposLosa.push({
@@ -1426,11 +1097,11 @@ function agregarLosaTipo(){
 function eliminarLosaTipo(id){
   var idx = tiposLosa.findIndex(function(t){return t.id === id;});
   if(idx < 0) return;
-  if(!confirm("确定删除混凝土板类型“"+tiposLosa[idx].codigo+"'?")) return;
+  if(!confirm("确定删除楼板类型 '" + tiposLosa[idx].codigo + "'？")) return;
   
   var usados = tramos.filter(function(t){return t.losaTipo === tiposLosa[idx].codigo;}).length;
   if(usados > 0){
-    if(!confirm("⚠️ 此混凝土板类型正在被 "+usados+" 个施工段使用。\n\n删除后，这些施工段仍会保留，但将失去该板型的关联。\n\n是否仍要继续？")) return;
+    if(!confirm("⚠️ 该楼板类型正被 " + usados + " 条记录使用。\n\n若删除，记录仍将保留但会失去关联。\n\n是否继续？")) return;
   }
   
   tiposLosa.splice(idx, 1);
@@ -1442,8 +1113,8 @@ function eliminarLosaTipo(id){
 function renderTiposLosa(){
   var cont = $("listaLosas");
   if(tiposLosa.length === 0){
-    cont.innerHTML = '<div class="aviso info" style="margin:0">尚未登记任何混凝土板类型。</div>';
-    $("badgeLosas").textContent = "0 tipos";
+    cont.innerHTML = '<div class="aviso info" style="margin:0">尚未登记楼板类型。</div>';
+    $("badgeLosas").textContent = "0 种类型";
     return;
   }
   
@@ -1460,45 +1131,59 @@ function renderTiposLosa(){
       '<div class="mini-svg">'+miniSvg+'</div>'+
       '<div class="detalles">'+
         '宽度：<b>'+fmt(m.ancho,2)+' m</b> · 参考长度：<b>'+fmt(m.largoRef,2)+' m</b><br>'+
-        '纵向切缝数：<b>'+m.distanciasLong.length+'</b> · 横向切缝数：<b>'+m.distanciasTransv.length+'</b><br>'+
-        '启用的接缝线：<b>'+nLongAct+' 条纵向</b> + <b>'+nTransvAct+' 条横向</b><br>'+
-        '每块板接缝工程量（参考）：<b>'+fmt(mlLosa,2)+' 延米</b>'+
+        '纵向切割：<b>'+m.distanciasLong.length+'</b> · 横向切割：<b>'+m.distanciasTransv.length+'</b><br>'+
+        '激活线条：<b>'+nLongAct+' 纵</b> + <b>'+nTransvAct+' 横</b><br>'+
+        '每块楼板工程量（参考）：<b>'+fmt(mlLosa,2)+' ml</b>'+
       '</div>'+
       '<div class="acciones">'+
-        '<button class="btn-outline" onclick="cargarEnConstructor('+m.id+')" title="加载并编辑">✏️ 编辑</button>'+
+        '<button class="btn-outline" onclick="cargarEnConstructor('+m.id+')" title="加载编辑">✏️ 编辑</button>'+
         '<button class="btn-peligro" onclick="eliminarLosaTipo('+m.id+')" title="删除">🗑 删除</button>'+
       '</div>'+
     '</div>';
   });
   cont.innerHTML = html;
-  $("badgeLosas").textContent = tiposLosa.length + (tiposLosa.length===1?" tipo":" tipos");
+  $("badgeLosas").textContent = tiposLosa.length + (tiposLosa.length===1?" 种类型":" 种类型");
 }
 
+// ---------------------------------------------------------
+// 卡片缩略图按比例修正
+// ---------------------------------------------------------
 function generarMiniSvgLosa(m){
   var W = 260, H = 140;
   var margen = {top: 10, right: 10, bottom: 10, left: 10};
-  var pW = W - margen.left - margen.right;
-  var pH = H - margen.top - margen.bottom;
+  var areaW = W - margen.left - margen.right;  // 240
+  var areaH = H - margen.top - margen.bottom;  // 120
+  
+  var a = m.ancho, l = m.largoRef;
+  if(!Number.isFinite(a) || a<=0) a = 1;
+  if(!Number.isFinite(l) || l<=0) l = 1;
+  
+  // 按实际宽:长比例
+  var escala = Math.min(areaW / a, areaH / l);
+  var pW = a * escala;
+  var pH = l * escala;
+  var offsetX = margen.left + (areaW - pW) / 2;
+  var offsetY = margen.top  + (areaH - pH) / 2;
   
   var sumaL = m.distanciasLong.reduce(function(a,b){return a+b;},0) || 1;
   var sumaT = m.distanciasTransv.reduce(function(a,b){return a+b;},0) || 1;
   
   var html = '<svg viewBox="0 0 '+W+' '+H+'" preserveAspectRatio="xMidYMid meet" style="width:100%;height:auto">';
-  html += '<rect x="'+margen.left+'" y="'+margen.top+'" width="'+pW+'" height="'+pH+'" fill="#f0f7f2" stroke="#90a4ae" stroke-width="1" rx="2"/>';
+  html += '<rect x="'+offsetX+'" y="'+offsetY+'" width="'+pW+'" height="'+pH+'" fill="#f0f7f2" stroke="#90a4ae" stroke-width="1" rx="2"/>';
   
   var yAcum = 0;
   for(var i=0; i<=m.distanciasTransv.length; i++){
-    var y = margen.top + (yAcum/sumaT)*pH;
+    var y = offsetY + (yAcum/sumaT)*pH;
     var activa = m.lineasTransv[i] !== false;
-    html += '<line x1="'+margen.left+'" y1="'+y+'" x2="'+(margen.left+pW)+'" y2="'+y+'" stroke="'+(activa?m.color:"#cfd8dc")+'" stroke-width="'+(activa?2:1)+'" '+(activa?'':'stroke-dasharray="3 2"')+'/>';
+    html += '<line x1="'+offsetX+'" y1="'+y+'" x2="'+(offsetX+pW)+'" y2="'+y+'" stroke="'+(activa?m.color:"#cfd8dc")+'" stroke-width="'+(activa?2:1)+'" '+(activa?'':'stroke-dasharray="3 2"')+'/>';
     if(i < m.distanciasTransv.length) yAcum += m.distanciasTransv[i];
   }
   
   var xAcum = 0;
   for(var j=0; j<=m.distanciasLong.length; j++){
-    var x = margen.left + (xAcum/sumaL)*pW;
+    var x = offsetX + (xAcum/sumaL)*pW;
     var activa2 = m.lineasLong[j] !== false;
-    html += '<line x1="'+x+'" y1="'+margen.top+'" x2="'+x+'" y2="'+(margen.top+pH)+'" stroke="'+(activa2?'#087f5b':"#cfd8dc")+'" stroke-width="'+(activa2?2:1)+'" '+(activa2?'':'stroke-dasharray="3 2"')+'/>';
+    html += '<line x1="'+x+'" y1="'+offsetY+'" x2="'+x+'" y2="'+(offsetY+pH)+'" stroke="'+(activa2?'#087f5b':"#cfd8dc")+'" stroke-width="'+(activa2?2:1)+'" '+(activa2?'':'stroke-dasharray="3 2"')+'/>';
     if(j < m.distanciasLong.length) xAcum += m.distanciasLong[j];
   }
   
@@ -1510,7 +1195,7 @@ function cargarEnConstructor(id){
   var m = tiposLosa.find(function(x){return x.id === id;});
   if(!m) return;
   
-  $("mCodigo").value = m.codigo + " (copia)";
+  $("mCodigo").value = m.codigo + " (副本)";
   $("mAncho").value = m.ancho;
   $("mLargoRef").value = m.largoRef;
   $("mColor").value = m.color;
@@ -1534,18 +1219,18 @@ function cargarEnConstructor(id){
 }
 
 /* =========================================================
-   SELECTS
+   下拉框
    ========================================================= */
 function renderFormSelects(){
   var selS = $("fSellador");
   var selFiltroS = $("filtroSellador");
   var htmlS = '<option value="">— 请选择 —</option>';
   selladores.forEach(function(s){ 
-    htmlS += '<option value="'+s.nombre+'">'+s.nombre+' ('+tipoSelladorTexto(s.tipo)+')</option>'; 
+    htmlS += '<option value="'+s.nombre+'">'+s.nombre+' ('+s.tipo+')</option>'; 
   });
   if(selS) selS.innerHTML = htmlS;
   
-  var htmlFS = '<option value="todas">Todos</option>';
+  var htmlFS = '<option value="todas">全部</option>';
   selladores.forEach(function(s){ htmlFS += '<option value="'+s.nombre+'">'+s.nombre+'</option>'; });
   if(selFiltroS) selFiltroS.innerHTML = htmlFS;
   
@@ -1556,7 +1241,7 @@ function renderFormSelects(){
 }
 
 function autocompletarSellador(){
-  // Solo informativo: no autocompleta ancho
+  // 仅供参考：不自动填充宽度
 }
 
 function autocompletarAnchoLosa(){
@@ -1568,7 +1253,7 @@ function autocompletarAnchoLosa(){
 }
 
 /* =========================================================
-   CÁLCULO DE METRADO POR TRAMO
+   按记录计算工程量
    ========================================================= */
 function calcularMetradoTramo(t){
   var dist = t.dist;
@@ -1603,7 +1288,7 @@ function calcularMetradoTramo(t){
   };
 }
 
-// Volumen en m3 de sello: ML * (Ancho_mm/1000) * (Prof_mm/1000)
+// 填缝体积 (m3)：ML * (宽度_mm/1000) * (深度_mm/1000)
 function volumenSelloM3(longTotalMl){
   var anchoM = geometria.anchoCorteMm / 1000;
   var profM = geometria.profundidadMm / 1000;
@@ -1611,13 +1296,13 @@ function volumenSelloM3(longTotalMl){
   return (longTotalMl * anchoM * profM);
 }
 
-// Gravedad del sellador del tramo, con fallback a 1.0
+// 记录中密封胶的比重，默认 1.0
 function gravedadDeTramo(t){
   if(t && t.sellador){
     var s = selladores.find(function(x){ return x.nombre === t.sellador; });
     if(s && Number.isFinite(s.gravedad) && s.gravedad > 0) return s.gravedad;
   }
-  return 1.0; // Fallback si no se asigna gravedad
+  return 1.0;
 }
 
 function recalcularTramo(t){
@@ -1629,12 +1314,12 @@ function recalcularTramo(t){
   t.nLong = m.nLongActivas;
   t.monto = t.longTotal * geometria.precio;
   t.m3 = volumenSelloM3(t.longTotal);
-  // Litros reales: m3 * gravedad * 1000
+  // 实际升数：m3 * 比重 * 1000
   t.litros = t.m3 * gravedadDeTramo(t) * 1000;
 }
 
 /* =========================================================
-   AGREGAR / EDITAR / ELIMINAR TRAMO
+   添加 / 编辑 / 删除 记录
    ========================================================= */
 function agregarTramo(){
   ocultarError();
@@ -1646,12 +1331,12 @@ function agregarTramo(){
   var via = txt("fVia"), obs = txt("fObs"), fecha = txt("fFecha");
   
   if(!Number.isFinite(pIni)){ mostrarError("请输入起始桩号。"); return; }
-  if(!Number.isFinite(pFin)){ mostrarError("请输入终止桩号。"); return; }
-  if(pFin <= pIni){ mostrarError("终止桩号必须大于起始桩号。"); return; }
+  if(!Number.isFinite(pFin)){ mostrarError("请输入终点桩号。"); return; }
+  if(pFin <= pIni){ mostrarError("终点桩号必须大于起始桩号。"); return; }
   if(!Number.isFinite(ancho) || ancho<=0){ mostrarError("宽度必须大于零。"); return; }
   if(!sellador){ mostrarError("请选择密封胶。"); return; }
-  if(!losaTipo){ mostrarError("请选择混凝土板类型。"); return; }
-  if(!fecha){ mostrarError("请输入施工段日期。"); return; }
+  if(!losaTipo){ mostrarError("请选择楼板类型。"); return; }
+  if(!fecha){ mostrarError("请输入记录日期。"); return; }
   
   var dist = pFin - pIni;
   var tramo = {
@@ -1677,8 +1362,7 @@ function ordenarTramos(){
     if(a.fecha > b.fecha) return 1;
     return a.progIni - b.progIni;
   });
-  // Después de agregar, editar, eliminar o cargar jornadas, mostrar siempre
-  // el orden cronológico (fecha más antigua primero).
+  // 添加、编辑、删除或加载后始终显示时间顺序（最早日期在前）。
   ordenActual.campo = "num";
   ordenActual.asc = true;
   tramos.forEach(function(t,i){ t.num = i+1; });
@@ -1694,7 +1378,7 @@ function limpiarFormTramo(){
 }
 
 function duplicarUltimo(){
-  if(tramos.length === 0){ mostrarError("当前没有可复制的施工段。"); return; }
+  if(tramos.length === 0){ mostrarError("尚无记录可复制。"); return; }
   var u = tramos[tramos.length-1];
   $("fIni").value = fmtProg(u.progFin);
   $("fFin").value = fmtProg(u.progFin + u.dist);
@@ -1720,7 +1404,7 @@ function editarCampo(idx, campo, valor, input){
     t[campo] = n;
     if(t.progFin <= t.progIni){
       restaurar(input, ant);
-      mostrarError("终止桩号必须大于起始桩号。");
+      mostrarError("终点桩号必须大于起始桩号。");
       return;
     }
     t.dist = t.progFin - t.progIni;
@@ -1764,7 +1448,7 @@ function restaurar(input, valor){
 }
 
 function eliminarTramo(idx){
-  if(!confirm("确定删除第 "+(idx+1)+" ("+fmtProg(tramos[idx].progIni)+" → "+fmtProg(tramos[idx].progFin)+")?")) return;
+  if(!confirm("确定删除第 " + (idx+1) + " 条记录（" + fmtProg(tramos[idx].progIni) + " → " + fmtProg(tramos[idx].progFin) + "）？")) return;
   tramos.splice(idx, 1);
   ordenarTramos();
   actualizarTodo();
@@ -1787,7 +1471,7 @@ function ordenarPor(campo){
 }
 
 /* =========================================================
-   RENDER TABLA
+   渲染表格
    ========================================================= */
 function renderTabla(){
   var filtroSellador = txt("filtroSellador") || "todas";
@@ -1845,15 +1529,15 @@ function renderTabla(){
     html += '<td class="celda-editable"><input class="celda-edit" type="number" step="0.01" data-idx="'+idx+'" data-campo="ancho" value="'+t.ancho+'" onchange="editarCampo('+idx+',\'ancho\',this.value,this)"></td>';
     
     var selectVia = '<select class="celda-edit" data-idx="'+idx+'" data-campo="via" onchange="editarCampo('+idx+',\'via\',this.value,this)">'+
-      '<option value="IZQUIERDA" '+(t.via==="IZQUIERDA"?'selected':'')+'>左幅</option>'+
-      '<option value="DERECHA" '+(t.via==="DERECHA"?'selected':'')+'>右幅</option>'+
-      '<option value="COMPLETA" '+(t.via==="COMPLETA"?'selected':'')+'>全幅</option>'+
+      '<option value="IZQUIERDA" '+(t.via==="IZQUIERDA"?'selected':'')+'>左</option>'+
+      '<option value="DERECHA" '+(t.via==="DERECHA"?'selected':'')+'>右</option>'+
+      '<option value="COMPLETA" '+(t.via==="COMPLETA"?'selected':'')+'>全</option>'+
     '</select>';
     html += '<td class="celda-editable">'+selectVia+'</td>';
     
     var selectObs = '<select class="celda-edit" data-idx="'+idx+'" data-campo="obs" onchange="editarCampo('+idx+',\'obs\',this.value,this)">'+
-      '<option value="INTERNA" '+(t.obs==="INTERNA"?'selected':'')+'>内侧</option>'+
-      '<option value="EXTERNA" '+(t.obs==="EXTERNA"?'selected':'')+'>外侧</option>'+
+      '<option value="INTERNA" '+(t.obs==="INTERNA"?'selected':'')+'>内</option>'+
+      '<option value="EXTERNA" '+(t.obs==="EXTERNA"?'selected':'')+'>外</option>'+
       '<option value="PC" '+(t.obs==="PC"?'selected':'')+'>PC</option>'+
     '</select>';
     html += '<td class="celda-editable">'+selectObs+'</td>';
@@ -1871,16 +1555,16 @@ function renderTabla(){
   });
   
   if(tramos.length === 0){
-    html = '<tr><td colspan="17" style="text-align:center;padding:20px;color:#607d8b;font-style:italic;">尚未登记任何施工段。请使用上方表单添加第一段。</td></tr>';
+    html = '<tr><td colspan="17" style="text-align:center;padding:20px;color:#607d8b;font-style:italic;">尚无记录。请使用上方表单添加第一条记录。</td></tr>';
   } else if(lista.length === 0){
-    html = '<tr><td colspan="17" style="text-align:center;padding:20px;color:#607d8b;font-style:italic;">没有施工段符合当前筛选条件。</td></tr>';
+    html = '<tr><td colspan="17" style="text-align:center;padding:20px;color:#607d8b;font-style:italic;">没有记录符合当前筛选条件。</td></tr>';
   }
   $("cuerpoTramos").innerHTML = html;
-  $("badgeTramos").textContent = tramos.length + (tramos.length===1?" 个施工段已登记":" 个施工段已登记");
+  $("badgeTramos").textContent = tramos.length + (tramos.length===1?" 条记录":" 条记录");
 }
 
 /* =========================================================
-   RESUMEN
+   摘要
    ========================================================= */
 function calcularVolTotalItem(){
   if(geometria.volTotal > 0) return geometria.volTotal;
@@ -1910,10 +1594,10 @@ function calcular(){
   var montoTotal = volTotal * geometria.precio;
   var montoRestante = montoTotal - totalMonto;
   
-  // Desglose por sellador
+  // 按密封胶分类
   var porSellador = {};
   tramos.forEach(function(t){
-    var k = t.sellador || "（未指定）";
+    var k = t.sellador || "(未指定)";
     if(!porSellador[k]) porSellador[k] = {long:0, litros:0, m3:0, monto:0, n:0};
     porSellador[k].long += t.longTotal;
     porSellador[k].litros += t.litros || 0;
@@ -1964,38 +1648,38 @@ function calcular(){
 function renderResumen(){
   var c = calcular();
   var html = "";
-  html += '<div class="tarjeta-res viajes"><div class="titulo">已登记施工段数</div><div class="valor">'+c.totalTramos+'</div></div>';
-  html += '<div class="tarjeta-res acum"><div class="titulo">已完成接缝长度</div><div class="valor">'+fmt(c.totalLong,2)+'<span class="unidad">延米</span></div></div>';
-  html += '<div class="tarjeta-res obra"><div class="titulo">清单项目总长度</div><div class="valor">'+fmt(c.volTotal,2)+'<span class="unidad">延米</span></div></div>';
+  html += '<div class="tarjeta-res viajes"><div class="titulo">记录数</div><div class="valor">'+c.totalTramos+'</div></div>';
+  html += '<div class="tarjeta-res acum"><div class="titulo">已完成延米</div><div class="valor">'+fmt(c.totalLong,2)+'<span class="unidad">ml</span></div></div>';
+  html += '<div class="tarjeta-res obra"><div class="titulo">分项总延米</div><div class="valor">'+fmt(c.volTotal,2)+'<span class="unidad">ml</span></div></div>';
   var claseRest = c.restante < 0 ? "cierre negativo" : "cierre";
-  html += '<div class="tarjeta-res '+claseRest+'"><div class="titulo">剩余接缝长度</div><div class="valor">'+fmt(c.restante,2)+'<span class="unidad">延米</span></div></div>';
-  html += '<div class="tarjeta-res '+(c.pct>=100?"ok":"acum")+'"><div class="titulo">实物进度</div><div class="valor">'+fmt(c.pct,1)+'<span class="unidad">%</span></div></div>';
+  html += '<div class="tarjeta-res '+claseRest+'"><div class="titulo">剩余延米</div><div class="valor">'+fmt(c.restante,2)+'<span class="unidad">ml</span></div></div>';
+  html += '<div class="tarjeta-res '+(c.pct>=100?"ok":"acum")+'"><div class="titulo">实际进度</div><div class="valor">'+fmt(c.pct,1)+'<span class="unidad">%</span></div></div>';
   html += '<div class="tarjeta-res acum"><div class="titulo">已完成金额</div><div class="valor">'+fmt(c.totalMonto,2)+'<span class="unidad">Bs</span></div></div>';
-  html += '<div class="tarjeta-res obra"><div class="titulo">清单项目总金额</div><div class="valor">'+fmt(c.montoTotal,2)+'<span class="unidad">Bs</span></div></div>';
+  html += '<div class="tarjeta-res obra"><div class="titulo">分项总金额</div><div class="valor">'+fmt(c.montoTotal,2)+'<span class="unidad">Bs</span></div></div>';
   html += '<div class="tarjeta-res '+(c.montoRestante<0?"cierre negativo":"cierre")+'"><div class="titulo">剩余金额</div><div class="valor">'+fmt(c.montoRestante,2)+'<span class="unidad">Bs</span></div></div>';
   
-  html += '<div class="tarjeta-res viajes"><div class="titulo">横向接缝长度</div><div class="valor">'+fmt(c.totalTransv,2)+'<span class="unidad">延米</span></div><div class="sub">'+c.totalTransvN+' 条接缝已施工</div></div>';
-  html += '<div class="tarjeta-res viajes"><div class="titulo">纵向接缝长度</div><div class="valor">'+fmt(c.totalLong_,2)+'<span class="unidad">延米</span></div></div>';
-  html += '<div class="tarjeta-res material"><div class="titulo">密封胶体积</div><div class="valor">'+fmt(c.totalLitros,2)+'<span class="unidad">L</span></div><div class="sub">'+fmt(c.totalM3,4)+' m³</div></div>';
+  html += '<div class="tarjeta-res viajes"><div class="titulo">横向延米</div><div class="valor">'+fmt(c.totalTransv,2)+'<span class="unidad">ml</span></div><div class="sub">已完成 '+c.totalTransvN+' 道接缝</div></div>';
+  html += '<div class="tarjeta-res viajes"><div class="titulo">纵向延米</div><div class="valor">'+fmt(c.totalLong_,2)+'<span class="unidad">ml</span></div></div>';
+  html += '<div class="tarjeta-res material"><div class="titulo">填缝体积</div><div class="valor">'+fmt(c.totalLitros,2)+'<span class="unidad">L</span></div><div class="sub">'+fmt(c.totalM3,4)+' m³</div></div>';
   
   $("tarjetasResumen").innerHTML = html;
   
   var vh = "";
   if(c.totalTramos === 0){
-    vh = '<div class="aviso info"><b>ℹ️</b> 尚未登记任何施工段。</div>';
+    vh = '<div class="aviso info"><b>ℹ️</b> 尚未登记任何记录。</div>';
   } else if(c.restante > 0){
-    vh = '<div class="aviso"><b>🚧 工程施工中：</b> 尚有 <b>'+fmt(c.restante,2)+' 延米未完成</b>。当前进度：<b>'+fmt(c.pct,1)+'%</b>.</div>';
+    vh = '<div class="aviso"><b>🚧 工程进行中：</b> 尚缺 <b>'+fmt(c.restante,2)+' ml</b>。进度：<b>'+fmt(c.pct,1)+'%</b>。</div>';
   } else if(c.restante > -0.5){
-    vh = '<div class="aviso ok"><b>✓ 工程已完成：</b> 已完成长度与清单项目总长度一致。</div>';
+    vh = '<div class="aviso ok"><b>✓ 工程完工：</b> 已完成长度与分项总长度一致。</div>';
   } else {
-    vh = '<div class="aviso error visible"><b>⚠ 超出清单长度：</b> 已完成 <b>'+fmt(Math.abs(c.restante),2)+' 延米</b>，超出清单项目长度。</div>';
+    vh = '<div class="aviso error visible"><b>⚠ 超长：</b> 超出分项总长度 <b>'+fmt(Math.abs(c.restante),2)+' ml</b>。</div>';
   }
   $("zonaVeredicto").innerHTML = vh;
   
   var br = "";
   br += '<div class="bloque-rendimiento">';
-  br += '<h3>🧪 各类密封胶材料消耗量</h3>';
-  br += '<div style="font-size:11.5px;color:#33691e;margin-bottom:8px">实际用量（L）= m³ × 相对密度 × 1000。若未设置密封胶相对密度，则按 1.0（水）计算。</div>';
+  br += '<h3>🧪 各类型密封胶材料消耗</h3>';
+  br += '<div style="font-size:11.5px;color:#33691e;margin-bottom:8px">实际升数 = m³ × 比重 × 1000。若密封胶未定义比重，按 1.0（水）计算。</div>';
   
   var keysS = Object.keys(c.porSellador);
   if(keysS.length > 0){
@@ -2003,23 +1687,23 @@ function renderResumen(){
     keysS.forEach(function(k){
       var s = c.porSellador[k];
       var sellInfo = selladores.find(function(x){return x.nombre === k;});
-      var tipoTxt = sellInfo ? ' · '+tipoSelladorTexto(sellInfo.tipo) : '';
+      var tipoTxt = sellInfo ? ' · '+sellInfo.tipo : '';
       br += '<div class="dato">';
       br += '<div class="lbl">'+k+tipoTxt+'</div>';
-      br += '<div class="val">'+fmt(s.litros,2)+'<small>用量 (L)</small></div>';
-      br += '<div style="font-size:10.5px;color:#33691e;margin-top:2px">'+fmt(s.m3,4)+' m³ · '+fmt(s.long,2)+' 延米已完成</div>';
+      br += '<div class="val">'+fmt(s.litros,2)+'<small>升</small></div>';
+      br += '<div style="font-size:10.5px;color:#33691e;margin-top:2px">'+fmt(s.m3,4)+' m³ · 完成 '+fmt(s.long,2)+' ml</div>';
       br += '</div>';
     });
     br += '</div>';
   }
   
-  br += '<div class="nota">ℹ️ <b>计算说明：</b>密封胶体积（m³）= 接缝长度（线性米）× 切缝宽度（mm/1000）× 密封深度（mm/1000）。用量（L）= m³ × 相对密度 × 1000。工程量根据所选混凝土板类型及启用的接缝线数量计算，并结合施工段长度进行折算。</div>';
+  br += '<div class="nota">ℹ️ <b>计算：</b> m³ = ML × (切割宽度_mm/1000) × (深度_mm/1000)。升数 = m³ × 比重 × 1000。工程量按所选楼板类型及激活线条计算，乘以记录延米数。</div>';
   br += '</div>';
   $("bloqueRendimiento").innerHTML = br;
 }
 
 /* =========================================================
-   PAPIRO SVG
+   纸草图 SVG
    ========================================================= */
 function renderPapiro(){
   var svg = $("papiroSvg");
@@ -2052,15 +1736,15 @@ function renderPapiro(){
   var offsetEjePx = (offsetEjeMetros / maxAnchoEscala) * alturaMaxVia;
   
   var html = "";
-  html += '<title>施工进度示意图</title>';
+  html += '<title>施工纸草图</title>';
   html += '<rect x="'+margen.left+'" y="'+margen.top+'" width="'+pW+'" height="'+pH+'" fill="#fafcfd" stroke="#e0e8f0"/>';
   html += '<rect x="'+margen.left+'" y="'+margen.top+'" width="'+pW+'" height="'+alturaMaxVia+'" fill="#f0f7f2" opacity="0.5"/>';
   html += '<rect x="'+margen.left+'" y="'+yEje+'" width="'+pW+'" height="'+alturaMaxVia+'" fill="#fffbf0" opacity="0.5"/>';
-  html += '<text x="'+(margen.left-8)+'" y="'+(margen.top+alturaMaxVia/2)+'" text-anchor="end" font-size="11" font-weight="bold" fill="#1e7a4a">左幅道路</text>';
-  html += '<text x="'+(margen.left-8)+'" y="'+(yEje+alturaMaxVia/2)+'" text-anchor="end" font-size="11" font-weight="bold" fill="#c05621">右幅道路</text>';
+  html += '<text x="'+(margen.left-8)+'" y="'+(margen.top+alturaMaxVia/2)+'" text-anchor="end" font-size="11" font-weight="bold" fill="#1e7a4a">左车道</text>';
+  html += '<text x="'+(margen.left-8)+'" y="'+(yEje+alturaMaxVia/2)+'" text-anchor="end" font-size="11" font-weight="bold" fill="#c05621">右车道</text>';
   html += '<line x1="'+margen.left+'" y1="'+yEje+'" x2="'+(margen.left+pW)+'" y2="'+yEje+'" stroke="#78909c" stroke-width="2" stroke-dasharray="4 3"/>';
   
-  // Etiquetas de INICIO y FIN (extraídas del programa de ejemplo)
+  // 起点和终点标签
   html += '<rect x="'+(margen.left-30)+'" y="10" width="60" height="26" fill="#fff9c4" stroke="#90a4ae" stroke-width="1" rx="3"/>';
   html += '<text x="'+margen.left+'" y="21" text-anchor="middle" font-size="8" font-weight="bold" fill="#546e7a">起点</text>';
   html += '<text x="'+margen.left+'" y="32" text-anchor="middle" font-size="10" font-weight="bold" fill="#004B87">'+fmtProg(pMin)+'</text>';
@@ -2086,7 +1770,7 @@ function renderPapiro(){
   }
   
   html += '<text x="'+(margen.left+pW/2)+'" y="'+(H-6)+'" text-anchor="middle" font-size="11" font-weight="bold" fill="#263238">桩号 (m)</text>';
-  html += '<text x="15" y="'+(margen.top+pH/2)+'" text-anchor="middle" font-size="11" font-weight="bold" fill="#263238" transform="rotate(-90 15 '+(margen.top+pH/2)+')">幅别</text>';
+  html += '<text x="15" y="'+(margen.top+pH/2)+'" text-anchor="middle" font-size="11" font-weight="bold" fill="#263238" transform="rotate(-90 15 '+(margen.top+pH/2)+')">车道</text>';
   
   tramos.forEach(function(t){
     var x1 = xEsc(t.progIni);
@@ -2137,7 +1821,7 @@ function renderPapiro(){
   
   var leg = '';
   selladores.forEach(function(s){
-    leg += '<div class="item"><span class="swatch" style="background:'+s.color+'"></span> '+s.nombre+' ('+tipoSelladorTexto(s.tipo)+')</div>';
+    leg += '<div class="item"><span class="swatch" style="background:'+s.color+'"></span> '+s.nombre+' ('+s.tipo+')</div>';
   });
   leg += '<div class="item"><span class="swatch" style="background:#c62828;height:2px"></span> 施工前沿</div>';
   $("papiroLeyenda").innerHTML = leg;
@@ -2178,7 +1862,7 @@ function exportarPapiroPNG(){
 }
 
 /* =========================================================
-   GRÁFICOS
+   图表
    ========================================================= */
 function renderGraficos(){
   var c = calcular();
@@ -2198,7 +1882,7 @@ function dibujarCurvaSConIdeal(c){
   
   var fechas = Object.keys(c.porFecha).sort();
   if(fechas.length === 0){
-    svg.innerHTML = '<text x="450" y="150" text-anchor="middle" font-size="13" fill="#90a4ae" font-style="italic">暂无数据</text>';
+    svg.innerHTML = '<text x="450" y="150" text-anchor="middle" font-size="13" fill="#90a4ae" font-style="italic">无数据</text>';
     return;
   }
   
@@ -2216,7 +1900,7 @@ function dibujarCurvaSConIdeal(c){
     html += '<text x="'+(m.left-8)+'" y="'+(yEsc(yv)+4)+'" text-anchor="end" font-size="10" fill="#546e7a">'+fmt0(yv)+'</text>';
   }
   
-  // Curva ideal
+  // 理想曲线
   var fIni = txt("fechaInicioObra");
   var fFin = txt("fechaFinObra");
   if(fIni && fFin && c.volTotal > 0){
@@ -2237,7 +1921,7 @@ function dibujarCurvaSConIdeal(c){
     }
   }
   
-  // Curva real
+  // 实际曲线
   var path = "";
   longAcum.forEach(function(v,i){ path += (i===0?"M ":" L ")+xEsc(i)+" "+yEsc(v); });
   html += '<path d="'+path+'" fill="none" stroke="#087f5b" stroke-width="3"/>';
@@ -2251,12 +1935,12 @@ function dibujarCurvaSConIdeal(c){
     }
   });
   
-  // Leyenda
+  // 图例
   html += '<rect x="'+(m.left+pW-260)+'" y="'+(m.top+5)+'" width="250" height="48" fill="#fff" stroke="#e0e8f0" rx="6"/>';
   html += '<line x1="'+(m.left+pW-250)+'" y1="'+(m.top+20)+'" x2="'+(m.left+pW-220)+'" y2="'+(m.top+20)+'" stroke="#087f5b" stroke-width="3"/>';
-  html += '<text x="'+(m.left+pW-215)+'" y="'+(m.top+24)+'" font-size="10" fill="#263238">实际进度</text>';
+  html += '<text x="'+(m.left+pW-215)+'" y="'+(m.top+24)+'" font-size="10" fill="#263238">实际</text>';
   html += '<line x1="'+(m.left+pW-250)+'" y1="'+(m.top+38)+'" x2="'+(m.left+pW-220)+'" y2="'+(m.top+38)+'" stroke="#c05621" stroke-width="2" stroke-dasharray="6 4"/>';
-  html += '<text x="'+(m.left+pW-215)+'" y="'+(m.top+42)+'" font-size="10" fill="#263238">理想进度（按工期）</text>';
+  html += '<text x="'+(m.left+pW-215)+'" y="'+(m.top+42)+'" font-size="10" fill="#263238">理想（时间）</text>';
   
   svg.innerHTML = html;
 }
@@ -2270,7 +1954,7 @@ function dibujarPorSellador(c){
   
   var claves = Object.keys(c.porSellador).filter(function(k){ return c.porSellador[k].long > 0; });
   if(claves.length === 0){
-    svg.innerHTML = '<text x="450" y="150" text-anchor="middle" font-size="13" fill="#90a4ae" font-style="italic">暂无数据</text>';
+    svg.innerHTML = '<text x="450" y="150" text-anchor="middle" font-size="13" fill="#90a4ae" font-style="italic">无数据</text>';
     return;
   }
   
@@ -2295,9 +1979,9 @@ function dibujarPorSellador(c){
     html += '<text x="'+(x+anchoB*0.35)+'" y="'+(y-6)+'" text-anchor="middle" font-size="10" font-weight="bold" fill="'+color+'">'+fmt0(s.litros)+' L</text>';
     html += '<text x="'+(x+anchoB*0.35)+'" y="'+(m.top+pH+16)+'" text-anchor="middle" font-size="10" fill="#37474f">'+k.substring(0,14)+'</text>';
     if(sInfo){
-      html += '<text x="'+(x+anchoB*0.35)+'" y="'+(m.top+pH+30)+'" text-anchor="middle" font-size="9" fill="#607d8b" font-style="italic">'+tipoSelladorTexto(sInfo.tipo)+'</text>';
+      html += '<text x="'+(x+anchoB*0.35)+'" y="'+(m.top+pH+30)+'" text-anchor="middle" font-size="9" fill="#607d8b" font-style="italic">'+sInfo.tipo+'</text>';
     }
-    html += '<text x="'+(x+anchoB*0.35)+'" y="'+(m.top+pH+44)+'" text-anchor="middle" font-size="9" fill="#607d8b">'+fmt0(s.long)+' 延米</text>';
+    html += '<text x="'+(x+anchoB*0.35)+'" y="'+(m.top+pH+44)+'" text-anchor="middle" font-size="9" fill="#607d8b">'+fmt0(s.long)+' ml</text>';
   });
   
   svg.innerHTML = html;
@@ -2312,7 +1996,7 @@ function dibujarMensual(c){
   
   var meses = Object.keys(c.porMes).sort();
   if(meses.length === 0){
-    svg.innerHTML = '<text x="450" y="150" text-anchor="middle" font-size="13" fill="#90a4ae" font-style="italic">暂无数据</text>';
+    svg.innerHTML = '<text x="450" y="150" text-anchor="middle" font-size="13" fill="#90a4ae" font-style="italic">无数据</text>';
     return;
   }
   
@@ -2330,7 +2014,7 @@ function dibujarMensual(c){
   meses.forEach(function(k,i){
     var s = c.porMes[k];
     var partes = k.split("-");
-    var etiq = nombresMes[parseInt(partes[1],10)-1] + " " + partes[0];
+    var etiq = nombresMes[parseInt(partes[1],10)-1] + " " + partes[0].substring(2);
     var x = m.left + i*anchoB + anchoB*0.15;
     var alto = (s.long/maxLong)*pH;
     var y = m.top + pH - alto;
@@ -2366,7 +2050,7 @@ function dibujarViaUbicacion(c){
     if(tot > maxTotal) maxTotal = tot;
   });
   if(maxTotal === 0){
-    svg.innerHTML = '<text x="450" y="150" text-anchor="middle" font-size="13" fill="#90a4ae" font-style="italic">暂无数据</text>';
+    svg.innerHTML = '<text x="450" y="150" text-anchor="middle" font-size="13" fill="#90a4ae" font-style="italic">无数据</text>';
     return;
   }
   
@@ -2380,6 +2064,7 @@ function dibujarViaUbicacion(c){
   
   var colores = {INTERNA:"#004B87", EXTERNA:"#c05621", PC:"#6a1b9a"};
   var anchoB = pW/grupos.length;
+  var nombresGrupo = {IZQUIERDA:"左", DERECHA:"右", COMPLETA:"全"};
   grupos.forEach(function(g,i){
     var xBase = m.left + i*anchoB + anchoB*0.15;
     var anchoBarra = anchoB*0.7;
@@ -2395,16 +2080,17 @@ function dibujarViaUbicacion(c){
       }
     });
     var total = ubic.reduce(function(a,u){ return a + matriz[g][u]; }, 0);
-    html += '<text x="'+(xBase+anchoBarra/2)+'" y="'+(m.top+pH+18)+'" text-anchor="middle" font-size="11" font-weight="bold" fill="#37474f">'+viaTexto(g)+'</text>';
-    html += '<text x="'+(xBase+anchoBarra/2)+'" y="'+(m.top+pH+32)+'" text-anchor="middle" font-size="10" fill="#607d8b">'+fmt0(total)+' 延米</text>';
+    html += '<text x="'+(xBase+anchoBarra/2)+'" y="'+(m.top+pH+18)+'" text-anchor="middle" font-size="11" font-weight="bold" fill="#37474f">'+nombresGrupo[g]+'</text>';
+    html += '<text x="'+(xBase+anchoBarra/2)+'" y="'+(m.top+pH+32)+'" text-anchor="middle" font-size="10" fill="#607d8b">'+fmt0(total)+' ml</text>';
   });
   
   var lx = m.left + pW - 220;
   var ly = m.top + 8;
   html += '<rect x="'+lx+'" y="'+ly+'" width="210" height="60" fill="#fff" stroke="#e0e8f0" rx="6"/>';
+  var nombresUbic = {INTERNA:"内侧", EXTERNA:"外侧", PC:"PC"};
   ubic.forEach(function(u, k){
     html += '<rect x="'+(lx+10)+'" y="'+(ly+8+k*16)+'" width="12" height="10" fill="'+colores[u]+'"/>';
-    html += '<text x="'+(lx+28)+'" y="'+(ly+17+k*16)+'" font-size="10" fill="#263238">'+ubicacionTexto(u)+'</text>';
+    html += '<text x="'+(lx+28)+'" y="'+(ly+17+k*16)+'" font-size="10" fill="#263238">'+nombresUbic[u]+'</text>';
   });
   
   svg.innerHTML = html;
@@ -2418,7 +2104,7 @@ function dibujarOrientacion(c){
   var pW = W - m.left - m.right, pH = H - m.top - m.bottom;
   
   if(c.totalTransv === 0 && c.totalLong_ === 0){
-    svg.innerHTML = '<text x="450" y="110" text-anchor="middle" font-size="13" fill="#90a4ae" font-style="italic">暂无数据</text>';
+    svg.innerHTML = '<text x="450" y="110" text-anchor="middle" font-size="13" fill="#90a4ae" font-style="italic">无数据</text>';
     return;
   }
   
@@ -2426,8 +2112,8 @@ function dibujarOrientacion(c){
   var html = '<rect x="'+m.left+'" y="'+m.top+'" width="'+pW+'" height="'+pH+'" fill="#fafcfd" stroke="#e0e8f0"/>';
   
   var barras = [
-    {label:"横向接缝", val:c.totalTransv, color:"#1976d2"},
-    {label:"纵向接缝", val:c.totalLong_, color:"#087f5b"}
+    {label:"横向", val:c.totalTransv, color:"#1976d2"},
+    {label:"纵向", val:c.totalLong_, color:"#087f5b"}
   ];
   var anchoB = pW/barras.length;
   barras.forEach(function(b,i){
@@ -2435,7 +2121,7 @@ function dibujarOrientacion(c){
     var alto = (b.val/maxV)*pH;
     var y = m.top + pH - alto;
     html += '<rect x="'+x+'" y="'+y+'" width="'+(anchoB*0.5)+'" height="'+alto+'" fill="'+b.color+'" rx="3"/>';
-    html += '<text x="'+(x+anchoB*0.25)+'" y="'+(y-8)+'" text-anchor="middle" font-size="12" font-weight="bold" fill="'+b.color+'">'+fmt0(b.val)+' 延米</text>';
+    html += '<text x="'+(x+anchoB*0.25)+'" y="'+(y-8)+'" text-anchor="middle" font-size="12" font-weight="bold" fill="'+b.color+'">'+fmt0(b.val)+' ml</text>';
     html += '<text x="'+(x+anchoB*0.25)+'" y="'+(m.top+pH+20)+'" text-anchor="middle" font-size="11" font-weight="bold" fill="#37474f">'+b.label+'</text>';
   });
   
@@ -2443,12 +2129,12 @@ function dibujarOrientacion(c){
 }
 
 /* =========================================================
-   GUARDAR / ABRIR / CSV / LIMPIAR
+   保存 / 打开 / CSV / 清空
    ========================================================= */
 function recolectarEstado(){
   return {
     version: "4.5",
-    aplicacion: "工程进度管理 — 接缝扩缝切割与密封",
+    aplicacion: "施工进度控制 - 切缝与填缝",
     fechaGuardado: new Date().toISOString(),
     obra: {
       nombre: txt("nombreObra"),
@@ -2515,11 +2201,11 @@ function abrirProyecto(){
 
 function cargarEstado(data, silencioso){
   if(!data || typeof data !== "object" || Array.isArray(data)){
-    if(!silencioso) mostrarError("文件中不包含有效数据。");
+    if(!silencioso) mostrarError("文件不包含有效数据。");
     return false;
   }
 
-  // 1. Restaurar primero la configuración general de la obra.
+  // 1. 先恢复工程总体配置。
   if(data.obra){
     var o = data.obra;
     $("nombreObra").value = o.nombre != null ? o.nombre : "Oruro-Challapata";
@@ -2540,7 +2226,7 @@ function cargarEstado(data, silencioso){
       var g = Number(s.gravedad);
       return {
         nombre: s.nombre || "",
-        tipo: s.tipo || "Otro",
+        tipo: s.tipo || "其他",
         color: s.color || "#004B87",
         gravedad: Number.isFinite(g) && g > 0 ? g : null
       };
@@ -2549,7 +2235,7 @@ function cargarEstado(data, silencioso){
     selladores = data.trabajos.map(function(t){
       return {
         nombre: t.codigo || t.nombre || "",
-        tipo: "Otro",
+        tipo: "其他",
         color: t.color || "#004B87",
         gravedad: null
       };
@@ -2573,7 +2259,7 @@ function cargarEstado(data, silencioso){
     });
   }
 
-  // La geometría debe estar cargada antes de reconstruir o recalcular tramos.
+  // 几何参数必须在重建或重新计算记录之前加载。
   leerEstado();
 
   tramos = [];
@@ -2581,7 +2267,7 @@ function cargarEstado(data, silencioso){
     tramos = data.tramos.map(function(t){
       var sell = t.sellador || t.trabajo || t.sellante || "";
       if(sell && !selladores.some(function(x){ return x.nombre === sell; })){
-        selladores.push({ nombre:sell, tipo:"Otro", color:"#546e7a", gravedad:null });
+        selladores.push({ nombre:sell, tipo:"其他", color:"#546e7a", gravedad:null });
       }
 
       var tramo = {
@@ -2600,8 +2286,7 @@ function cargarEstado(data, silencioso){
         longAcum: 0, montoAcum: 0
       };
 
-      // Recuperar los cálculos guardados. La versión anterior los reemplazaba
-      // incondicionalmente por cero, aunque el JSON sí contenía sus valores.
+      // 恢复已保存的计算值。
       var camposCalculo = ["longTransv","longLong","longTotal","monto","m3","litros"];
       var calculosGuardadosCompletos = camposCalculo.every(function(campo){
         return t[campo] !== undefined && t[campo] !== null && Number.isFinite(Number(t[campo]));
@@ -2614,12 +2299,12 @@ function cargarEstado(data, silencioso){
         tramo.monto = Number(t.monto);
         tramo.m3 = Number(t.m3);
         tramo.litros = Number(t.litros);
-        // Los conteos se derivan de la plantilla y no alteran los metrados guardados.
+        // 计数从模板派生，不改变已保存的工程量。
         var metradoBase = calcularMetradoTramo(tramo);
         tramo.nTransv = metradoBase.nTransvActivas;
         tramo.nLong = metradoBase.nLongActivas;
       } else {
-        // Compatibilidad con JSON antiguos que no almacenaban todos los cálculos.
+        // 兼容未存储全部计算值的旧 JSON。
         recalcularTramo(tramo);
       }
       return tramo;
@@ -2636,29 +2321,29 @@ function cargarEstado(data, silencioso){
 
 function exportarCSV(){
   ocultarError();
-  if(tramos.length === 0){ mostrarError("没有可导出的施工段。"); return; }
+  if(tramos.length === 0){ mostrarError("没有可导出的记录。"); return; }
   var c = calcular();
   var lineas = [];
-  lineas.push(["工程进度管理 — 接缝扩缝切割与密封"]);
+  lineas.push(["施工进度控制 - 切缝与填缝"]);
   lineas.push([]);
-  lineas.push(["工程名称", txt("nombreObra")]);
-  lineas.push(["综合单价 (Bs/延米)", txt("precioUnit")]);
-  lineas.push(["工程总长度 (延米)", fmt(c.volTotal,2)]);
+  lineas.push(["工程", txt("nombreObra")]);
+  lineas.push(["单价 (Bs/ml)", txt("precioUnit")]);
+  lineas.push(["工程总长度 (ml)", fmt(c.volTotal,2)]);
   lineas.push([]);
-  lineas.push(["进度汇总"]);
-  lineas.push(["已登记施工段数", c.totalTramos]);
-  lineas.push(["已完成接缝长度", fmt(c.totalLong,2)]);
-  lineas.push(["密封胶体积 (m³)", fmt(c.totalM3,4)]);
-  lineas.push(["密封胶实际用量 (L)", fmt(c.totalLitros,2)]);
+  lineas.push(["摘要"]);
+  lineas.push(["记录数", c.totalTramos]);
+  lineas.push(["已完成延米", fmt(c.totalLong,2)]);
+  lineas.push(["填缝体积 (m³)", fmt(c.totalM3,4)]);
+  lineas.push(["填缝体积 (实际升数)", fmt(c.totalLitros,2)]);
   lineas.push(["已完成金额", fmt(c.totalMonto,2)]);
-  lineas.push(["实物进度 (%)", fmt(c.pct,2)]);
+  lineas.push(["实际进度 (%)", fmt(c.pct,2)]);
   lineas.push([]);
-  lineas.push(["施工段明细"]);
-  lineas.push(["序号","起始桩号","终止桩号","长度","密封胶","板型","宽度","幅别","位置","日期","横向缝长度","纵向缝长度","接缝总长度","金额","用量 (L)"]);
+  lineas.push(["记录明细"]);
+  lineas.push(["序号","起始桩号","终点桩号","距离","密封胶","楼板类型","宽度","车道","位置","日期","横向延米","纵向延米","总延米","金额","升数"]);
   tramos.forEach(function(t){
     lineas.push([
       t.num, fmtProg(t.progIni), fmtProg(t.progFin), fmt(t.dist,2), t.sellador, t.losaTipo,
-      fmt(t.ancho,2), viaTexto(t.via), ubicacionTexto(t.obs), t.fecha,
+      fmt(t.ancho,2), t.via, t.obs, t.fecha,
       fmt(t.longTransv,2), fmt(t.longLong,2), fmt(t.longTotal,2), fmt(t.monto,2), fmt(t.litros,2)
     ]);
   });
@@ -2681,7 +2366,7 @@ function exportarCSV(){
 }
 
 function limpiarTodo(){
-  if(!confirm("确定清除全部数据吗？\n\n此操作无法撤销。")) return;
+  if(!confirm("确定清除所有数据？\n\n此操作无法撤销。")) return;
   tramos = []; selladores = []; tiposLosa = [];
   ["nombreObra","progIniGlobal","progFinGlobal","fIni","fFin","fAncho","fFecha","mCodigo","sNombre"].forEach(function(id){ if($(id)) $(id).value = ""; });
   $("fSellador").innerHTML = "";
@@ -2697,10 +2382,10 @@ function limpiarTodo(){
 }
 
 /* =========================================================
-   NUEVO PROYECTO / IMPRIMIR
+   新建项目 / 打印
    ========================================================= */
 function nuevoProyecto(){
-  if(!confirm("确定新建项目吗？如果尚未保存，当前数据将会丢失。")) return;
+  if(!confirm("确定新建项目？如未保存，当前数据将丢失。")) return;
   limpiarTodo();
   $("nombreObra").value = "Oruro-Challapata";
   $("progIniGlobal").value = "235+266";
@@ -2718,27 +2403,27 @@ function nuevoProyecto(){
 
 function imprimirResumen(){
   var c = calcular();
-  var html = '<html><head><meta charset="UTF-8"><title>Resumen</title><style>body{font-family:Arial;padding:20px;font-size:12px}h1{color:#004B87;font-size:18px}h2{color:#004B87;font-size:14px;margin-top:20px;border-bottom:1px solid #ccc}table{width:100%;border-collapse:collapse;margin-top:8px}td,th{border:1px solid #ccc;padding:4px 6px;font-size:11px}th{background:#eef2f7}.k{font-weight:bold;color:#37474f}.v{color:#004B87;font-weight:bold}</style></head><body>';
-  html += '<h1>工程进度汇总 — '+txt("nombreObra")+'</h1>';
+  var html = '<html><head><meta charset="UTF-8"><title>摘要</title><style>body{font-family:"Microsoft YaHei",Arial;padding:20px;font-size:12px}h1{color:#004B87;font-size:18px}h2{color:#004B87;font-size:14px;margin-top:20px;border-bottom:1px solid #ccc}table{width:100%;border-collapse:collapse;margin-top:8px}td,th{border:1px solid #ccc;padding:4px 6px;font-size:11px}th{background:#eef2f7}.k{font-weight:bold;color:#37474f}.v{color:#004B87;font-weight:bold}</style></head><body>';
+  html += '<h1>进度摘要 — '+txt("nombreObra")+'</h1>';
   html += '<p>出具日期：'+new Date().toLocaleString('zh-CN')+'</p>';
-  html += '<h2>进度指标</h2><table>';
-  html += '<tr><td class="k">已登记施工段数</td><td class="v">'+c.totalTramos+'</td></tr>';
-  html += '<tr><td class="k">已完成接缝长度</td><td class="v">'+fmt(c.totalLong,2)+' 延米</td></tr>';
-  html += '<tr><td class="k">清单项目总长度</td><td class="v">'+fmt(c.volTotal,2)+' 延米</td></tr>';
-  html += '<tr><td class="k">剩余接缝长度</td><td class="v">'+fmt(c.restante,2)+' 延米</td></tr>';
-  html += '<tr><td class="k">实物进度</td><td class="v">'+fmt(c.pct,2)+' %</td></tr>';
+  html += '<h2>指标</h2><table>';
+  html += '<tr><td class="k">记录数</td><td class="v">'+c.totalTramos+'</td></tr>';
+  html += '<tr><td class="k">已完成延米</td><td class="v">'+fmt(c.totalLong,2)+' ml</td></tr>';
+  html += '<tr><td class="k">分项总延米</td><td class="v">'+fmt(c.volTotal,2)+' ml</td></tr>';
+  html += '<tr><td class="k">剩余延米</td><td class="v">'+fmt(c.restante,2)+' ml</td></tr>';
+  html += '<tr><td class="k">实际进度</td><td class="v">'+fmt(c.pct,2)+' %</td></tr>';
   html += '<tr><td class="k">已完成金额</td><td class="v">Bs '+fmt(c.totalMonto,2)+'</td></tr>';
-  html += '<tr><td class="k">清单项目总金额</td><td class="v">Bs '+fmt(c.montoTotal,2)+'</td></tr>';
-  html += '<tr><td class="k">密封胶体积</td><td class="v">'+fmt(c.totalLitros,2)+' L ('+fmt(c.totalM3,4)+' m³)</td></tr>';
+  html += '<tr><td class="k">分项总金额</td><td class="v">Bs '+fmt(c.montoTotal,2)+'</td></tr>';
+  html += '<tr><td class="k">填缝体积</td><td class="v">'+fmt(c.totalLitros,2)+' L ('+fmt(c.totalM3,4)+' m³)</td></tr>';
   html += '</table>';
-  html += '<h2>密封胶消耗量统计</h2><table><tr><th>密封胶</th><th>类型</th><th>ML</th><th>用量 (L)</th><th>m³</th><th>金额 (Bs)</th></tr>';
+  html += '<h2>各密封胶消耗</h2><table><tr><th>密封胶</th><th>类型</th><th>延米</th><th>升数</th><th>m³</th><th>金额 Bs</th></tr>';
   Object.keys(c.porSellador).forEach(function(k){
     var s = c.porSellador[k];
     var info = selladores.find(function(x){ return x.nombre === k; });
-    html += '<tr><td>'+k+'</td><td>'+(info?tipoSelladorTexto(info.tipo):'-')+'</td><td>'+fmt(s.long,2)+'</td><td>'+fmt(s.litros,2)+'</td><td>'+fmt(s.m3,4)+'</td><td>'+fmt(s.monto,2)+'</td></tr>';
+    html += '<tr><td>'+k+'</td><td>'+(info?info.tipo:'-')+'</td><td>'+fmt(s.long,2)+'</td><td>'+fmt(s.litros,2)+'</td><td>'+fmt(s.m3,4)+'</td><td>'+fmt(s.monto,2)+'</td></tr>';
   });
   html += '</table>';
-  html += '<h2>签字</h2><br><br><br><table><tr><td style="border:none;text-align:center;width:50%">_______________________<br>施工负责人</td><td style="border:none;text-align:center;width:50%">_______________________<br>工程监理</td></tr></table>';
+  html += '<h2>签名</h2><br><br><br><table><tr><td style="border:none;text-align:center;width:50%">_______________________<br>现场负责人</td><td style="border:none;text-align:center;width:50%">_______________________<br>监理工程师</td></tr></table>';
   html += '</body></html>';
   var w = window.open('', '_blank');
   w.document.write(html);
@@ -2748,7 +2433,7 @@ function imprimirResumen(){
 }
 
 /* =========================================================
-   INICIALIZACIÓN
+   初始化
    ========================================================= */
 document.addEventListener("DOMContentLoaded", function(){
   var inp = $("inputArchivo");
